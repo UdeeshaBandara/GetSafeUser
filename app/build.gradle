@@ -30,4 +30,20 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
+    //volley
+    implementation 'com.android.volley:volley:1.1.1'
+    implementation 'com.google.code.gson:gson:2.6.2'
+
+    //Rounded Image View
+    implementation 'com.makeramen:roundedimageview:2.3.0'
+
+    //Picasso : image render engine
+    implementation 'com.squareup.picasso:picasso:2.3.2'
+
+    //progress window
+    implementation 'com.kaopiz:kprogresshud:1.2.0'
+
+    //card view
+    implementation "androidx.cardview:cardview:1.0.0"
+
 }
