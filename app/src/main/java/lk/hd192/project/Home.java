@@ -1,11 +1,14 @@
 package lk.hd192.project;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,15 +25,26 @@ public class Home extends AppCompatActivity {
     NavigationView navigationView;
 
 
+    RelativeLayout drawerTransportLyt, drawerLocationLyt, drawerStatsLyt, drawerExpensesLyt, drawerSwapLyt,drawerHelpLyt;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         homeRecycler=findViewById(R.id.home_recycler);
         sideMenuListener=findViewById(R.id.btn_side_menu);
         drawerLayout =findViewById(R.id.main_drawer_layout);
         navigationView = findViewById(R.id.main_navigation);
+
+        drawerTransportLyt = navigationView.findViewById(R.id.rlt_transport_services);
+        drawerLocationLyt = navigationView.findViewById(R.id.rlt_locations);
+        drawerStatsLyt = navigationView.findViewById(R.id.rlt_stats);
+        drawerExpensesLyt = navigationView.findViewById(R.id.rlt_expenses);
+        drawerSwapLyt = navigationView.findViewById(R.id.rlt_swap);
+        drawerHelpLyt = navigationView.findViewById(R.id.rlt_help);
 
 
         homeRecycler.setAdapter(new FunctionItemAdapter());
@@ -42,6 +56,22 @@ public class Home extends AppCompatActivity {
             public void onClick(View v) {
                 drawerLayout.openDrawer(Gravity.LEFT);
 
+            }
+        });
+
+
+        drawerTransportLyt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), LiveLocation.class);
+                startActivity(intent);
+            }
+        });
+        drawerStatsLyt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), Statistics.class);
+                startActivity(intent);
             }
         });
     }
