@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_main"
+    tools:context=".Register">
+
+
+    <ImageView
+        android:id="@+id/main_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/main_logo" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:layout_below="@id/main_logo">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_marginBottom="15dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/register_heading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/nunito_bold"
+                android:text="Let us know the \nfollowing about you"
+                android:textSize="28sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/register_heading"
+                android:layout_marginHorizontal="20dp"
+                android:orientation="vertical">
+
+
+                <EditText
+                    android:id="@+id/txt_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="15dp"
+                    android:hint="Your name"
+                    android:background="@drawable/custom_edittext"
+                    android:drawableLeft="@drawable/icon_name"
+                    android:paddingLeft="20dp" />
+
+                <EditText
+                    android:id="@+id/txt_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="15dp"
+                    android:hint="Email"
+                    android:background="@drawable/custom_edittext"
+                    android:drawableLeft="@drawable/icon_email"
+                    android:paddingLeft="20dp" />
+
+                <EditText
+                    android:id="@+id/txt_mobile"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="15dp"
+                    android:hint="Mobile no"
+                    android:background="@drawable/custom_edittext"
+                    android:drawableLeft="@drawable/icon_mobile"
+                    android:paddingLeft="20dp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="25dp"
+                    android:layout_height="wrap_content">
+
+                    <Button
+                        android:id="@+id/btn_register_back"
+                        android:layout_width="110dp"
+                        android:layout_height="45dp"
+                        android:drawableLeft="@drawable/icon_back"
+                        android:background="@drawable/bg_btn_next_forward"
+                        android:text="Back"
+                        android:paddingLeft="10dp"
+                        android:textColor="@color/white"
+                        android:textAllCaps="false" />
+
+                    <Button
+                        android:id="@+id/btn_register_next"
+                        android:layout_width="110dp"
+                        android:layout_height="45dp"
+                        android:layout_alignParentRight="true"
+                        android:background="@drawable/bg_btn_next_forward"
+                        android:drawableRight="@drawable/icon_forward"
+                        android:paddingRight="10dp"
+                        android:text="Next"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white" />
+
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

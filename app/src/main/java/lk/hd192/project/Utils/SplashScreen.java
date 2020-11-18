@@ -1,18 +1,10 @@
 package lk.hd192.project.Utils;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
 
-import androidx.annotation.RequiresApi;
-
-import org.json.JSONObject;
-
-import java.util.HashMap;
-
-import lk.hd192.project.MainActivity;
 import lk.hd192.project.Welcome;
 
 public class SplashScreen extends Base {

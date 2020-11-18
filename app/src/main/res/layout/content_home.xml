@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E2F3F5"
+    tools:context=".Home">
+
+    <RelativeLayout
+        android:id="@+id/home_heading"
+        android:layout_width="match_parent"
+        android:layout_height="270dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/bg_home_heading">
+
+
+        <RelativeLayout
+            android:id="@+id/status_bar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/action_bar_gradient">
+
+            <ImageView
+                android:id="@+id/btn_side_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/icon_drawer_open" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/status_logo" />
+
+            <ImageView
+                android:id="@+id/btn_notification"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+
+                android:src="@drawable/icon_notification" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/status_bar"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/nunito_bold"
+            android:text="Good Morning, \nThaveesha"
+            android:textColor="@color/dark_blue"
+            android:textSize="28sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="15dp"
+            android:fontFamily="@font/nunito_bold"
+            android:text="Your child was safely dropped of at school at 07:21 AM"
+            android:textColor="@color/dark_blue"
+            android:textSize="13sp" />
+
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/home_sub_heading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:text="What can we help you with ?"
+        android:fontFamily="@font/nunito_bold"
+        android:layout_below="@+id/home_heading"
+        android:textSize="18sp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/dark_blue"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/home_recycler"
+        android:layout_marginTop="5dp"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="10dp"
+        android:layout_below="@id/home_sub_heading"/>
+
+</RelativeLayout>
