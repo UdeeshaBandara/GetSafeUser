@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,12 +32,13 @@ public class Statistics extends AppCompatActivity {
     }
 
     class JourneyItemHolder extends RecyclerView.ViewHolder {
-        RelativeLayout rltCardSchoolToHome, rltCardHomeToSchool;
+        RelativeLayout rltCardSchoolToHome, rltCardHomeToSchool,rltItemJourney;
 
         public JourneyItemHolder(@NonNull View itemView) {
             super(itemView);
             rltCardHomeToSchool = itemView.findViewById(R.id.rlt_card_home_to_school);
             rltCardSchoolToHome = itemView.findViewById(R.id.rlt_card_school_to_home);
+            rltItemJourney = itemView.findViewById(R.id.rlt_item_journey);
         }
     }
 
@@ -61,6 +63,12 @@ public class Statistics extends AppCompatActivity {
                 holder.rltCardSchoolToHome.setVisibility(View.GONE);
             }
 
+            holder.rltItemJourney.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(getApplicationContext(),JourneyDetails.class));
+                }
+            });
         }
 
         @Override

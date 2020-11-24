@@ -17,8 +17,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".Statistics"></activity>
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".DriverProfile"></activity>
+        <activity android:name=".JourneyDetails" />
+        <activity android:name=".Statistics" />
         <activity android:name=".LiveLocation" />
         <activity
             android:name=".OTP"
@@ -30,18 +33,16 @@
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".Selection" />
         <activity android:name=".Welcome" />
-        <activity android:name=".Home" >
+        <activity android:name=".Home" />
+        <activity
+            android:name=".Utils.SplashScreen"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".Utils.SplashScreen"
-            android:screenOrientation="portrait"
-            android:theme="@style/SplashTheme">
-
         </activity>
 
         <meta-data
