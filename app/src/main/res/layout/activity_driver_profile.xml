@@ -69,6 +69,7 @@
             android:layout_alignParentBottom="true"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="30dp"
+
             app:cardElevation="0dp">
 
             <LinearLayout

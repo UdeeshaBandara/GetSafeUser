@@ -25,7 +25,7 @@ public class Home extends AppCompatActivity {
     NavigationView navigationView;
 
 
-    RelativeLayout drawerTransportLyt, drawerLocationLyt, drawerStatsLyt, drawerExpensesLyt, drawerSwapLyt,drawerHelpLyt;
+    RelativeLayout drawerTransportLyt,drawerHomeLyt, drawerLocationLyt, drawerStatsLyt, drawerExpensesLyt, drawerSwapLyt,drawerHelpLyt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +40,7 @@ public class Home extends AppCompatActivity {
         navigationView = findViewById(R.id.main_navigation);
 
         drawerTransportLyt = navigationView.findViewById(R.id.rlt_transport_services);
+        drawerHomeLyt = navigationView.findViewById(R.id.rlt_home);
         drawerLocationLyt = navigationView.findViewById(R.id.rlt_locations);
         drawerStatsLyt = navigationView.findViewById(R.id.rlt_stats);
         drawerExpensesLyt = navigationView.findViewById(R.id.rlt_expenses);
@@ -63,7 +64,7 @@ public class Home extends AppCompatActivity {
         drawerTransportLyt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), LiveLocation.class);
+                Intent intent = new Intent(getApplicationContext(), ExploreTransport.class);
                 startActivity(intent);
             }
         });
@@ -71,6 +72,20 @@ public class Home extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), Statistics.class);
+                startActivity(intent);
+            }
+        });
+        drawerLocationLyt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), LiveLocation.class);
+                startActivity(intent);
+            }
+        });
+        drawerExpensesLyt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), JourneyDetails.class);
                 startActivity(intent);
             }
         });

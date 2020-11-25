@@ -1,0 +1,312 @@
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+
+    tools:context=".ExploreTransport">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="-20dp"
+            android:accessibilityPaneTitle="sdhdfjkhskd"
+            android:background="#CF000000"
+            android:fitsSystemWindows="true"
+            app:expandedTitleMarginEnd="0dp"
+            app:expandedTitleMarginStart="0dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="65dp"
+
+                >
+
+
+                <RelativeLayout
+                    android:id="@+id/home_heading"
+                    android:layout_width="match_parent"
+
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_marginLeft="-50dp"
+                        android:layout_toEndOf="@id/location_heading"
+                        android:layout_toRightOf="@id/location_heading"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/bg_explore_transport" />
+
+                    <Button
+                        android:id="@+id/btn_explore_back"
+                        android:layout_width="110dp"
+                        android:layout_height="35dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="15dp"
+                        android:background="@drawable/bg_btn_next_forward"
+                        android:drawableLeft="@drawable/icon_back"
+                        android:paddingLeft="10dp"
+                        android:text="Back"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white" />
+
+
+                    <TextView
+                        android:id="@+id/location_heading"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/btn_explore_back"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/nunito_bold"
+                        android:text="Explore Transport \nServices"
+                        android:textColor="@color/white"
+                        android:textSize="20sp" />
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_below="@+id/home_heading"
+                android:layout_marginLeft="-17dp"
+                android:layout_marginTop="-5dp"
+
+                android:visibility="visible"
+                app:layout_collapseMode="pin">
+
+                <RelativeLayout
+                    android:id="@+id/status_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/action_bar_gradient">
+
+                    <ImageView
+                        android:id="@+id/btn_side_menu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:src="@drawable/icon_drawer_open" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/status_logo" />
+
+                    <ImageView
+                        android:id="@+id/btn_notification"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+
+                        android:src="@drawable/icon_notification" />
+
+                </RelativeLayout>
+
+
+            </androidx.appcompat.widget.Toolbar>
+
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/home_heading"
+
+            android:background="@drawable/bg_explore">
+
+            <RelativeLayout
+                android:id="@+id/rlt_pick"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_explore">
+
+
+                <RelativeLayout
+                    android:id="@+id/pick_lyt"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/bg_pick_drop">
+
+                    <EditText
+                        android:id="@+id/pick_up_dropdwn"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="110dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginRight="15dp"
+                        android:background="@color/white"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/nunito_regular"
+                        android:lines="1"
+                        android:scrollHorizontally="true"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_pick_drop"
+                        android:fontFamily="@font/nunito_bold"
+                        android:gravity="center"
+                        android:text="PICKUP"
+                        android:textColor="@color/dark_blue" />
+
+                    <!--                <fragment-->
+                    <!--                    android:id="@+id/autocomplete_fragment"-->
+                    <!--                    android:layout_width="match_parent"-->
+                    <!--                    android:layout_marginLeft="110dp"-->
+                    <!--                    android:layout_marginRight="15dp"-->
+                    <!--                    android:layout_centerVertical="true"-->
+                    <!--                    android:layout_height="wrap_content"-->
+                    <!--                    android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"-->
+                    <!--                    />-->
+
+
+                </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/pick_drop_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/pick_lyt"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5dp"
+                    android:src="@drawable/drop_n_pickup_icon" />
+
+
+                <RelativeLayout
+                    android:id="@+id/drop_lyt"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_below="@id/pick_drop_icon"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/bg_pick_drop">
+
+                    <EditText
+                        android:id="@+id/drop_dropdwn"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="110dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginRight="15dp"
+                        android:background="@color/white"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/nunito_regular"
+                        android:lines="1"
+                        android:scrollHorizontally="true"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+
+                    <TextView
+
+                        android:layout_width="100dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_pick_drop"
+                        android:fontFamily="@font/nunito_bold"
+                        android:gravity="center"
+                        android:text="DROP"
+                        android:textColor="#EA3333" />
+
+                    <!--                <fragment-->
+                    <!--                    android:id="@+id/autocomplete_fragment_drop"-->
+                    <!--                    android:layout_width="match_parent"-->
+                    <!--                    android:layout_marginLeft="110dp"-->
+                    <!--                    android:layout_marginRight="15dp"-->
+                    <!--                    android:layout_centerVertical="true"-->
+                    <!--                    android:layout_height="wrap_content"-->
+                    <!--                    android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"-->
+                    <!--                    />-->
+
+
+                </RelativeLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/lnr_options"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/drop_lyt"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:src="@drawable/icon_van_bus" />
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:src="@drawable/icon_ac_non_ac" />
+
+
+                </LinearLayout>
+
+                <TextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/lnr_options"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="Transport services that match your prefernces "
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_driver"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:clipToPadding="false"
+            android:paddingBottom="80dp" />
+
+
+    </androidx.core.widget.NestedScrollView>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
