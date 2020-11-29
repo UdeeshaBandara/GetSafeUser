@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_main"
+    tools:context=".Login">
+
+
+    <ImageView
+        android:id="@+id/main_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/main_logo" />
+
+    <ImageView
+        android:id="@+id/login_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="15dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/logo_login" />
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/login_logo"
+        android:layout_marginTop="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/login_heading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+
+                android:layout_marginLeft="15dp"
+
+                android:fontFamily="@font/nunito_bold"
+                android:text="Continue your work \nwith login"
+                android:textColor="@color/dark_blue"
+                android:textSize="30sp" />
+
+            <TextView
+                android:id="@+id/login_sub"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginLeft="15dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/nunito_regular"
+                android:text="Phone number"
+                android:textColor="@color/dark_blue"
+                android:textSize="17sp" />
+
+            <LinearLayout
+                android:id="@+id/lnr_number"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+
+                android:layout_marginHorizontal="15dp"
+                android:background="@drawable/bg_login_number"
+                android:orientation="horizontal"
+                android:paddingHorizontal="10dp">
+
+
+                <EditText
+                    android:id="@+id/country_code"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_weight="1.5"
+                    android:enabled="false"
+                    android:gravity="center"
+                    android:hint="+94"
+                    android:inputType="number" />
+
+                <EditText
+                    android:id="@+id/txt_number_one"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:maxLength="1" />
+
+                <EditText
+                    android:id="@+id/txt_number_two"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:maxLength="1" />
+
+                <EditText
+                    android:id="@+id/txt_number_three"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:maxLength="1" />
+
+                <EditText
+                    android:id="@+id/txt_number_four"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:maxLength="1" />
+
+                <EditText
+                    android:id="@+id/txt_number_five"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:maxLength="1" />
+
+                <EditText
+                    android:id="@+id/txt_number_six"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:maxLength="1" />
+
+                <EditText
+                    android:id="@+id/txt_number_seven"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:maxLength="1" />
+
+                <EditText
+                    android:id="@+id/txt_number_eight"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:maxLength="1" />
+
+                <EditText
+                    android:id="@+id/txt_number_nine"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:maxLength="1" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="7"
+                    android:scaleType="fitStart"
+                    android:src="@drawable/login_logo2" />
+
+                <Button
+
+                    android:id="@+id/btn_login_next"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="20dp"
+
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_weight="3"
+                    android:background="@drawable/bg_btn_next_forward"
+                    android:drawableRight="@drawable/icon_forward"
+                    android:fontFamily="@font/nunito_semibold"
+                    android:paddingRight="15dp"
+                    android:text="Next"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

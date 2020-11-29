@@ -18,8 +18,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-android:layout_marginTop="90dp"
-        android:layout_below="@id/main_logo">
+        android:layout_below="@id/main_logo"
+        android:layout_marginTop="90dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -33,8 +33,8 @@ android:layout_marginTop="90dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
-                android:gravity="center"
                 android:fontFamily="@font/nunito_bold"
+                android:gravity="center"
                 android:text="A verification code has been sent to
 your mobile \n (+94 76 272 5395)"
                 android:textSize="15sp" />
@@ -54,10 +54,10 @@ your mobile \n (+94 76 272 5395)"
             <LinearLayout
                 android:id="@+id/lnr_otp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_height="40dp"
                 android:layout_below="@id/otp_sub_heading"
                 android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="30dp"
                 android:orientation="horizontal">
 
 
@@ -65,40 +65,40 @@ your mobile \n (+94 76 272 5395)"
                     android:id="@+id/otp_one"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:inputType="number"
-                    android:maxLength="1"
+                    android:layout_weight="2.5"
                     android:gravity="center"
-                    android:layout_weight="2.5" />
+                    android:inputType="number"
+                    android:maxLength="1" />
 
                 <EditText
                     android:id="@+id/otp_two"
                     android:layout_width="0dp"
-                    android:inputType="number"
-                    android:maxLength="1"
-                    android:gravity="center"
                     android:layout_height="40dp"
                     android:layout_marginLeft="5dp"
-                    android:layout_weight="2.5" />
+                    android:layout_weight="2.5"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:maxLength="1" />
 
                 <EditText
                     android:id="@+id/otp_three"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:inputType="number"
-                    android:gravity="center"
-                    android:maxLength="1"
                     android:layout_marginLeft="5dp"
-                    android:layout_weight="2.5" />
+                    android:layout_weight="2.5"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:maxLength="1" />
 
                 <EditText
                     android:id="@+id/otp_four"
                     android:layout_width="0dp"
-                    android:gravity="center"
                     android:layout_height="40dp"
-                    android:inputType="number"
-                    android:maxLength="1"
                     android:layout_marginLeft="5dp"
-                    android:layout_weight="2.5" />
+                    android:layout_weight="2.5"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:maxLength="1" />
 
 
             </LinearLayout>
@@ -114,24 +114,24 @@ your mobile \n (+94 76 272 5395)"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:layout_centerHorizontal="true"
-                    android:background="@drawable/bg_btn_next_forward"
                     android:layout_marginHorizontal="120dp"
+                    android:background="@drawable/bg_btn_next_forward"
                     android:drawableRight="@drawable/icon_forward"
+                    android:fontFamily="@font/nunito_semibold"
                     android:paddingRight="15dp"
                     android:text="Next"
-                    android:textSize="15sp"
-                    android:fontFamily="@font/nunito_semibold"
                     android:textAllCaps="false"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
 
                 <RelativeLayout
                     android:id="@+id/btn_otp_resend"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginHorizontal="30dp"
                     android:layout_below="@id/btn_otp_next"
                     android:layout_centerHorizontal="true"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginTop="20dp"
                     android:background="@drawable/bg_btn_resend">
 
 
@@ -140,9 +140,9 @@ your mobile \n (+94 76 272 5395)"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:text="Resend verification code"
-                        android:fontFamily="@font/nunito_semibold"
                         android:layout_marginTop="5dp"
+                        android:fontFamily="@font/nunito_semibold"
+                        android:text="Resend verification code"
                         android:textColor="@color/white"
                         android:textSize="19sp" />
 
@@ -150,9 +150,9 @@ your mobile \n (+94 76 272 5395)"
                         android:id="@+id/resend_countdown"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/nunito_semibold"
                         android:layout_below="@id/resend_text"
                         android:layout_centerHorizontal="true"
+                        android:fontFamily="@font/nunito_semibold"
                         android:text=" ( A new verification code will be sent in 02:00 )"
                         android:textColor="@color/white"
                         android:textSize="12sp" />
@@ -162,9 +162,9 @@ your mobile \n (+94 76 272 5395)"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
+                        android:layout_toRightOf="@id/resend_countdown"
                         android:padding="5dp"
-                        android:src="@drawable/icon_resend"
-                        android:layout_toRightOf="@id/resend_countdown"              />
+                        android:src="@drawable/icon_resend" />
 
 
                 </RelativeLayout>
@@ -173,14 +173,14 @@ your mobile \n (+94 76 272 5395)"
                     android:id="@+id/btn_otp_back"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:layout_marginTop="20dp"
-                    android:fontFamily="@font/nunito_semibold"
-                    android:layout_marginHorizontal="100dp"
                     android:layout_below="@id/btn_otp_resend"
                     android:layout_centerHorizontal="true"
-                    android:gravity="center"
+                    android:layout_marginHorizontal="100dp"
+                    android:layout_marginTop="20dp"
                     android:background="@drawable/bg_btn_next_forward"
                     android:drawableLeft="@drawable/icon_back"
+                    android:fontFamily="@font/nunito_semibold"
+                    android:gravity="center"
                     android:paddingLeft="20dp"
 
 

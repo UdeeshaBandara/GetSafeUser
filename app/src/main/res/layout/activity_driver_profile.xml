@@ -578,7 +578,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:fontFamily="@font/nunito_bold"
-                        android:text="Vehicle Details"
+                        android:text="Contact Driver"
                         android:textColor="@color/white"
                         android:textSize="16sp" />
 
