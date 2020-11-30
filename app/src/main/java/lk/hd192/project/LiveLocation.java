@@ -3,8 +3,10 @@ package lk.hd192.project;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -12,10 +14,12 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -25,6 +29,7 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.navigation.NavigationView;
 
 import java.io.IOException;
 import java.util.List;
@@ -43,6 +48,8 @@ public class LiveLocation extends AppCompatActivity {
     String locationProvider = LocationManager.GPS_PROVIDER;
     CameraPosition cameraPosition;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +60,8 @@ public class LiveLocation extends AppCompatActivity {
 
         mapView = findViewById(R.id.mapView);
 
-        btnBack=findViewById(R.id.btn_location_back);
+        btnBack = findViewById(R.id.btn_location_back);
+
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,22 +70,32 @@ public class LiveLocation extends AppCompatActivity {
             }
         });
 
+
+
+
         try {
 
             MapsInitializer.initialize(getApplicationContext());
             loadMap();
 
-        }catch (Exception e){
+        } catch (Exception e) {
 
             Log.e("Map Load Err >> ", e + "");
             e.printStackTrace();
 
         }
-
+        findViewById(R.id.btn_location_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
     }
+
+
 
     public void loadMap() {
 
@@ -96,7 +114,7 @@ public class LiveLocation extends AppCompatActivity {
 
                 googleMap.setMyLocationEnabled(true);
 
-                try{
+                try {
 
                     final Location location = locationManager.getLastKnownLocation(locationProvider);
 
@@ -109,19 +127,17 @@ public class LiveLocation extends AppCompatActivity {
                         @Override
                         public void onCameraChange(CameraPosition cameraPosition) {
 
-                       //     Base.pickLat = cameraPosition.target.latitude;
-                         //   Base.pickLng = cameraPosition.target.longitude;
+                            //     Base.pickLat = cameraPosition.target.latitude;
+                            //   Base.pickLng = cameraPosition.target.longitude;
 
 
                             locationAddress(cameraPosition.target.latitude, cameraPosition.target.longitude);
 
 
-
-
                         }
                     });
 
-                }catch (Exception e){
+                } catch (Exception e) {
 
                     Log.e("Map EXC >> ", e + "");
                     Toast.makeText(getApplicationContext(), "Something Went Wrong in Location Service !", Toast.LENGTH_SHORT).show();
@@ -132,7 +148,6 @@ public class LiveLocation extends AppCompatActivity {
             }
         });
     }
-
 
 
     private void askForPermission(String permission, Integer requestCode) {
@@ -153,8 +168,6 @@ public class LiveLocation extends AppCompatActivity {
             //Toast.makeText(this, "" + permission + " is already granted.", Toast.LENGTH_SHORT).show();
         }
     }
-
-
 
 
     public void locationAddress(double lat, double lon) {
@@ -178,8 +191,7 @@ public class LiveLocation extends AppCompatActivity {
             } else {
 
 //                mapConfirmLocation.setEnabled(true);
-              //  Base.pickAddress = addressList.get(0).getAddressLine(0);
-
+                //  Base.pickAddress = addressList.get(0).getAddressLine(0);
 
 
                 Log.e("address", addressList + " ");

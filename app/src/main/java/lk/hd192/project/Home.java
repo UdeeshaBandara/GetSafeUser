@@ -20,12 +20,11 @@ import com.google.android.material.navigation.NavigationView;
 
 public class Home extends AppCompatActivity {
     RecyclerView homeRecycler;
+
     ImageView sideMenuListener;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
-
-
-    RelativeLayout drawerTransportLyt,drawerHomeLyt, drawerLocationLyt, drawerStatsLyt, drawerExpensesLyt, drawerSwapLyt,drawerHelpLyt;
+    RelativeLayout drawerTransportLyt,  drawerLocationLyt, drawerStatsLyt, drawerExpensesLyt, drawerSwapLyt, drawerHelpLyt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,13 +33,15 @@ public class Home extends AppCompatActivity {
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        homeRecycler=findViewById(R.id.home_recycler);
-        sideMenuListener=findViewById(R.id.btn_side_menu);
-        drawerLayout =findViewById(R.id.main_drawer_layout);
+        homeRecycler = findViewById(R.id.home_recycler);
+
+
+        sideMenuListener = findViewById(R.id.btn_side_menu);
+        drawerLayout = findViewById(R.id.main_drawer_layout);
         navigationView = findViewById(R.id.main_navigation);
 
         drawerTransportLyt = navigationView.findViewById(R.id.rlt_transport_services);
-        drawerHomeLyt = navigationView.findViewById(R.id.rlt_home);
+
         drawerLocationLyt = navigationView.findViewById(R.id.rlt_locations);
         drawerStatsLyt = navigationView.findViewById(R.id.rlt_stats);
         drawerExpensesLyt = navigationView.findViewById(R.id.rlt_expenses);
@@ -51,6 +52,13 @@ public class Home extends AppCompatActivity {
         homeRecycler.setAdapter(new FunctionItemAdapter());
         homeRecycler.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
 
+        drawerMenu();
+
+    }
+
+
+
+    private void drawerMenu() {
 
         sideMenuListener.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,20 +74,21 @@ public class Home extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), ExploreTransport.class);
                 startActivity(intent);
+
             }
         });
         drawerStatsLyt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Statistics.class);
+                Intent intent = new Intent(getApplicationContext(), Journey.class);
                 startActivity(intent);
+
             }
         });
         drawerLocationLyt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), LiveLocation.class);
-                startActivity(intent);
+
             }
         });
         drawerExpensesLyt.setOnClickListener(new View.OnClickListener() {
@@ -87,14 +96,18 @@ public class Home extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), JourneyDetails.class);
                 startActivity(intent);
+
             }
         });
+
     }
 
     class FunctionViewHolder extends RecyclerView.ViewHolder {
+        RelativeLayout homeSelection;
 
         public FunctionViewHolder(@NonNull View itemView) {
             super(itemView);
+            homeSelection = itemView.findViewById(R.id.home_selection);
         }
     }
 
@@ -109,13 +122,32 @@ public class Home extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull FunctionViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull FunctionViewHolder holder, final int position) {
+
+            holder.homeSelection.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    switch (position) {
+                        case 0:
+                            startActivity(new Intent(getApplicationContext(), LiveLocation.class));
+                            drawerLayout.closeDrawers();
+                            break;
+                        case 1:
+                            startActivity(new Intent(getApplicationContext(), Journey.class));
+                            drawerLayout.closeDrawers();
+                            break;
+
+
+                    }
+
+                }
+            });
 
         }
 
         @Override
         public int getItemCount() {
-            return 10;
+            return 5;
         }
     }
 

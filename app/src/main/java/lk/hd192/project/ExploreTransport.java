@@ -5,10 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.RelativeLayout;
 
 public class ExploreTransport extends AppCompatActivity {
 
@@ -19,6 +22,8 @@ public class ExploreTransport extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore_transport);
 
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         recyclerDriver=findViewById(R.id.recycler_driver);
 
 
@@ -26,14 +31,23 @@ public class ExploreTransport extends AppCompatActivity {
         recyclerDriver.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
 
 
+        findViewById(R.id.btn_explore_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
 
 
     }
 
     class DriverViewHolder extends  RecyclerView.ViewHolder{
 
+        RelativeLayout oneDriver;
         public DriverViewHolder(@NonNull View itemView) {
             super(itemView);
+            oneDriver=itemView.findViewById(R.id.one_driver);
         }
     }
     class DriverAdapter extends RecyclerView.Adapter<DriverViewHolder>{
@@ -49,6 +63,12 @@ public class ExploreTransport extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull DriverViewHolder holder, int position) {
 
+            holder.oneDriver.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(getApplicationContext(),DriverProfile.class));
+                }
+            });
         }
 
         @Override

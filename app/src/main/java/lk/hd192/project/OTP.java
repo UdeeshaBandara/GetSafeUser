@@ -33,6 +33,13 @@ public class OTP extends AppCompatActivity {
 
             }
         });
+        findViewById(R.id.btn_otp_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),Register.class));
+
+            }
+        });
 
 
         confirmOTP_1.addTextChangedListener(new TextWatcher() {

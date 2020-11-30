@@ -21,14 +21,6 @@
             android:layout_alignParentTop="true"
             android:background="@drawable/action_bar_gradient">
 
-            <ImageView
-                android:id="@+id/btn_side_menu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                android:src="@drawable/icon_drawer_open" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -36,26 +28,29 @@
                 android:layout_centerInParent="true"
                 android:src="@drawable/status_logo" />
 
-            <ImageView
-                android:id="@+id/btn_notification"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-
-                android:src="@drawable/icon_notification" />
 
         </RelativeLayout>
 
 
+        <Button
+            android:id="@+id/btn_driver_back"
+            android:layout_width="80dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="65dp"
+            android:background="@drawable/bg_btn_next_forward"
+            android:drawableLeft="@drawable/icon_back"
+            android:paddingLeft="10dp"
+            android:text="Back"
+            android:textAllCaps="false"
+            android:textColor="@color/white" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/status_bar"
-            android:layout_marginLeft="10dp"
+
             android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
             android:fontFamily="@font/nunito_bold"
             android:text="Driver Profile"
             android:textColor="@color/white"
@@ -156,39 +151,33 @@
                         android:textColor="@color/white"
                         android:textSize="14sp" />
 
-
                 </LinearLayout>
-
-
             </LinearLayout>
-
-
         </androidx.cardview.widget.CardView>
-
-        <com.makeramen.roundedimageview.RoundedImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-
-            android:layout_alignParentBottom="true"
-            android:layout_marginRight="10dp"
-            android:layout_toStartOf="@id/card_driver_details"
-            android:layout_toLeftOf="@id/card_driver_details"
-
-            android:scaleType="centerCrop"
-            android:src="@drawable/driver_profile_pic"
-            app:riv_corner_radius="75dp" />
-
     </RelativeLayout>
 
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/driver_photo"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_alignBottom="@+id/home_heading"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="-55dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/driver_profile_pic"
+        app:riv_corner_radius="75dp" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/home_heading"
-        android:layout_marginTop="10dp">
+android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="60dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
+            android:layout_marginTop="10dp"
             android:layout_height="match_parent">
 
 
@@ -559,7 +548,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/heading_route_info"
                 android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/bg_card_driver_details_three">
 
 

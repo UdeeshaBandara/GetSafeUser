@@ -17,7 +17,14 @@ public class Welcome extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(),Selection.class));
-                finishAffinity();
+                finish();
+            }
+        });
+        findViewById(R.id.btn_exist_user).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),Login.class));
+                finish();
             }
         });
 

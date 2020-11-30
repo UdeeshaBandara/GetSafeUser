@@ -21,5 +21,12 @@ public class Selection extends AppCompatActivity {
 
             }
         });
+        findViewById(R.id.staff).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),Register.class));
+
+            }
+        });
     }
 }

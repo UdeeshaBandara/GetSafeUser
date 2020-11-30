@@ -52,7 +52,7 @@
 
                     <Button
                         android:id="@+id/btn_explore_back"
-                        android:layout_width="110dp"
+                        android:layout_width="80dp"
                         android:layout_height="35dp"
                         android:layout_marginLeft="15dp"
                         android:layout_marginTop="15dp"
@@ -98,30 +98,12 @@
                     android:background="@drawable/action_bar_gradient">
 
                     <ImageView
-                        android:id="@+id/btn_side_menu"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="15dp"
-                        android:src="@drawable/icon_drawer_open" />
-
-                    <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:src="@drawable/status_logo" />
 
-                    <ImageView
-                        android:id="@+id/btn_notification"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
 
-                        android:src="@drawable/icon_notification" />
 
                 </RelativeLayout>
 

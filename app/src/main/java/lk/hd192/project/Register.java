@@ -17,6 +17,14 @@ public class Register extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(),OTP.class));
+                finish();
+            }
+        });
+        findViewById(R.id.btn_register_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),Selection.class));
+                finish();
             }
         });
     }

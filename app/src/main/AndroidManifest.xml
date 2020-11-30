@@ -21,16 +21,12 @@
         android:theme="@style/AppTheme">
         <activity android:name=".Login"
             android:windowSoftInputMode="adjustPan">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".ExploreTransport"></activity>
         <activity android:name=".DriverProfile" />
         <activity android:name=".JourneyDetails" />
-        <activity android:name=".Statistics" />
+        <activity android:name=".Journey" />
         <activity android:name=".LiveLocation" />
         <activity
             android:name=".OTP"
@@ -47,6 +43,11 @@
             android:name=".Utils.SplashScreen"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
 
