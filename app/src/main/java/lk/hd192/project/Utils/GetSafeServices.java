@@ -18,7 +18,9 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GetSafeServices extends Base {
+import lk.hd192.project.GetSafeBase;
+
+public class GetSafeServices extends GetSafeBase {
 
 
     String requestResponse = "";
@@ -269,7 +271,6 @@ public class GetSafeServices extends Base {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-
                 headers.put("Authorization", tinyDB.getString("TOKEN"));
 
 //                headers.put("Authorization", "Bearer TThfab87wy438rf38vbqb3yf78qybfiqc387fcgnq387fg8cn3ncfg8k");

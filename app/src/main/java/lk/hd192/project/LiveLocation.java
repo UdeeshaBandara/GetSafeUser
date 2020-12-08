@@ -1,12 +1,13 @@
 package lk.hd192.project;
 
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
-import android.content.Intent;
+import android.content.Context;
+
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -14,12 +15,10 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
+
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -29,13 +28,15 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.material.navigation.NavigationView;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-public class LiveLocation extends AppCompatActivity {
+import lk.hd192.project.Utils.GetSafeServices;
+
+
+public class LiveLocation extends GetSafeBase {
 
     Button btnBack;
     MapView mapView;
@@ -44,6 +45,7 @@ public class LiveLocation extends AppCompatActivity {
     private GoogleMap googleMap;
 
     LocationManager locationManager;
+    GetSafeServices getSafeServices;
 
     String locationProvider = LocationManager.GPS_PROVIDER;
     CameraPosition cameraPosition;
@@ -57,6 +59,7 @@ public class LiveLocation extends AppCompatActivity {
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        getSafeServices=new GetSafeServices();
 
         mapView = findViewById(R.id.mapView);
 
@@ -115,10 +118,11 @@ public class LiveLocation extends AppCompatActivity {
                 googleMap.setMyLocationEnabled(true);
 
                 try {
+                    locationManager= (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
                     final Location location = locationManager.getLastKnownLocation(locationProvider);
 
-                    cameraPosition = new CameraPosition.Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(10).build();
+                    cameraPosition = new CameraPosition.Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(15).build();
 
                     googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
@@ -126,10 +130,6 @@ public class LiveLocation extends AppCompatActivity {
                     googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
                         @Override
                         public void onCameraChange(CameraPosition cameraPosition) {
-
-                            //     Base.pickLat = cameraPosition.target.latitude;
-                            //   Base.pickLng = cameraPosition.target.longitude;
-
 
                             locationAddress(cameraPosition.target.latitude, cameraPosition.target.longitude);
 
@@ -139,7 +139,7 @@ public class LiveLocation extends AppCompatActivity {
 
                 } catch (Exception e) {
 
-                    Log.e("Map EXC >> ", e + "");
+
                     Toast.makeText(getApplicationContext(), "Something Went Wrong in Location Service !", Toast.LENGTH_SHORT).show();
 
                 }
@@ -169,38 +169,33 @@ public class LiveLocation extends AppCompatActivity {
         }
     }
 
-
-    public void locationAddress(double lat, double lon) {
+    public void locationAddress(double lat, double lon){
         Geocoder geocoder;
         List<Address> addressList;
 
         geocoder = new Geocoder(this, Locale.getDefault());
 
         try {
-            addressList = geocoder.getFromLocation(lat, lon, 1);
+            addressList = geocoder.getFromLocation(lat,lon,1);
 
-            Log.e("address", addressList.size() + " ");
+            Log.e("address", addressList.size()+" ");
 
-            if (addressList.size() == 0) {
-
-
-//                mapConfirmLocation.setEnabled(false);
-                Toast.makeText(this, "No Address Found", Toast.LENGTH_LONG);
+            if(addressList.size()==0){
 
 
-            } else {
+                customToast("Oops.. \nNo Address Found in this Area ");
+            //    mConfirm.setEnabled(false);
 
-//                mapConfirmLocation.setEnabled(true);
-                //  Base.pickAddress = addressList.get(0).getAddressLine(0);
-
-
-                Log.e("address", addressList + " ");
-
+            }else{
+//                mConfirm.setEnabled(true);
+//                LOC_ADDRESS = addressList.get(0).getAddressLine(0);
             }
 
 
+
+
         } catch (IOException e) {
-            Toast.makeText(this, "An error occurred", Toast.LENGTH_LONG);
+            customToast("Oops.. \nan error occurred");
             e.printStackTrace();
         }
     }

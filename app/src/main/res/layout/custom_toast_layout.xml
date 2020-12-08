@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:background="#f32d2d2d"
+    android:orientation="vertical"
+    android:padding="5dp"
+    android:gravity="center">
+
+
+    <!--<ImageView-->
+    <!--android:layout_width="30dp"-->
+    <!--android:layout_height="30dp"-->
+    <!--android:src="@drawable/app_logo"/>-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/toast_message_oops"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Oops.."-->
+    <!--android:textSize="16sp"-->
+    <!--android:textColor="#fff"-->
+    <!--android:fontFamily="@font/proxima_nova_regular"-->
+    <!--/>-->
+
+    <TextView
+        android:id="@+id/toast_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text=""
+        android:layout_margin="1dp"
+        android:textSize="16sp"
+        android:textColor="#fff"
+        android:fontFamily="@font/nunito_regular"
+        />
+
+
+</LinearLayout>

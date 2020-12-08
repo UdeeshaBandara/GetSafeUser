@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Get Safe</string>
+
+
+    <string name="API_KEY">AIzaSyDprEjSWo2BqCS9jR3DwJdPeoe5b1l63OU</string>
+    <string name="AUTO_COMPLETE">https://maps.googleapis.com/maps/api/place/autocomplete/json</string>
+    <string name="REVERSE_GEO">https://maps.googleapis.com/maps/api/geocode/json</string>
 </resources>

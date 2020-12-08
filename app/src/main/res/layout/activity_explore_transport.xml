@@ -104,7 +104,6 @@
                         android:src="@drawable/status_logo" />
 
 
-
                 </RelativeLayout>
 
 
@@ -141,7 +140,9 @@
                         android:layout_height="30dp"
                         android:layout_marginLeft="110dp"
                         android:layout_marginTop="5dp"
-                        android:layout_marginRight="15dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_toStartOf="@id/pickup_map"
+                        android:layout_toLeftOf="@id/pickup_map"
                         android:background="@color/white"
                         android:ellipsize="end"
                         android:fontFamily="@font/nunito_regular"
@@ -158,6 +159,19 @@
                         android:fontFamily="@font/nunito_bold"
                         android:gravity="center"
                         android:text="PICKUP"
+                        android:textColor="@color/dark_blue" />
+
+                    <Button
+                        android:id="@+id/pickup_map"
+                        android:layout_width="100dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentRight="true"
+                        android:background="@drawable/bg_pick_drop"
+                        android:fontFamily="@font/nunito_bold"
+                        android:gravity="center"
+                        android:textSize="12sp"
+                        android:text="Set on \nmap"
+                        android:textAllCaps="false"
                         android:textColor="@color/dark_blue" />
 
                     <!--                <fragment-->
@@ -203,10 +217,12 @@
                         android:ellipsize="end"
                         android:fontFamily="@font/nunito_regular"
                         android:lines="1"
+                        android:layout_toStartOf="@id/drop_map"
                         android:scrollHorizontally="true"
                         android:singleLine="true"
                         android:textColor="@color/black"
-                        android:textSize="12sp" />
+                        android:textSize="12sp"
+                        android:layout_toLeftOf="@id/drop_map" />
 
                     <TextView
 
@@ -216,6 +232,20 @@
                         android:fontFamily="@font/nunito_bold"
                         android:gravity="center"
                         android:text="DROP"
+                        android:textColor="#EA3333" />
+
+                    <Button
+                        android:id="@+id/drop_map"
+                        android:layout_width="100dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentRight="true"
+                        android:background="@drawable/bg_pick_drop"
+                        android:fontFamily="@font/nunito_bold"
+                        android:gravity="center"
+
+                        android:textSize="12sp"
+                        android:text="Set on \nmap"
+                        android:textAllCaps="false"
                         android:textColor="#EA3333" />
 
                     <!--                <fragment-->
