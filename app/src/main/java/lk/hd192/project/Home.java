@@ -1,7 +1,14 @@
 package lk.hd192.project;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,19 +19,31 @@ import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
-public class Home extends AppCompatActivity {
+public class Home extends GetSafeBase {
     RecyclerView homeRecycler;
+
+
 
     ImageView sideMenuListener;
     DrawerLayout drawerLayout;
+
+
+
     NavigationView navigationView;
-    RelativeLayout drawerTransportLyt,  drawerLocationLyt, drawerStatsLyt, drawerExpensesLyt, drawerSwapLyt, drawerHelpLyt;
+    RelativeLayout drawerTransportLyt, drawerLocationLyt, drawerStatsLyt, drawerExpensesLyt, drawerSwapLyt, drawerHelpLyt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,14 +67,17 @@ public class Home extends AppCompatActivity {
         drawerSwapLyt = navigationView.findViewById(R.id.rlt_swap);
         drawerHelpLyt = navigationView.findViewById(R.id.rlt_help);
 
-
         homeRecycler.setAdapter(new FunctionItemAdapter());
         homeRecycler.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
 
         drawerMenu();
 
-    }
 
+
+
+
+
+    }
 
 
     private void drawerMenu() {
@@ -112,6 +134,7 @@ public class Home extends AppCompatActivity {
     }
 
     class FunctionItemAdapter extends RecyclerView.Adapter<FunctionViewHolder> {
+        int i = 0;
 
         @NonNull
         @Override
@@ -136,7 +159,10 @@ public class Home extends AppCompatActivity {
                             startActivity(new Intent(getApplicationContext(), Journey.class));
                             drawerLayout.closeDrawers();
                             break;
+                        case 2:
 
+                            break;
+                        case 3:
 
                     }
 

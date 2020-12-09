@@ -5,12 +5,14 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -55,6 +57,7 @@ public class Map extends GetSafeBase {
         }
         mPickupLocation.onCreate(savedInstanceState);
         mPickupLocation.onResume();
+        locationManager= (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
 
         mConfirm.setOnClickListener(new View.OnClickListener() {
@@ -70,6 +73,16 @@ public class Map extends GetSafeBase {
         });
 
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(googleMap != null){
+            googleMap.clear();
+
+            // add the markers just like how you did the first time
+        }
     }
 
     public void loadMap() {
@@ -88,6 +101,14 @@ public class Map extends GetSafeBase {
 
                 try{
 
+                    if( !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+                    {
+                        customToast("Please enable location services",1);
+                        Intent settings=new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivity(settings);
+
+                    }
+
 //                    boolean success = googleMap.setMapStyle(
 //                            MapStyleOptions.loadRawResourceStyle(
 //                                    ActivitySIngleView.this, R.raw.style_json));
@@ -95,7 +116,7 @@ public class Map extends GetSafeBase {
                 }catch (Exception e){
 
                 }
-                locationManager= (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
                 // For zooming automatically to the location of the marker
                 final Location location = locationManager.getLastKnownLocation(locationProvider);
 
@@ -157,7 +178,7 @@ public class Map extends GetSafeBase {
             if(addressList.size()==0){
 
 
-                customToast("Oops.. \nNo Address Found in this Area ");
+                customToast("Oops.. \nNo Address Found in this Area ",0);
                 mConfirm.setEnabled(false);
 
             }else{
@@ -169,7 +190,7 @@ public class Map extends GetSafeBase {
 
 
         } catch (IOException e) {
-            customToast("Oops.. \nan error occurred");
+            customToast("Oops.. \nan error occurred",1);
             e.printStackTrace();
         }
     }

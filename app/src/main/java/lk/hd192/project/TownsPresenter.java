@@ -16,11 +16,11 @@ import java.util.List;
 
 import lk.hd192.project.Utils.GetSafeServices;
 
-public class TownsPresenter  extends RecyclerViewPresenter<NearestTowns> {
+public class TownsPresenter extends RecyclerViewPresenter<NearestTowns> {
 
 
     protected Adapter adapter;
- GetSafeServices getSafeServices = new GetSafeServices();
+    GetSafeServices getSafeServices = new GetSafeServices();
     List<String> nearestTownsArr;
 
 

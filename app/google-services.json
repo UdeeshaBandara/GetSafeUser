@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "644743339190",
+    "project_id": "get-safe",
+    "storage_bucket": "get-safe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:644743339190:android:f2d9cfb86eb6abe09c9a17",
+        "android_client_info": {
+          "package_name": "lk.hd192.project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "644743339190-s4ammeddghe47sn0una95r7u8qh3glh7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDF8q9HbTGX8qTT2StaNu-UOvvHn7Yi1ZE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "644743339190-s4ammeddghe47sn0una95r7u8qh3glh7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

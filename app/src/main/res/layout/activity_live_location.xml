@@ -7,22 +7,19 @@
     android:background="@color/white"
     tools:context=".LiveLocation">
 
-
     <RelativeLayout
-        android:id="@+id/status_bar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/action_bar_gradient">
+        android:layout_height="match_parent"
+        android:layout_below="@id/home_heading"
+        android:layout_marginTop="-25dp"
+        android:background="@drawable/bg_map">
 
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:src="@drawable/status_logo" />
-
-
+            />
     </RelativeLayout>
 
     <RelativeLayout
@@ -30,13 +27,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/status_bar"
-        android:layout_marginTop="-50dp">
+        android:layout_marginTop="-50dp"
+        android:background="@drawable/action_bar_gradient">
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scaleType="centerCrop"
 
+            android:background="@drawable/blue_gradient_home"
+            android:scaleType="centerCrop"
             android:src="@drawable/bg_shadow" />
 
         <Button
@@ -76,18 +75,21 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/status_bar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/home_heading"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/action_bar_gradient">
 
-        android:background="@drawable/bg_map">
 
-        <com.google.android.gms.maps.MapView
-            android:id="@+id/mapView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/status_logo" />
 
-       />
+
     </RelativeLayout>
+
 
 </RelativeLayout>

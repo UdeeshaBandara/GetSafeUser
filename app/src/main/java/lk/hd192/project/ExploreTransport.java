@@ -196,7 +196,7 @@ public class ExploreTransport extends GetSafeBase {
 
         HashMap<String, String> tempParam = new HashMap<>();
         tempParam.put("input", code);
-        tempParam.put("key", "AIzaSyDprEjSWo2BqCS9jR3DwJdPeoe5b1l63OU");
+        tempParam.put("key", "AIzaSyAPrTPADT_tYmMJYjg6nZZ4jUHLJILoWpM");
         tempParam.put("sessiontoken", "1234567890");
         tempParam.put("components", "country:lk");
 
@@ -293,7 +293,7 @@ public class ExploreTransport extends GetSafeBase {
 
         HashMap<String, String> tempParam = new HashMap<>();
         tempParam.put("input", code);
-        tempParam.put("key", "AIzaSyDprEjSWo2BqCS9jR3DwJdPeoe5b1l63OU");
+        tempParam.put("key", "AIzaSyAPrTPADT_tYmMJYjg6nZZ4jUHLJILoWpM");
         tempParam.put("sessiontoken", "1234567890");
         tempParam.put("components", "country:lk");
 

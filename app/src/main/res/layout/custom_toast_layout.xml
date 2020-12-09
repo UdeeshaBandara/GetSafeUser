@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="100dp"
+    android:id="@+id/lnr_bg_toast"
     android:background="#f32d2d2d"
     android:orientation="vertical"
     android:padding="5dp"
