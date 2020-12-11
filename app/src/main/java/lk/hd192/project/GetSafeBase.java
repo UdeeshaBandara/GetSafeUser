@@ -29,6 +29,7 @@ public class GetSafeBase extends AppCompatActivity {
     public static Double pickLat;
 
     public static Double pickLng;
+    public static  boolean isEnable;
     LocationManager locationManager;
     public static boolean MAP_SELECTED = false;
 
@@ -55,7 +56,7 @@ public class GetSafeBase extends AppCompatActivity {
 
     public void verifyLocationService() {
 
-        boolean isEnable;
+
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))

@@ -41,10 +41,8 @@ public class Home extends GetSafeBase {
     RecyclerView homeRecycler;
 
 
-
     ImageView sideMenuListener;
     DrawerLayout drawerLayout;
-
 
 
     NavigationView navigationView;
@@ -78,10 +76,6 @@ public class Home extends GetSafeBase {
         drawerMenu();
 
 
-
-
-
-
     }
 
 
@@ -99,16 +93,32 @@ public class Home extends GetSafeBase {
         drawerTransportLyt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ExploreTransport.class);
-                startActivity(intent);
+                verifyLocationService();
+                if (ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
+                    askForPermission(android.Manifest.permission.ACCESS_FINE_LOCATION, 100);
+                    return;
+                } else if(!isEnable){
+
+                    Intent intent = new Intent(getApplicationContext(), ExploreTransport.class);
+                    startActivity(intent);
+
+                }
             }
         });
         drawerStatsLyt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Journey.class);
-                startActivity(intent);
+                verifyLocationService();
+                if (ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                    askForPermission(android.Manifest.permission.ACCESS_FINE_LOCATION, 100);
+                    return;
+                } else if(!isEnable){
+
+                    Intent intent = new Intent(getApplicationContext(), Journey.class);
+                    startActivity(intent);
+                }
 
             }
         });
@@ -121,8 +131,18 @@ public class Home extends GetSafeBase {
         drawerExpensesLyt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), JourneyDetails.class);
-                startActivity(intent);
+                verifyLocationService();
+                if (ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                    askForPermission(android.Manifest.permission.ACCESS_FINE_LOCATION, 100);
+                    return;
+                } else if(!isEnable){
+
+
+                    Intent intent = new Intent(getApplicationContext(), JourneyDetails.class);
+                    startActivity(intent);
+                }
+
 
             }
         });
@@ -157,15 +177,19 @@ public class Home extends GetSafeBase {
                 public void onClick(View v) {
                     switch (position) {
                         case 0:
+                            verifyLocationService();
                             if (ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
                                 askForPermission(android.Manifest.permission.ACCESS_FINE_LOCATION, 100);
                                 return;
+                            } else if(!isEnable){
+
+
+                                startActivity(new Intent(getApplicationContext(), LiveLocation.class));
+                                drawerLayout.closeDrawers();
                             }
 
 
-                            startActivity(new Intent(getApplicationContext(), LiveLocation.class));
-                            drawerLayout.closeDrawers();
                             break;
                         case 1:
                             startActivity(new Intent(getApplicationContext(), Journey.class));
@@ -188,39 +212,41 @@ public class Home extends GetSafeBase {
             return 5;
         }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(permissions.length == 0){
+        if (permissions.length == 0) {
             return;
         }
         boolean allPermissionsGranted = true;
-        if(grantResults.length>0){
-            for(int grantResult: grantResults){
-                if(grantResult != PackageManager.PERMISSION_GRANTED){
+        if (grantResults.length > 0) {
+            for (int grantResult : grantResults) {
+                if (grantResult != PackageManager.PERMISSION_GRANTED) {
                     allPermissionsGranted = false;
                     break;
                 }
             }
         }
-        if(!allPermissionsGranted){
+        if (!allPermissionsGranted) {
             boolean somePermissionsForeverDenied = false;
-            for(String permission: permissions){
-                if(ActivityCompat.shouldShowRequestPermissionRationale(this, permission)){
+            for (String permission : permissions) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
                     //denied
-                    Log.e("denied", permission);
-                }else{
-                    if(ActivityCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED){
+                    customToast("Permission denied.\nCannot open map", 1);
+                } else {
+                    if (ActivityCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {
                         //allowed
-                        Log.e("allowed", permission);
+                        startActivity(new Intent(getApplicationContext(), LiveLocation.class));
+                        drawerLayout.closeDrawers();
 
-                    } else{
+                    } else {
                         //set to never ask again
                         Log.e("set to never ask again", permission);
                         somePermissionsForeverDenied = true;
                     }
                 }
             }
-            if(somePermissionsForeverDenied){
+            if (somePermissionsForeverDenied) {
                 final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
                 alertDialogBuilder.setTitle("Permissions Required")
                         .setMessage("You have forcefully denied some of the required permissions " +
@@ -257,13 +283,12 @@ public class Home extends GetSafeBase {
 
                 ActivityCompat.requestPermissions(Home.this, new String[]{permission}, requestCode);
 
-
-
             } else {
 
 //                ActivityCompat.requestPermissions(Home.this, new String[]{permission}, requestCode);
             }
         } else {
+
             //Toast.makeText(this, "" + permission + " is already granted.", Toast.LENGTH_SHORT).show();
         }
     }

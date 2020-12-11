@@ -109,7 +109,7 @@ public class LiveLocation extends GetSafeBase {
         myRef = database.getReference("message");
         Query lastQuery = myRef.orderByKey().limitToLast(1);
 
-        verifyLocationService();
+
 
         if (ActivityCompat.checkSelfPermission(LiveLocation.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(LiveLocation.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -177,11 +177,14 @@ public class LiveLocation extends GetSafeBase {
         lastQuery.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                LocationUpdates locationUpdates = snapshot.getValue(LocationUpdates.class);
-                dropLat = locationUpdates.getLatitude();
-                dropLon = locationUpdates.getLongitude();
-                googleMap.clear();
-                drawMapPolyline();
+             try {
+                 LocationUpdates locationUpdates = snapshot.getValue(LocationUpdates.class);
+                 dropLat = locationUpdates.getLatitude();
+                 dropLon = locationUpdates.getLongitude();
+                 googleMap.clear();
+                 drawMapPolyline();
+             }
+             catch(Exception e){}
 
             }
 
