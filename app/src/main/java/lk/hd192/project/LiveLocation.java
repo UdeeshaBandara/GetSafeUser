@@ -109,6 +109,16 @@ public class LiveLocation extends GetSafeBase {
         myRef = database.getReference("message");
         Query lastQuery = myRef.orderByKey().limitToLast(1);
 
+        verifyLocationService();
+
+        if (ActivityCompat.checkSelfPermission(LiveLocation.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(LiveLocation.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            askForPermission(android.Manifest.permission.ACCESS_FINE_LOCATION, 100);
+            return;
+        }
+
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
         originMarker = bitmapSizeByScale(BitmapFactory.decodeResource(getResources(), R.drawable.map_marker), 1);
         finalMarker = bitmapSizeByScale(BitmapFactory.decodeResource(getResources(), R.drawable.map_marker), 1);
 
@@ -161,7 +171,7 @@ public class LiveLocation extends GetSafeBase {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        locationManagerSender.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, locationListener);
+        locationManagerSender.requestLocationUpdates(LocationManager.GPS_PROVIDER, 120000, 0, locationListener);
 
 
         lastQuery.addChildEventListener(new ChildEventListener() {
@@ -228,9 +238,9 @@ public class LiveLocation extends GetSafeBase {
 
                 googleMap = gMap;
 
+                if (ActivityCompat.checkSelfPermission(LiveLocation.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(LiveLocation.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-                if (ActivityCompat.checkSelfPermission(LiveLocation.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(LiveLocation.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    askForPermission(Manifest.permission.ACCESS_FINE_LOCATION, 100);
+                    askForPermission(android.Manifest.permission.ACCESS_FINE_LOCATION, 100);
                     return;
                 }
 
@@ -238,15 +248,8 @@ public class LiveLocation extends GetSafeBase {
                 googleMap.setMyLocationEnabled(true);
 
                 try {
-                    locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-                    if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                        customToast("Please enable location services", 1);
-                        Intent settings = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        startActivity(settings);
 
-                    }
-//
 //                    final Location location = locationManager.getLastKnownLocation(locationProvider);
 //
 //                    cameraPosition = new CameraPosition.Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(15).build();
@@ -383,19 +386,23 @@ public class LiveLocation extends GetSafeBase {
         // Destination of route
         String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
 
-        // Sensor enabled
-        String sensor = "sensor=false";
+        //avoid highways
+        String avoidList = "&avoid=highways";
+
+        //drop off locations
+        String wayPoints = "&waypoints=via:6.9361,79.8450";
+
 
         // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest + "&key=" + getString(R.string.API_KEY);
+        String parameters = str_origin + "&" + str_dest + avoidList + "&key=" + getString(R.string.API_KEY);
 
         // Output format
         String output = "json";
 
+
         // Building the url to the web service
         String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
 
-//        Log.e("POLY- URL ", url);
 
         return url;
     }

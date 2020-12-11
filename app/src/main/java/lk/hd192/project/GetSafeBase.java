@@ -1,6 +1,10 @@
 package lk.hd192.project;
 
+import android.content.Context;
+import android.content.Intent;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -20,13 +24,13 @@ public class GetSafeBase extends AppCompatActivity {
     static KProgressHUD hud;
     static int device_width, device_height;
     public TinyDB tinyDB;
-    public static String PICKUP_LAT, PICKUP_LOG, DROP_LAT, DROP_LOG, PICKUP_LOCATION, DROP_LOCATION,LOC_ADDRESS;
+    public static String PICKUP_LAT, PICKUP_LOG, DROP_LAT, DROP_LOG, PICKUP_LOCATION, DROP_LOCATION, LOC_ADDRESS;
     int dropNPickAddressDistinguish;
     public static Double pickLat;
 
     public static Double pickLng;
-
-    public static boolean MAP_SELECTED=false;
+    LocationManager locationManager;
+    public static boolean MAP_SELECTED = false;
 
     public static String pickAddress;
 
@@ -49,16 +53,37 @@ public class GetSafeBase extends AppCompatActivity {
 
     }
 
-    public void customToast(String message,int type) {
+    public void verifyLocationService() {
+
+        boolean isEnable;
+
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+
+            isEnable = true;
+
+        else
+            isEnable = false;
+
+        if (isEnable) {
+            customToast("Please enable location services", 1);
+            Intent settings = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(settings);
+        }
+
+    }
+
+
+    public void customToast(String message, int type) {
 
         View toastView = getLayoutInflater().inflate(R.layout.custom_toast_layout, null);
 
         toastView.setMinimumWidth(device_width);
         toastView.setMinimumHeight(100);
 
-        if (type==1)
+        if (type == 1)
             toastView.findViewById(R.id.lnr_bg_toast).setBackgroundColor(getResources().getColor(R.color.toast_warning_color));
-        
+
         TextView textView = toastView.findViewById(R.id.toast_message);
 
         textView.setText(message);
