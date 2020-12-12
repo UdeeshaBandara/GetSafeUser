@@ -1,7 +1,6 @@
 package lk.hd192.project;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,6 +33,7 @@ import java.util.HashMap;
 
 import lk.hd192.project.Utils.GetSafeServices;
 import lk.hd192.project.Utils.VolleyJsonCallback;
+import lk.hd192.project.pojo.NearestTowns;
 
 public class ExploreTransport extends GetSafeBase {
 

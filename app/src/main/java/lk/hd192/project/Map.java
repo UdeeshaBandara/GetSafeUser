@@ -44,8 +44,9 @@ public class Map extends GetSafeBase {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        mPickupLocation = findViewById(R.id.map_pickupLocation);
-        mConfirm = findViewById(R.id.btn_confirmMapLocation);
+        mPickupLocation=findViewById(R.id.map_pickupLocation);
+        mConfirm=findViewById(R.id.btn_confirmMapLocation);
+
 
 
         try {
@@ -56,17 +57,17 @@ public class Map extends GetSafeBase {
         }
         mPickupLocation.onCreate(savedInstanceState);
         mPickupLocation.onResume();
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager= (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
 
         mConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PICKUP_LAT = String.valueOf(googleMap.getCameraPosition().target.latitude);
-                PICKUP_LOG = String.valueOf(googleMap.getCameraPosition().target.longitude);
-                DROP_LAT = String.valueOf(googleMap.getCameraPosition().target.latitude);
-                DROP_LOG = String.valueOf(googleMap.getCameraPosition().target.longitude);
-                MAP_SELECTED = true;
+                PICKUP_LAT=String.valueOf(googleMap.getCameraPosition().target.latitude);
+                PICKUP_LOG=String.valueOf(googleMap.getCameraPosition().target.longitude);
+                DROP_LAT=String.valueOf(googleMap.getCameraPosition().target.latitude);
+                DROP_LOG=String.valueOf(googleMap.getCameraPosition().target.longitude);
+                MAP_SELECTED=true;
                 onBackPressed();
             }
         });
@@ -77,7 +78,7 @@ public class Map extends GetSafeBase {
     @Override
     protected void onResume() {
         super.onResume();
-        if (googleMap != null) {
+        if(googleMap != null){
             googleMap.clear();
 
             // add the markers just like how you did the first time
@@ -91,48 +92,49 @@ public class Map extends GetSafeBase {
                 googleMap = mMap;
 
                 if (ActivityCompat.checkSelfPermission(Map.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Map.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
                     askForPermission(android.Manifest.permission.ACCESS_FINE_LOCATION, 100);
                     return;
                 }
                 googleMap.setMyLocationEnabled(true);
 
 
-                try {
 
-                    if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                        customToast("Please enable location services", 1);
-                        Intent settings = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                try{
+
+                    if( !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+                    {
+                        customToast("Please enable location services",1);
+                        Intent settings=new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                         startActivity(settings);
 
-                    }else{
+                    }
 
 //                    boolean success = googleMap.setMapStyle(
 //                            MapStyleOptions.loadRawResourceStyle(
 //                                    ActivitySIngleView.this, R.raw.style_json));
 
-
-                    // For zooming automatically to the location of the marker
-                    final Location location = locationManager.getLastKnownLocation(locationProvider);
-
-                    cameraPosition = new CameraPosition.Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(15).build();
-
-                    googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-
-                    googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-                        @Override
-                        public void onCameraChange(CameraPosition cameraPosition) {
-
-                            locationAddress(cameraPosition.target.latitude, cameraPosition.target.longitude);
-
-
-                        }
-                    });
-                    }
-                } catch (Exception e) {
+                }catch (Exception e){
 
                 }
+
+                // For zooming automatically to the location of the marker
+                final Location location = locationManager.getLastKnownLocation(locationProvider);
+
+                cameraPosition = new CameraPosition.Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(15).build();
+
+                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+
+                googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+                    @Override
+                    public void onCameraChange(CameraPosition cameraPosition) {
+
+                        locationAddress(cameraPosition.target.latitude, cameraPosition.target.longitude);
+
+
+                    }
+                });
+
 
             }
         });
@@ -162,31 +164,33 @@ public class Map extends GetSafeBase {
         super.onBackPressed();
     }
 
-    public void locationAddress(double lat, double lon) {
+    public void locationAddress(double lat, double lon){
         Geocoder geocoder;
         List<Address> addressList;
 
         geocoder = new Geocoder(this, Locale.getDefault());
 
         try {
-            addressList = geocoder.getFromLocation(lat, lon, 1);
+            addressList = geocoder.getFromLocation(lat,lon,1);
 
-            Log.e("address", addressList.size() + " ");
+            Log.e("address", addressList.size()+" ");
 
-            if (addressList.size() == 0) {
+            if(addressList.size()==0){
 
 
-                customToast("Oops.. \nNo Address Found in this Area ", 0);
+                customToast("Oops.. \nNo Address Found in this Area ",0);
                 mConfirm.setEnabled(false);
 
-            } else {
+            }else{
                 mConfirm.setEnabled(true);
                 LOC_ADDRESS = addressList.get(0).getAddressLine(0);
             }
 
 
+
+
         } catch (IOException e) {
-            customToast("Oops.. \nan error occurred", 1);
+            customToast("Oops.. \nan error occurred",1);
             e.printStackTrace();
         }
     }

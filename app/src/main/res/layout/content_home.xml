@@ -75,35 +75,44 @@
             android:textSize="13sp" />
 
     </RelativeLayout>
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scaleType="centerCrop"
         android:layout_below="@+id/home_heading"
-
-
+        android:scaleType="centerCrop"
         android:src="@drawable/bg_shadow" />
+
     <TextView
         android:id="@+id/home_sub_heading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        android:text="What can we help you with ?"
-        android:fontFamily="@font/nunito_bold"
         android:layout_below="@+id/home_heading"
-        android:textSize="18sp"
         android:layout_marginLeft="14dp"
         android:layout_marginTop="5dp"
+        android:fontFamily="@font/nunito_bold"
+        android:text="What can we help you with ?"
         android:textColor="@color/dark_blue"
-        />
+        android:textSize="18sp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/home_recycler"
-        android:layout_marginTop="5dp"
-
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/home_sub_heading"
         android:layout_marginHorizontal="10dp"
-        android:layout_below="@id/home_sub_heading"/>
+        android:layout_marginTop="5dp" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+      android:id="@+id/fab_add_kid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.3"
+        android:src="@drawable/icon_home_next"
+        android:background="@color/dark_blue"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"/>
 </RelativeLayout>

@@ -34,6 +34,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/nunito_bold"
+
                 android:text="Let us know the \nfollowing about you"
                 android:textSize="28sp" />
 
@@ -51,9 +52,11 @@
                     android:layout_height="45dp"
                     android:layout_marginTop="15dp"
                     android:hint="Your name"
+                    android:maxLines="1"
+                    android:drawablePadding="5dp"
                     android:background="@drawable/custom_edittext"
                     android:drawableLeft="@drawable/icon_name"
-                    android:paddingLeft="20dp" />
+                    android:paddingLeft="25dp" />
 
                 <EditText
                     android:id="@+id/txt_email"
@@ -61,9 +64,12 @@
                     android:layout_height="45dp"
                     android:layout_marginTop="15dp"
                     android:hint="Email"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:drawablePadding="5dp"
                     android:background="@drawable/custom_edittext"
                     android:drawableLeft="@drawable/icon_email"
-                    android:paddingLeft="20dp" />
+                    android:paddingLeft="25dp" />
 
                 <EditText
                     android:id="@+id/txt_mobile"
@@ -71,9 +77,12 @@
                     android:layout_height="45dp"
                     android:layout_marginTop="15dp"
                     android:hint="Mobile no"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    android:drawablePadding="5dp"
                     android:background="@drawable/custom_edittext"
                     android:drawableLeft="@drawable/icon_mobile"
-                    android:paddingLeft="20dp" />
+                    android:paddingLeft="25dp" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"

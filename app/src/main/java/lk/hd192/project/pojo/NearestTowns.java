@@ -1,4 +1,4 @@
-package lk.hd192.project;
+package lk.hd192.project.pojo;
 
 import java.util.ArrayList;
 

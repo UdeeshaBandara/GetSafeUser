@@ -5,4 +5,6 @@
     <string name="API_KEY">AIzaSyAPrTPADT_tYmMJYjg6nZZ4jUHLJILoWpM</string>
     <string name="AUTO_COMPLETE">https://maps.googleapis.com/maps/api/place/autocomplete/json</string>
     <string name="REVERSE_GEO">https://maps.googleapis.com/maps/api/geocode/json</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

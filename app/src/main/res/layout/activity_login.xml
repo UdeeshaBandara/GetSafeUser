@@ -83,6 +83,8 @@
                     android:layout_height="45dp"
                     android:layout_weight="1.5"
                     android:enabled="false"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:gravity="center"
                     android:hint="+94"
                     android:inputType="number" />
@@ -93,6 +95,7 @@
                     android:layout_height="45dp"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:maxLines="1"
                     android:inputType="number"
                     android:maxLength="1" />
 
@@ -102,6 +105,7 @@
                     android:layout_height="45dp"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:maxLines="1"
                     android:inputType="number"
                     android:maxLength="1" />
 
@@ -111,6 +115,7 @@
                     android:layout_height="45dp"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:maxLines="1"
                     android:inputType="number"
                     android:maxLength="1" />
 
@@ -119,6 +124,7 @@
                     android:layout_width="0dp"
                     android:layout_height="45dp"
                     android:layout_weight="1"
+                    android:maxLines="1"
                     android:gravity="center"
                     android:inputType="number"
                     android:maxLength="1" />
@@ -129,6 +135,7 @@
                     android:layout_height="45dp"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:maxLines="1"
                     android:inputType="number"
                     android:maxLength="1" />
 
@@ -146,6 +153,7 @@
                     android:layout_width="0dp"
                     android:layout_height="45dp"
                     android:layout_weight="1"
+                    android:maxLines="1"
                     android:gravity="center"
                     android:inputType="number"
                     android:maxLength="1" />
@@ -155,6 +163,7 @@
                     android:layout_width="0dp"
                     android:layout_height="45dp"
                     android:layout_weight="1"
+                    android:maxLines="1"
                     android:gravity="center"
                     android:inputType="number"
                     android:maxLength="1" />
@@ -164,6 +173,7 @@
                     android:layout_width="0dp"
                     android:layout_height="45dp"
                     android:layout_weight="1"
+                    android:maxLines="1"
                     android:gravity="center"
                     android:inputType="number"
                     android:maxLength="1" />

@@ -15,6 +15,7 @@ import com.otaliastudios.autocomplete.RecyclerViewPresenter;
 import java.util.List;
 
 import lk.hd192.project.Utils.GetSafeServices;
+import lk.hd192.project.pojo.NearestTowns;
 
 public class TownsPresenter extends RecyclerViewPresenter<NearestTowns> {
 
