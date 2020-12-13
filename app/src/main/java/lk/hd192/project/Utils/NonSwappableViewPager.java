@@ -10,33 +10,27 @@ import androidx.viewpager.widget.ViewPager;
 
 public class NonSwappableViewPager extends ViewPager {
 
-    boolean Swappable = true;
+    private boolean isPagingEnabled = false;
 
-    public NonSwappableViewPager(@NonNull Context context) {
+    public NonSwappableViewPager(Context context) {
         super(context);
     }
 
-    public NonSwappableViewPager(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public NonSwappableViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
     @Override
-    public boolean onInterceptHoverEvent(MotionEvent event) {
-        if (Swappable) {
-            return super.onInterceptTouchEvent(event);
-        }
-        return false;
+    public boolean onTouchEvent(MotionEvent event) {
+        return this.isPagingEnabled && super.onTouchEvent(event);
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent ev) {
-        if (Swappable) {
-            return super.onTouchEvent(ev);
-        }
-        return false;
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+        return this.isPagingEnabled && super.onInterceptTouchEvent(event);
     }
 
-    public void setSwappable(boolean swappable) {
-        Swappable = swappable;
+    public void setPagingEnabled(boolean b) {
+        this.isPagingEnabled = b;
     }
 }

@@ -4,9 +4,11 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
 
+
+
     defaultConfig {
         applicationId "lk.hd192.project"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -33,19 +35,19 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:19.5.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     //google services
     //volley
     implementation 'com.android.volley:volley:1.1.1'
-    implementation 'com.google.code.gson:gson:2.6.2'
+    implementation 'com.google.code.gson:gson:2.8.5'
 
     //Rounded Image View
     implementation 'com.makeramen:roundedimageview:2.3.0'
 
     //Picasso : image render engine
-    implementation 'com.squareup.picasso:picasso:2.3.2'
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
     //progress window
     implementation 'com.kaopiz:kprogresshud:1.2.0'
@@ -56,15 +58,24 @@ dependencies {
     //recycler view
     implementation "androidx.recyclerview:recyclerview:1.1.0"
 
-    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.google.android.material:material:1.2.1'
 
 
     implementation 'com.daimajia.androidanimations:library:2.4@aar'
     //autocomplete edit text
     implementation 'com.otaliastudios:autocomplete:1.1.0'
-    implementation 'com.google.android.libraries.places:places:1.0.0'
+    implementation 'com.google.android.libraries.places:places:2.4.0'
 
     implementation 'com.android.support:multidex:1.0.3'
+
+    //YOYO animation
+    implementation 'com.daimajia.androidanimations:library:2.4@aar'
+
+    //spinner date picker
+    implementation 'com.github.drawers:SpinnerDatePicker:2.0.1'
+
+    //lottie animations
+    implementation 'com.airbnb.android:lottie:3.5.0'
 
 
 }

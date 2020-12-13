@@ -14,6 +14,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -81,10 +82,18 @@ public class Home extends GetSafeBase {
         fabAddKid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), AddNewKid.class));
+                customToast("Press and hold to add new kid", 0);
+
             }
         });
 
+        fabAddKid.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                startActivity(new Intent(getApplicationContext(), AddNewKid.class));
+                return false;
+            }
+        });
 
     }
 

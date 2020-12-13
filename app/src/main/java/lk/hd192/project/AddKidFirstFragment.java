@@ -1,19 +1,50 @@
 package lk.hd192.project;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.Filterable;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.tsongkha.spinnerdatepicker.DatePicker;
+import com.tsongkha.spinnerdatepicker.DatePickerDialog;
+import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 
-public class AddKidFirstFragment extends Fragment {
+public class AddKidFirstFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
+    int year;
+    int month;
+    int day;
+    TextView calenderBirthday, txtSchoolName, txtBottomSheetSearch;
+    EditText txtFirstName, txtLastName;
+    SimpleDateFormat simpleDateFormat;
+    RecyclerView bottomSheetRecycler;
+    SchoolBottomSheet schoolBottomSheet;
 
-
+    RadioGroup rbnGrpGender;
 
     public AddKidFirstFragment() {
         // Required empty public constructor
@@ -24,7 +55,259 @@ public class AddKidFirstFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_add_kid_first, container, false);
 
-        return inflater.inflate(R.layout.fragment_add_kid_first, container, false);
+        calenderBirthday = view.findViewById(R.id.calender_birthday);
+        txtSchoolName = view.findViewById(R.id.txt_school_name);
+        txtFirstName = view.findViewById(R.id.txt_first_name);
+        txtLastName = view.findViewById(R.id.txt_last_name);
+        rbnGrpGender = view.findViewById(R.id.rbn_grp_gender);
+
+
+        if (AddNewKid.isEditing) {
+
+
+            txtFirstName.setText(AddNewKid.FirstName);
+            txtLastName.setText(AddNewKid.LastName);
+            txtSchoolName.setText(AddNewKid.SchoolName);
+            calenderBirthday.setText(AddNewKid.Birthday);
+
+        }
+
+        final Calendar c = Calendar.getInstance();
+        year = c.get(Calendar.YEAR);
+        month = c.get(Calendar.MONTH);
+        day = c.get(Calendar.DAY_OF_MONTH);
+        simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
+
+
+        calenderBirthday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDate(year, month, day, R.style.DatePickerSpinner);
+            }
+        });
+
+        txtSchoolName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openBottomSheet();
+            }
+        });
+
+
+        AddNewKid.Gender = (((RadioButton) view.findViewById(rbnGrpGender.getCheckedRadioButtonId())).getText()).toString();
+
+        return view;
+
     }
+
+    public void validateFields() {
+
+        if (txtFirstName.getText().toString().isEmpty()) {
+            YoYo.with(Techniques.Bounce)
+                    .duration(1000)
+                    .playOn(txtFirstName);
+            txtFirstName.setError("Please enter kid first name");
+            AddNewKid.firstCompleted = false;
+
+        } else if (txtLastName.getText().toString().isEmpty()) {
+            YoYo.with(Techniques.Bounce)
+                    .duration(1000)
+                    .playOn(txtLastName);
+            txtLastName.setError("Please enter kid last name");
+            AddNewKid.firstCompleted = false;
+
+        } else if (txtSchoolName.getHint().toString().equals("School Name")) {
+            YoYo.with(Techniques.Bounce)
+                    .duration(1000)
+                    .playOn(txtSchoolName);
+            txtSchoolName.setError("Please select school name");
+            AddNewKid.firstCompleted = false;
+
+        } else if (calenderBirthday.getHint().toString().equals("Birthday")) {
+            YoYo.with(Techniques.Bounce)
+                    .duration(1000)
+                    .playOn(calenderBirthday);
+            calenderBirthday.setError("Please select kid birthday");
+            AddNewKid.firstCompleted = false;
+        } else {
+
+            AddNewKid.firstCompleted = true;
+            AddNewKid.FirstName = txtFirstName.getText().toString();
+            AddNewKid.LastName = txtLastName.getText().toString();
+            AddNewKid.SchoolName = txtSchoolName.getText().toString();
+            AddNewKid.Birthday = calenderBirthday.getHint().toString();
+
+        }
+    }
+
+    @VisibleForTesting
+    void showDate(int year, int monthOfYear, int dayOfMonth, int spinnerTheme) {
+        new SpinnerDatePickerDialogBuilder()
+                .context(getActivity())
+                .callback(this)
+                .spinnerTheme(spinnerTheme)
+                .showDaySpinner(true)
+                .maxDate(year - 4, month, day)
+                .minDate(year - 20, month, day)
+                .defaultDate(year, monthOfYear, dayOfMonth)
+                .build()
+                .show();
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+        Calendar calendar = new GregorianCalendar(year, monthOfYear, dayOfMonth);
+        calenderBirthday.setHint(simpleDateFormat.format(calendar.getTime()));
+
+    }
+
+    private class SchoolBottomSheet extends BottomSheetDialog {
+
+
+        public SchoolBottomSheet(Context context) {
+            super(context);
+
+        }
+
+        @Override
+        protected void onStart() {
+            super.onStart();
+            getBehavior().setPeekHeight((GetSafeBase.device_height / 3) * 2, false);
+            getBehavior().setDraggable(false);
+
+
+        }
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+
+            bottomSheetRecycler = findViewById(R.id.bottom_sheet_recycle_view);
+            txtBottomSheetSearch = findViewById(R.id.school_search);
+
+            bottomSheetRecycler.setAdapter(new SchoolAdapter());
+
+            bottomSheetRecycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+            txtBottomSheetSearch.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                    if (txtBottomSheetSearch.getText().toString().equals("")) {
+                        //  schoolsArr = originalResult;
+                        bottomSheetRecycler.getAdapter().notifyDataSetChanged();
+                    } else {
+
+                        SchoolAdapter homeAdapter = new SchoolAdapter();
+                        homeAdapter.getFilter().filter(s);
+                    }
+
+                }
+            });
+
+
+        }
+    }
+
+    public void openBottomSheet() {
+
+
+        schoolBottomSheet = new SchoolBottomSheet(getActivity());
+        schoolBottomSheet.setContentView(R.layout.schools_bottom_sheet);
+        schoolBottomSheet.show();
+
+    }
+
+    public class SchoolNameViewHolder extends RecyclerView.ViewHolder {
+
+        RelativeLayout rltSchool;
+
+        public SchoolNameViewHolder(@NonNull View itemView) {
+            super(itemView);
+            rltSchool = itemView.findViewById(R.id.rlt_school);
+        }
+    }
+
+    public class SchoolAdapter extends RecyclerView.Adapter<SchoolNameViewHolder> implements Filterable {
+
+        @NonNull
+        @Override
+        public SchoolNameViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(getActivity())
+                    .inflate(R.layout.item_school_name, parent, false);
+            return new SchoolNameViewHolder(view);
+
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull SchoolNameViewHolder holder, int position) {
+
+            holder.rltSchool.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    txtSchoolName.setText("Mahanama College");
+                    txtSchoolName.setHint("Mahanama College");
+                    schoolBottomSheet.dismiss();
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return 20;
+        }
+
+        @Override
+        public Filter getFilter() {
+            return null;
+        }
+
+        //Home screen search - filter stories by story name or category name  #Udeesha
+        Filter filter = new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                //   schoolsArr = new JSONArray();
+                int put = 0;
+
+                try {
+//                    for (int i = 0; i < originalResult.length(); i++) {
+//                        if (originalResult.getJSONObject(i).getString("name_en").toLowerCase().contains(constraint.toString().toLowerCase()) ||
+//                                originalResult.getJSONObject(i).getString("category_name").toLowerCase().contains(constraint.toString().toLowerCase())) {
+//
+//                            schoolsArr.put(put++, originalResult.getJSONObject(i));
+//                        }
+//
+//                    }
+
+                } catch (Exception e) {
+
+                }
+
+
+                return null;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+
+                bottomSheetRecycler.getAdapter().notifyDataSetChanged();
+
+            }
+        };
+
+    }
+
+
 }

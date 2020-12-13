@@ -108,34 +108,26 @@ public class Map extends GetSafeBase {
                         startActivity(settings);
 
                     }
+                    final Location location = locationManager.getLastKnownLocation(locationProvider);
 
-//                    boolean success = googleMap.setMapStyle(
-//                            MapStyleOptions.loadRawResourceStyle(
-//                                    ActivitySIngleView.this, R.raw.style_json));
+                    cameraPosition = new CameraPosition.Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(15).build();
+
+                    googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+
+                    googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+                        @Override
+                        public void onCameraChange(CameraPosition cameraPosition) {
+
+                            locationAddress(cameraPosition.target.latitude, cameraPosition.target.longitude);
+
+
+                        }
+                    });
 
                 }catch (Exception e){
 
                 }
-
-                // For zooming automatically to the location of the marker
-                final Location location = locationManager.getLastKnownLocation(locationProvider);
-
-                cameraPosition = new CameraPosition.Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(15).build();
-
-                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-
-                googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-                    @Override
-                    public void onCameraChange(CameraPosition cameraPosition) {
-
-                        locationAddress(cameraPosition.target.latitude, cameraPosition.target.longitude);
-
-
-                    }
-                });
-
-
             }
         });
     }
@@ -144,16 +136,7 @@ public class Map extends GetSafeBase {
         if (ContextCompat.checkSelfPermission(Map.this, permission) != PackageManager.PERMISSION_GRANTED) {
 
             // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(Map.this, permission)) {
-
-                //This is called if user has denied the permission before
-                //In this case I am just asking the permission again
-                ActivityCompat.requestPermissions(Map.this, new String[]{permission}, requestCode);
-
-            } else {
-
-                ActivityCompat.requestPermissions(Map.this, new String[]{permission}, requestCode);
-            }
+            ActivityCompat.requestPermissions(Map.this, new String[]{permission}, requestCode);
         } else {
             //Toast.makeText(this, "" + permission + " is already granted.", Toast.LENGTH_SHORT).show();
         }

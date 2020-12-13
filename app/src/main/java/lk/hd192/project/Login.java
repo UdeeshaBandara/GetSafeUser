@@ -2,6 +2,7 @@ package lk.hd192.project;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -10,7 +11,10 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-public class Login extends AppCompatActivity {
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+
+public class Login extends GetSafeBase {
 
     EditText one, two, three, four, five, six, seven, eight, nine;
 
@@ -30,6 +34,38 @@ public class Login extends AppCompatActivity {
         nine = findViewById(R.id.txt_number_nine);
 
         requestFocus();
+
+        findViewById(R.id.btn_login_next).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                if (!TextUtils.isEmpty(one.getText().toString()) &
+                        !TextUtils.isEmpty(two.getText().toString()) &
+                        !TextUtils.isEmpty(three.getText().toString()) &
+                        !TextUtils.isEmpty(four.getText().toString()) &
+                        !TextUtils.isEmpty(five.getText().toString())&
+                        !TextUtils.isEmpty(six.getText().toString())&
+                        !TextUtils.isEmpty(seven.getText().toString())&
+                        !TextUtils.isEmpty(eight.getText().toString())&
+                        !TextUtils.isEmpty(nine.getText().toString())) {
+
+                    startActivity(new Intent(getApplicationContext(), OTP.class));
+                    finish();
+
+
+
+
+                }
+                else{
+                    YoYo.with(Techniques.Bounce)
+                            .duration(1000)
+                            .playOn(findViewById(R.id.lnr_number));
+                    customToast("Please enter correct number",1);
+
+                }
+            }
+        });
     }
 
     private void requestFocus() {

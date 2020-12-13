@@ -1,0 +1,534 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
+    tools:context="AddKidThirdFragment">
+
+
+    <ScrollView
+        android:id="@+id/map_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:scrollbars="none">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="65dp">
+
+            <LinearLayout
+                android:id="@+id/kidsNameBox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/kid_name_review_label"
+                                android:layout_width="match_parent"
+                                android:layout_height="20dp"
+                                android:fontFamily="@font/nunito_regular"
+                                android:gravity="center_vertical"
+                                android:hint="kid's Name"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/review_kid_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:fontFamily="@font/nunito_bold"
+                                android:text=""
+                                android:textColor="@color/black"
+                                android:textSize="18sp" />
+
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1">
+
+
+                            <com.airbnb.lottie.LottieAnimationView
+                                android:id="@+id/edit_animation"
+                                android:layout_width="100dp"
+                                android:layout_height="100dp"
+                                android:layout_gravity="center"
+                                app:lottie_autoPlay="true"
+                                app:lottie_loop="true"
+                                app:lottie_rawRes="@raw/edit_button"
+                               />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/kidSchoolBox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/kidsNameBox"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <View
+                        android:id="@+id/SplitLine_hor2"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#FFD5D6D6" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/kid_name_school_label"
+                                android:layout_width="match_parent"
+                                android:layout_height="20dp"
+                                android:fontFamily="@font/nunito_regular"
+                                android:gravity="center_vertical"
+                                android:hint="School Name"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/review_school_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:fontFamily="@font/nunito_bold"
+                                android:text=""
+                                android:textColor="@color/black"
+                                android:textSize="18sp" />
+
+
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical">
+
+                            <com.makeramen.roundedimageview.RoundedImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_alignParentTop="true"
+                                android:src="@drawable/icon_home_next"
+                                android:visibility="gone" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/kidBirthdayBox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/kidSchoolBox"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <View
+                        android:id="@+id/SplitLine_hor3"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#FFD5D6D6" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/kid_name_bdy_label"
+                                android:layout_width="match_parent"
+                                android:layout_height="20dp"
+                                android:fontFamily="@font/nunito_regular"
+                                android:gravity="center_vertical"
+                                android:hint="Birthday"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/review_kid_dob"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:fontFamily="@font/nunito_bold"
+                                android:text=""
+                                android:textColor="@color/black"
+                                android:textSize="18sp" />
+
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical">
+
+                            <com.makeramen.roundedimageview.RoundedImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_alignParentTop="true"
+                                android:src="@drawable/icon_home_next"
+                                android:visibility="gone" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/kidGurdianDetailsBox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/kidBirthdayBox"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <View
+                        android:id="@+id/SplitLine_hor4"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#FFD5D6D6" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/kid_gurdian_name_label"
+                                android:layout_width="match_parent"
+                                android:layout_height="20dp"
+                                android:fontFamily="@font/nunito_regular"
+                                android:gravity="center_vertical"
+                                android:hint="Guardian's Details"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/review_guardian_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:fontFamily="@font/nunito_bold"
+                                android:text=""
+                                android:textColor="@color/black"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/review_guardian_contact"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:drawableLeft="@drawable/icon_call"
+                                android:fontFamily="@font/nunito_regular"
+                                android:text=" "
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+
+
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical">
+
+                            <com.makeramen.roundedimageview.RoundedImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_alignParentTop="true"
+                                android:src="@drawable/icon_home_next"
+                                android:visibility="gone" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/kidAddressBox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/kidGurdianDetailsBox"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <View
+                        android:id="@+id/SplitLine_hor5"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#FFD5D6D6" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/kid_address_label"
+                                android:layout_width="match_parent"
+                                android:layout_height="20dp"
+                                android:fontFamily="@font/nunito_regular"
+                                android:gravity="center_vertical"
+                                android:hint="Pick up Address"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/review_address"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:fontFamily="@font/nunito_bold"
+                                android:text=""
+                                android:textColor="@color/black"
+                                android:textSize="18sp" />
+
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <com.makeramen.roundedimageview.RoundedImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentTop="true"
+                                android:src="@drawable/icon_home_next"
+                                android:visibility="gone" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/kidAddressBoxMap"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/kidAddressBox"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <View
+                        android:id="@+id/SplitLine_hor6"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#FFD5D6D6" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/kid_address_label2"
+                                android:layout_width="match_parent"
+                                android:layout_height="20dp"
+                                android:fontFamily="@font/nunito_regular"
+                                android:gravity="center_vertical"
+                                android:hint="Map Location"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/review_map_location_address"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:fontFamily="@font/nunito_bold"
+                                android:text=""
+                                android:textColor="@color/black"
+                                android:textSize="18sp" />
+
+
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/rlt_drop_down"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <ImageView
+                                android:id="@+id/review_under_button"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignParentTop="true"
+                                android:layout_centerInParent="true"
+                                android:src="@drawable/down_arrow" />
+
+                            <ImageView
+                                android:id="@+id/review_upper_button"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:visibility="gone"
+                                android:layout_alignParentTop="true"
+                                android:layout_centerInParent="true"
+                                android:src="@drawable/up_arrow" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/map_scroll_container"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_below="@+id/kidAddressBoxMap"
+                android:layout_marginTop="15dp"
+                android:focusableInTouchMode="true"
+                android:visibility="gone">
+
+                <com.google.android.gms.maps.MapView
+                    android:id="@+id/review_map"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:focusable="true" />
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+
+</FrameLayout>

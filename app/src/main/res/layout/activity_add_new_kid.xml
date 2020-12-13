@@ -4,16 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".AddNewKid">
 
     <RelativeLayout
         android:id="@+id/card_heading"
         android:layout_width="match_parent"
         android:layout_height="140dp"
-        android:background="@drawable/action_bar_gradient">
+        android:background="@drawable/bg_add_kid">
 
         <RelativeLayout
             android:layout_width="match_parent"
+
             android:layout_height="wrap_content">
 
 
@@ -43,34 +45,88 @@
         </RelativeLayout>
     </RelativeLayout>
 
-    <com.makeramen.roundedimageview.RoundedImageView
-        android:id="@+id/icon_kid_loc"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_centerHorizontal="true"
+    <LinearLayout
+        android:id="@+id/lnr_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="90dp"
-        android:src="@drawable/driver_profile_pic" />
+        android:orientation="vertical">
+
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/kid_animation"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:visibility="visible"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/kid_profile_animation" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/location_animation"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/add_kid_location" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/done_animation"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/done_animation" />
+    </LinearLayout>
 
     <lk.hd192.project.Utils.NonSwappableViewPager
         android:id="@+id/view_pager_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/icon_kid_loc"
-        android:layout_marginTop="10dp" />
+         android:layout_below="@+id/lnr_image" />
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/main_save_animation"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_next"
+        android:visibility="gone"
+        app:lottie_rawRes="@raw/add_kid_confirmation" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/btn_next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginRight="15dp"
+        android:layout_gravity="center"
+        android:layout_marginEnd="15dp"
 
         android:layout_marginBottom="15dp"
-        android:background="@color/dark_blue"
-        android:src="@drawable/icon_home_next"
-        app:rippleColor="@color/dark_blue" />
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/right_arrow"
 
+        />
+
+    <Button
+        android:id="@+id/btn_save"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/bg_button_contact_driver"
+        android:text="Save"
+        android:textAllCaps="false"
+        android:visibility="gone" />
 
 </RelativeLayout>

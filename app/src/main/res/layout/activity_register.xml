@@ -35,7 +35,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/nunito_bold"
 
-                android:text="Let us know the \nfollowing about you"
+                android:text="Let us know the \nfollowing about guardian"
                 android:textSize="28sp" />
 
             <LinearLayout
@@ -52,6 +52,7 @@
                     android:layout_height="45dp"
                     android:layout_marginTop="15dp"
                     android:hint="Your name"
+                    android:paddingRight="10dp"
                     android:maxLines="1"
                     android:drawablePadding="5dp"
                     android:background="@drawable/custom_edittext"
@@ -64,6 +65,7 @@
                     android:layout_height="45dp"
                     android:layout_marginTop="15dp"
                     android:hint="Email"
+                    android:paddingRight="10dp"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
                     android:drawablePadding="5dp"
@@ -78,6 +80,7 @@
                     android:layout_marginTop="15dp"
                     android:hint="Mobile no"
                     android:inputType="number"
+                    android:paddingRight="10dp"
                     android:maxLines="1"
                     android:drawablePadding="5dp"
                     android:background="@drawable/custom_edittext"

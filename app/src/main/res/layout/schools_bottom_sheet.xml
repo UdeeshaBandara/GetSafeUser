@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="@color/colorPrimaryDark" />
+
+        <EditText
+            android:id="@+id/school_search"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@+id/lyt_gender"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginTop="15dp"
+            android:imeOptions="actionSearch"
+            android:inputType="textNoSuggestions"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/custom_edittext"
+            android:drawableLeft="@drawable/quantum_ic_search_grey600_24"
+            android:fontFamily="@font/nunito_regular"
+            android:gravity="center"
+            android:paddingHorizontal="20dp"
+            android:hint="Search School"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/bottom_sheet_recycle_view"
+            android:layout_width="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="15dp"
+            android:layout_height="wrap_content">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+
+    </LinearLayout>
+
+</RelativeLayout>
