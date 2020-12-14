@@ -100,7 +100,7 @@ public class AddKidThirdFragment extends Fragment {
         editDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addNewKid.goToFirstStep();
+             //   addNewKid.goToFirstStep();
 
                 AddNewKid.isEditing = true;
             }
