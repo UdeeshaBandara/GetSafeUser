@@ -25,6 +25,6 @@
         android:layout_marginHorizontal="5dp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:alpha=".05"
+        android:alpha=".02"
         android:background="@color/black" />
 </RelativeLayout>

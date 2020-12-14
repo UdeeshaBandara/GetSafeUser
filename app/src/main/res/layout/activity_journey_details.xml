@@ -87,6 +87,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scrollbars="none"
         android:layout_below="@id/lnr_journey_details"
         android:layout_marginTop="10dp">
 
@@ -114,7 +115,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="25"
-                        android:fontFamily="@font/nunito_bold"
+                        android:fontFamily="@font/nunito_regular"
                         android:text="Trip ID"
                         android:textColor="@color/dark_blue"
                         android:textSize="14sp" />
@@ -124,7 +125,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="25"
-                        android:fontFamily="@font/nunito_bold"
+                        android:fontFamily="@font/nunito_regular"
                         android:text="15896"
                         android:textColor="@color/dark_blue"
                         android:textSize="14sp" />
@@ -152,7 +153,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="5"
-                    android:fontFamily="@font/nunito_bold"
+                    android:fontFamily="@font/nunito_regular"
                     android:text="Driver Name"
                     android:textColor="@color/dark_blue"
                     android:textSize="14sp" />
@@ -169,7 +170,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="4"
-                        android:fontFamily="@font/nunito_bold"
+                        android:fontFamily="@font/nunito_regular"
                         android:gravity="center_vertical"
                         android:text="Sudesh Bandara"
                         android:textColor="@color/dark_blue"
@@ -211,7 +212,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="5"
 
-                    android:fontFamily="@font/nunito_bold"
+                    android:fontFamily="@font/nunito_regular"
                     android:text="Date"
                     android:textColor="@color/dark_blue"
                     android:textSize="14sp" />
@@ -222,7 +223,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="5"
 
-                    android:fontFamily="@font/nunito_bold"
+                    android:fontFamily="@font/nunito_regular"
                     android:text="Wednesday, \nDecember 4th, 2015"
                     android:textColor="@color/dark_blue"
                     android:textSize="14sp" />
@@ -247,7 +248,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="6.4"
-                        android:fontFamily="@font/nunito_bold"
+                        android:fontFamily="@font/nunito_regular"
                         android:text="Pickup Time"
                         android:textColor="@color/dark_blue"
                         android:textSize="14sp" />
@@ -257,7 +258,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="3.6"
-                        android:fontFamily="@font/nunito_bold"
+                        android:fontFamily="@font/nunito_regular"
                         android:text="03 : 00 pm"
                         android:textColor="@color/dark_blue"
                         android:textSize="14sp" />
@@ -287,8 +288,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="5"
-
-                    android:fontFamily="@font/nunito_bold"
+                    android:fontFamily="@font/nunito_regular"
                     android:text="Pickup Location "
                     android:textColor="@color/dark_blue"
                     android:textSize="14sp" />
@@ -298,8 +298,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="5"
-
-                    android:fontFamily="@font/nunito_bold"
+                    android:fontFamily="@font/nunito_regular"
                     android:text="Ananda College \nColombo 02"
                     android:textColor="@color/dark_blue"
                     android:textSize="14sp" />
@@ -324,7 +323,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="6.4"
-                        android:fontFamily="@font/nunito_bold"
+                        android:fontFamily="@font/nunito_regular"
                         android:text="Dropoff Time"
                         android:textColor="@color/dark_blue"
                         android:textSize="14sp" />
@@ -334,7 +333,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="3.6"
-                        android:fontFamily="@font/nunito_bold"
+                        android:fontFamily="@font/nunito_regular"
                         android:text="04 : 17 pm"
                         android:textColor="@color/dark_blue"
                         android:textSize="14sp" />
@@ -365,8 +364,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="5"
-
-                    android:fontFamily="@font/nunito_bold"
+                    android:fontFamily="@font/nunito_regular"
                     android:text="Dropoff Location"
                     android:textColor="@color/dark_blue"
                     android:textSize="14sp" />
@@ -376,8 +374,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="5"
-
-                    android:fontFamily="@font/nunito_bold"
+                    android:fontFamily="@font/nunito_regular"
                     android:text="Samagi Mawatha,\nWijerama, Nugegoda"
                     android:textColor="@color/dark_blue"
                     android:textSize="14sp" />
@@ -399,7 +396,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="5"
-                    android:fontFamily="@font/nunito_bold"
+                    android:fontFamily="@font/nunito_regular"
                     android:text="Trip Rating"
                     android:textColor="@color/dark_blue"
                     android:textSize="14sp" />
@@ -415,7 +412,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="4"
-                        android:fontFamily="@font/nunito_bold"
+                        android:fontFamily="@font/nunito_regular"
                         android:text="Sudesh Bandara"
                         android:textColor="@color/dark_blue"
                         android:textSize="14sp" />

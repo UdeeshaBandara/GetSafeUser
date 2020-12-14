@@ -1,20 +1,16 @@
 package lk.hd192.project;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -23,7 +19,6 @@ import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -32,24 +27,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 public class Home extends GetSafeBase {
-    RecyclerView homeRecycler;
+    RecyclerView homeRecycler, recyclerSelectChild;
 
     FloatingActionButton fabAddKid;
 
-    ImageView sideMenuListener;
+    ImageView sideMenuListener, selectChildDownArrow, selectChildUpArrow;
     DrawerLayout drawerLayout;
 
 
     NavigationView navigationView;
-    RelativeLayout drawerTransportLyt, drawerLocationLyt, drawerStatsLyt, drawerExpensesLyt, drawerSwapLyt, drawerHelpLyt;
+    RelativeLayout drawerSelectChildLyt, drawerTransportLyt, drawerLocationLyt, drawerStatsLyt, drawerExpensesLyt, drawerSwapLyt, drawerHelpLyt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,12 +48,15 @@ public class Home extends GetSafeBase {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         homeRecycler = findViewById(R.id.home_recycler);
+        recyclerSelectChild = findViewById(R.id.recycler_select_child);
 
 
         sideMenuListener = findViewById(R.id.btn_side_menu);
         drawerLayout = findViewById(R.id.main_drawer_layout);
         navigationView = findViewById(R.id.main_navigation);
         fabAddKid = findViewById(R.id.fab_add_kid);
+        selectChildDownArrow = findViewById(R.id.select_child_down_arrow);
+        selectChildUpArrow = findViewById(R.id.select_child_up_arrow);
 
         drawerTransportLyt = navigationView.findViewById(R.id.rlt_transport_services);
 
@@ -73,24 +65,39 @@ public class Home extends GetSafeBase {
         drawerExpensesLyt = navigationView.findViewById(R.id.rlt_expenses);
         drawerSwapLyt = navigationView.findViewById(R.id.rlt_swap);
         drawerHelpLyt = navigationView.findViewById(R.id.rlt_help);
+        drawerSelectChildLyt = navigationView.findViewById(R.id.rlt_select_child);
 
         homeRecycler.setAdapter(new FunctionItemAdapter());
         homeRecycler.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
+
+        recyclerSelectChild.setAdapter(new StudentItemAdapter());
+        recyclerSelectChild.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
 
         drawerMenu();
 
         fabAddKid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                customToast("Press and hold to add new kid", 0);
+                // customToast("Press and hold to add new kid", 0);
 
+                isDeviceLocationTurnedOn();
+
+                if (ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+
+                    askForPermission();
+                    return;
+                }
+               else if (isEnable)
+
+                startActivity(new Intent(getApplicationContext(), AddNewKid.class));
             }
         });
 
         fabAddKid.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                startActivity(new Intent(getApplicationContext(), AddNewKid.class));
+
                 return false;
             }
         });
@@ -109,15 +116,36 @@ public class Home extends GetSafeBase {
         });
 
 
+        drawerSelectChildLyt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (recyclerSelectChild.getVisibility() == View.GONE) {
+                    recyclerSelectChild.setVisibility(View.VISIBLE);
+                    selectChildUpArrow.setVisibility(View.VISIBLE);
+                    selectChildDownArrow.setVisibility(View.GONE);
+
+
+                } else {
+
+                    recyclerSelectChild.setVisibility(View.GONE);
+                    selectChildUpArrow.setVisibility(View.GONE);
+                    selectChildDownArrow.setVisibility(View.VISIBLE);
+
+
+                }
+
+            }
+        });
         drawerTransportLyt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                verifyLocationService();
+                isDeviceLocationTurnedOn();
                 if (ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-                    askForPermission(android.Manifest.permission.ACCESS_FINE_LOCATION, 100);
+
+                    askForPermission();
                     return;
-                } else if (!isEnable) {
+                } else if (isEnable) {
 
                     Intent intent = new Intent(getApplicationContext(), ExploreTransport.class);
                     startActivity(intent);
@@ -129,16 +157,16 @@ public class Home extends GetSafeBase {
         drawerStatsLyt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                verifyLocationService();
+                isDeviceLocationTurnedOn();
                 if (ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-                    askForPermission(android.Manifest.permission.ACCESS_FINE_LOCATION, 100);
-                    return;
-                } else if (!isEnable) {
 
-                    Intent intent = new Intent(getApplicationContext(), Journey.class);
-                    startActivity(intent);
-                }
+                    askForPermission();
+                    return;
+                } else if (isEnable)
+
+                    startActivity(new Intent(getApplicationContext(), Journey.class));
+
             }
         });
         drawerLocationLyt.setOnClickListener(new View.OnClickListener() {
@@ -150,22 +178,56 @@ public class Home extends GetSafeBase {
         drawerExpensesLyt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                verifyLocationService();
+                isDeviceLocationTurnedOn();
                 if (ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-                    askForPermission(android.Manifest.permission.ACCESS_FINE_LOCATION, 100);
+//                    askForPermission(android.Manifest.permission.ACCESS_FINE_LOCATION, 100);
+                    askForPermission();
                     return;
-                } else if (!isEnable) {
+                } else if (isEnable)
 
-
-                    Intent intent = new Intent(getApplicationContext(), JourneyDetails.class);
-                    startActivity(intent);
-                }
-
+                    startActivity(new Intent(getApplicationContext(), JourneyDetails.class));
 
             }
         });
 
+    }
+
+    class StudentViewHolder extends RecyclerView.ViewHolder {
+        RelativeLayout rltItemStudent;
+
+        public StudentViewHolder(@NonNull View itemView) {
+            super(itemView);
+            rltItemStudent = itemView.findViewById(R.id.rlt_item_student);
+        }
+    }
+
+    class StudentItemAdapter extends RecyclerView.Adapter<StudentViewHolder> {
+
+        @NonNull
+        @Override
+        public StudentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(getApplicationContext())
+                    .inflate(R.layout.item_student, parent, false);
+            return new StudentViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull StudentViewHolder holder, int position) {
+
+            holder.rltItemStudent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return 3;
+        }
     }
 
     class FunctionViewHolder extends RecyclerView.ViewHolder {
@@ -178,7 +240,7 @@ public class Home extends GetSafeBase {
     }
 
     class FunctionItemAdapter extends RecyclerView.Adapter<FunctionViewHolder> {
-        int i = 0;
+
 
         @NonNull
         @Override
@@ -196,12 +258,13 @@ public class Home extends GetSafeBase {
                 public void onClick(View v) {
                     switch (position) {
                         case 0:
-                            verifyLocationService();
+                            isDeviceLocationTurnedOn();
                             if (ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-                                askForPermission(android.Manifest.permission.ACCESS_FINE_LOCATION, 100);
+//                                askForPermission(android.Manifest.permission.ACCESS_FINE_LOCATION, 100);
+                                askForPermission();
                                 return;
-                            } else if (!isEnable) {
+                            } else if (isEnable) {
 
 
                                 startActivity(new Intent(getApplicationContext(), LiveLocation.class));
@@ -294,22 +357,20 @@ public class Home extends GetSafeBase {
     }
 
 
-    private void askForPermission(String permission, Integer requestCode) {
-        if (ContextCompat.checkSelfPermission(Home.this, permission) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(Home.this, permission)) {
+    private void askForPermission() {
 
-                ActivityCompat.requestPermissions(Home.this, new String[]{permission}, requestCode);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+                    ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+                    ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
 
             } else {
-
-//                ActivityCompat.requestPermissions(Home.this, new String[]{permission}, requestCode);
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                        10);
             }
         } else {
 
-            //Toast.makeText(this, "" + permission + " is already granted.", Toast.LENGTH_SHORT).show();
         }
-
     }
 }
-

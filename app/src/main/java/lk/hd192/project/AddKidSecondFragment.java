@@ -123,6 +123,7 @@ public class AddKidSecondFragment extends Fragment {
                 if (AddNewKid.isLocationRemembered) {
                     rememberAnimation.setMinAndMaxProgress(0.0f, .7f);
                     rememberAnimation.setSpeed(1f);
+                    AddNewKid.isLocationRemembered = false;
                     rememberAnimation.playAnimation();
 
                 } else {

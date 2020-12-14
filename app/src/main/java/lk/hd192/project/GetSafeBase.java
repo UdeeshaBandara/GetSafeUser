@@ -54,19 +54,19 @@ public class GetSafeBase extends AppCompatActivity {
 
     }
 
-    public void verifyLocationService() {
+    public void isDeviceLocationTurnedOn() {
 
 
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
 
             isEnable = true;
 
         else
             isEnable = false;
 
-        if (isEnable) {
+        if (!isEnable) {
             customToast("Please enable location services", 1);
             Intent settings = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             startActivity(settings);

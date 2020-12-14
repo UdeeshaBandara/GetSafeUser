@@ -74,7 +74,7 @@ dependencies {
     //spinner date picker
     implementation 'com.github.drawers:SpinnerDatePicker:2.0.1'
 
-    //lottie animations
+    //lottie animation
     implementation 'com.airbnb.android:lottie:3.5.0'
 
 

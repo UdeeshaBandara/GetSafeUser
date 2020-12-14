@@ -2,16 +2,19 @@ package lk.hd192.project;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -210,6 +213,74 @@ public class AddKidThirdFragment extends Fragment {
             ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, requestCode);
         } else {
             //Toast.makeText(this, "" + permission + " is already granted.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (permissions.length == 0) {
+            return;
+        }
+        boolean allPermissionsGranted = true;
+        if (grantResults.length > 0) {
+            for (int grantResult : grantResults) {
+                if (grantResult != PackageManager.PERMISSION_GRANTED) {
+                    allPermissionsGranted = false;
+                    break;
+                }
+            }
+        }
+        if (!allPermissionsGranted) {
+            boolean somePermissionsForeverDenied = false;
+            for (String permission : permissions) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), permission)) {
+
+                } else {
+                    if (ActivityCompat.checkSelfPermission(getActivity(), permission) == PackageManager.PERMISSION_GRANTED) {
+                        startActivity(new Intent(getActivity(), LiveLocation.class));
+
+
+                    } else {
+                        //set to never ask again
+                        Log.e("set to never ask again", permission);
+                        somePermissionsForeverDenied = true;
+                    }
+                }
+            }
+            if (somePermissionsForeverDenied) {
+                final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+                alertDialogBuilder.setTitle("Permissions Required")
+                        .setMessage("You have forcefully denied some of the required permissions " +
+                                "for this action. Please open settings, go to permissions and allow them.")
+                        .setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                        Uri.fromParts("package", getActivity().getPackageName(), null));
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .setCancelable(false)
+                        .create()
+                        .show();
+            }
+        } else {
+            switch (requestCode) {
+    //
+    //                case 100:
+    //                    try {
+    //                        MapsInitializer.initialize(getActivity());
+    //                        loadMap();
+    //                    } catch (Exception e) {
+    //                        e.printStackTrace();
+    //                    }
+    //                    break;
+            }
         }
     }
 }
