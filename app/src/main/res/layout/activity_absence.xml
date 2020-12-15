@@ -125,11 +125,14 @@
                 android:id="@+id/recycler_month"
                 android:layout_width="0dp"
                 android:layout_weight="4"
+                android:overScrollMode="never"
                 android:layout_height="200dp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_month_date"
                 android:layout_width="0dp"
+
+                android:overScrollMode="never"
                 android:layout_marginLeft="5dp"
                 android:layout_weight="6"
                 android:layout_height="200dp" />

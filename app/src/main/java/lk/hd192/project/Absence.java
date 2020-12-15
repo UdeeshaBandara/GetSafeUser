@@ -10,6 +10,7 @@ import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,8 @@ public class Absence extends AppCompatActivity {
 
     SimpleDateFormat dateInFormat;
     Date date;
+
+    int selectedItem = -1;
 
     @SuppressLint("SimpleDateFormat")
     @Override
@@ -155,27 +158,17 @@ public class Absence extends AppCompatActivity {
         try {
             dayArray = new ArrayList<>();
             String day = "";
-            int monthLength= YearMonth.of(year, month).lengthOfMonth();
+            int monthLength = YearMonth.of(year, month).lengthOfMonth();
 
-            for (int i = 0; i <monthLength; i++) {
-                Log.e("length of month",YearMonth.of(year, month).lengthOfMonth()+"");
+            for (int i = 0; i < monthLength; i++) {
+
                 date = dateInFormat.parse((i + 1) + "-" + month + "-" + year);
 
                 day = android.text.format.DateFormat.format("EEEE", date).toString();
-//                Log.e("day", day);
-//                Log.e("i values",i+"");
-                if (day.equals("Saturday") ) {
-                  //  Log.e("continue", "true");
-                    continue;
-
-                } else {
-                    dayArray.add(i, day);
-                    Log.e("day array",dayArray.get(i));
-                }
+                dayArray.add(i, day);
 
             }
 
-            Log.e("outside loop", "true");
 
         } catch (Exception e) {
 
@@ -185,17 +178,22 @@ public class Absence extends AppCompatActivity {
     }
 
     class MonthViewHolder extends RecyclerView.ViewHolder {
-        RelativeLayout rltMonth;
+        RelativeLayout rltMonth, rltMonthFocus;
         TextView txtMonth;
+
 
         public MonthViewHolder(@NonNull View itemView) {
             super(itemView);
             rltMonth = itemView.findViewById(R.id.rlt_month);
+            rltMonthFocus = itemView.findViewById(R.id.rlt_month_focus);
             txtMonth = itemView.findViewById(R.id.txt_month);
         }
+
+
     }
 
     class MonthItemAdapter extends RecyclerView.Adapter<MonthViewHolder> {
+
 
         @NonNull
         @Override
@@ -206,7 +204,14 @@ public class Absence extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull MonthViewHolder holder, final int position) {
+        public void onBindViewHolder(@NonNull final MonthViewHolder holder, final int position) {
+
+
+            if (selectedItem == position)
+                holder.rltMonthFocus.setSelected(true);
+            else
+                holder.rltMonthFocus.setSelected(false);
+
 
             holder.txtMonth.setText(monthArray.get(position));
             holder.rltMonth.setOnClickListener(new View.OnClickListener() {
@@ -215,7 +220,8 @@ public class Absence extends AppCompatActivity {
                 public void onClick(View v) {
 
                     getDaysForMonth(position + 1, year);
-
+                    selectedItem = position;
+                    notifyDataSetChanged();
                     recyclerMonthDate.getAdapter().notifyDataSetChanged();
                 }
             });
