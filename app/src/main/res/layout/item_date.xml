@@ -10,7 +10,7 @@
         android:layout_width="150dp"
         android:layout_height="35dp"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/bg_month">
+        android:background="@drawable/bg_absence_date">
 
 
         <TextView

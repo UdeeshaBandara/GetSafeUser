@@ -1,10 +1,6 @@
 package lk.hd192.project.Utils;
 
-import android.content.Context;
-import android.content.Intent;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -50,7 +46,7 @@ public class GetSafeBaseFragment extends Fragment {
 
     public void customToast(String message, int type) {
 
-        View toastView = getLayoutInflater().inflate(R.layout.custom_toast_layout, null);
+        View toastView = getLayoutInflater().inflate(R.layout.toast_layout_warning, null);
 
         toastView.setMinimumWidth(device_width);
         toastView.setMinimumHeight(100);

@@ -7,6 +7,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 
 import android.content.pm.PackageManager;
@@ -100,6 +101,9 @@ public class LiveLocation extends GetSafeBase {
         getSafeServices = new GetSafeServices();
 
         mapView = findViewById(R.id.mapView);
+
+
+
 
         btnBack = findViewById(R.id.btn_location_back);
 

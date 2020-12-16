@@ -1,18 +1,34 @@
 package lk.hd192.project;
 
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.animation.Animator;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.time.YearMonth;
@@ -24,20 +40,28 @@ import lk.hd192.project.Utils.GetSafeBase;
 
 public class Absence extends GetSafeBase {
 
-    Button btnMorning, btnEvening, btnBoth, btnBothSelect, btnMorningSelect, btnEveningSelect;
-
-    RecyclerView recyclerMonth, recyclerMonthDate;
-    int currentYear,currentMonth,currentDate;
+    Button btnMorning, btnEvening, btnBoth, btnBothSelect, btnMorningSelect, btnEveningSelect, btnSaveAbsence, btnAddToList;
+    LottieAnimationView mainSaveAnimation;
+    RecyclerView recyclerMonth, recyclerMonthDate, recyclerAbsence;
+    Context context;
+    int currentYear, currentMonth, currentDate;
 
     SingleDateAndTimePicker monthPicker, dayPicker;
-
+    TextView subHeadingAbsence;
     ArrayList<String> monthArray;
     ArrayList<String> dayArray;
+    JSONObject absenceDate;
+    JSONArray absenceDateList;
 
     SimpleDateFormat dateInFormat;
     Date date;
+    int selectedMonthNumber = 0, selectedDateNumber = 0;
+    String selectedDay = "";
+    String[] dayNames = new String[7];
 
+    Dialog dialog;
     int selectedItem = -1;
+    int absenceDatesIndex = 0;
 
     @SuppressLint("SimpleDateFormat")
     @Override
@@ -46,10 +70,23 @@ public class Absence extends GetSafeBase {
         setContentView(R.layout.activity_absence);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        context = getApplicationContext();
 
         monthArray = new ArrayList<>();
         dayArray = new ArrayList<>();
+        absenceDateList = new JSONArray();
+        absenceDate = new JSONObject();
 
+
+        dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
+
+        dayNames[0] = "Sunday";
+        dayNames[1] = "Monday";
+        dayNames[2] = "Tuesday";
+        dayNames[3] = "Wednesday";
+        dayNames[4] = "Thursday";
+        dayNames[5] = "Friday";
+        dayNames[6] = "Saturday";
 
         monthArray.add("January");
         monthArray.add("February");
@@ -78,32 +115,137 @@ public class Absence extends GetSafeBase {
         btnMorningSelect = findViewById(R.id.btn_morning_select);
         monthPicker = findViewById(R.id.month_picker);
         dayPicker = findViewById(R.id.day_picker);
+        btnSaveAbsence = findViewById(R.id.btn_save_absence);
+        mainSaveAnimation = findViewById(R.id.main_save_animation);
+        subHeadingAbsence = findViewById(R.id.sub_heading_absence);
+        btnAddToList = findViewById(R.id.btn_add_to_list);
+
 
         dayPicker.setEnabled(false);
+        btnSaveAbsence.setVisibility(View.INVISIBLE);
+        subHeadingAbsence.setVisibility(View.INVISIBLE);
+//        btnSaveAbsence.setBackgroundColor(getResources().getColor(R.color.sec_color));
+
 
 //customToast("you have nothing",1);
 
 
+        btnSaveAbsence.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainSaveAnimation.setVisibility(View.VISIBLE);
+                mainSaveAnimation.playAnimation();
+            }
+        });
+
         monthPicker.addOnDateChangedListener(new SingleDateAndTimePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(String displayed, Date date) {
-                Log.e("date", date.getMonth()+"");
+                Log.e("date", date.getMonth() + "");
                 dayPicker.setEnabled(true);
+                selectedMonthNumber = date.getMonth();
+                if (currentDate > date.getMonth()) {
+                }
 
-               if(currentDate>date.getMonth()){}
 
+            }
+        });
+        btnAddToList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("ontap", "btnAddToList");
+                absenceDate = new JSONObject();
+
+                try {
+                    absenceDate.put("month", monthArray.get(selectedMonthNumber));
+                    absenceDate.put("year", currentYear);
+                    absenceDate.put("date", getDateSuffix(selectedDateNumber) + selectedDay);
+
+
+                    if (btnBothSelect.getVisibility() == View.GONE & btnEveningSelect.getVisibility() == View.GONE & btnMorningSelect.getVisibility() == View.GONE)
+                        showWarningToast(dialog, "Please select session", 0);
+
+                    else {
+                        if (btnBothSelect.getVisibility() == View.VISIBLE)
+                            absenceDate.put("session", "Both");
+                        else if (btnEveningSelect.getVisibility() == View.VISIBLE)
+                            absenceDate.put("session", "Evening");
+                        else if (btnMorningSelect.getVisibility() == View.VISIBLE)
+                            absenceDate.put("session", "Morning");
+
+
+                         absenceDateList.put(absenceDate);
+
+                        if(absenceDateList.length()>1)
+                            Log.e("hash", String.valueOf(String.valueOf( absenceDateList.get(1)).hashCode()));
+                        else
+
+                            Log.e("hash", String.valueOf(String.valueOf( absenceDateList.get(0)).hashCode()));
+
+                        btnSaveAbsence.setVisibility(View.VISIBLE);
+                        subHeadingAbsence.setVisibility(View.VISIBLE);
+
+                        btnSaveAbsence.setBackground(getDrawable(R.drawable.bg_btn_resend));
+                        recyclerAbsence.getAdapter().notifyDataSetChanged();
+                    }
+
+
+                    if (currentDate > date.getMonth()) {
+                    }
+
+                } catch (Exception e) {
+
+                    Log.e("exception", e.getMessage());
+                }
+
+            }
+        });
+        dayPicker.addOnDateChangedListener(new SingleDateAndTimePicker.OnDateChangedListener() {
+            @Override
+            public void onDateChanged(String displayed, Date date) {
+                selectedDateNumber = date.getDate();
+                selectedDay = dayNames[date.getDay()];
+            }
+        });
+        mainSaveAnimation.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mainSaveAnimation.setVisibility(View.GONE);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        finish();
+                    }
+                }, 800);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
 
             }
         });
 
 //        recyclerMonth = findViewById(R.id.recycler_month);
 //        recyclerMonthDate = findViewById(R.id.recycler_month_date);
+        recyclerAbsence = findViewById(R.id.recycler_absence);
 
 
 //        recyclerMonth.setAdapter(new MonthItemAdapter());
 //        recyclerMonth.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
 //        recyclerMonthDate.setAdapter(new DateItemAdapter());
-//        recyclerMonthDate.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
+        recyclerAbsence.setAdapter(new MonthItemAdapter());
+        recyclerAbsence.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
 
 
         btnBoth.setOnClickListener(new View.OnClickListener() {
@@ -115,7 +257,8 @@ public class Absence extends GetSafeBase {
                 btnMorning.setVisibility(View.VISIBLE);
                 btnEveningSelect.setVisibility(View.GONE);
                 btnEvening.setVisibility(View.VISIBLE);
-                showAlertDialogButtonClicked(getApplicationContext(),"You have nothing!");
+//                showToast(dialog,"Please enable location servicePlease enable location service",1);
+//                showWarningToast(dialog, "Please enable location service", 0);
 
 
             }
@@ -173,63 +316,113 @@ public class Absence extends GetSafeBase {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public void getDaysForMonth(int month, int year) {
+//    @RequiresApi(api = Build.VERSION_CODES.O)
+//    public void getDaysForMonth(int month, int year) {
+//
+//        try {
+//            dayArray = new ArrayList<>();
+//            String day = "";
+//            int monthLength = YearMonth.of(year, month).lengthOfMonth();
+//
+//            for (int i = 0; i < monthLength; i++) {
+//
+//                date = dateInFormat.parse((i + 1) + "-" + month + "-" + year);
+//
+//                day = android.text.format.DateFormat.format("EEEE", date).toString();
+//                dayArray.add(i, day);
+//
+//            }
+//
+//
+//        } catch (Exception e) {
+//
+//        }
+//
+//
+//    }
 
-        try {
-            dayArray = new ArrayList<>();
-            String day = "";
-            int monthLength = YearMonth.of(year, month).lengthOfMonth();
 
-            for (int i = 0; i < monthLength; i++) {
-
-                date = dateInFormat.parse((i + 1) + "-" + month + "-" + year);
-
-                day = android.text.format.DateFormat.format("EEEE", date).toString();
-                dayArray.add(i, day);
-
-            }
+    class MonthViewHolder extends RecyclerView.ViewHolder {
+        RelativeLayout rltMonth, rltMonthFocus;
+        TextView txtMonth, txtYear, txtDate, txtSession;
+        ImageView btnDeleteDate;
 
 
-        } catch (Exception e) {
-
+        public MonthViewHolder(View itemView) {
+            super(itemView);
+            rltMonth = itemView.findViewById(R.id.rlt_month);
+            rltMonthFocus = itemView.findViewById(R.id.rlt_month_focus);
+            txtMonth = itemView.findViewById(R.id.txt_month);
+            txtYear = itemView.findViewById(R.id.txt_year);
+            txtDate = itemView.findViewById(R.id.txt_date);
+            btnDeleteDate = itemView.findViewById(R.id.btn_delete_date);
+            txtSession = itemView.findViewById(R.id.txt_session);
         }
 
 
     }
 
+    class MonthItemAdapter extends RecyclerView.Adapter<MonthViewHolder> {
 
-//    class MonthViewHolder extends RecyclerView.ViewHolder {
-//        RelativeLayout rltMonth, rltMonthFocus;
-//        TextView txtMonth;
-//
-//
-//        public MonthViewHolder(@NonNull View itemView) {
-//            super(itemView);
-//            rltMonth = itemView.findViewById(R.id.rlt_month);
-//            rltMonthFocus = itemView.findViewById(R.id.rlt_month_focus);
-//            txtMonth = itemView.findViewById(R.id.txt_month);
-//        }
-//
-//
-//    }
-//
-//    class MonthItemAdapter extends RecyclerView.Adapter<MonthViewHolder> {
-//
-//
-//
-//        @NonNull
-//        @Override
-//        public MonthViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//            View view = LayoutInflater.from(getApplicationContext())
-//                    .inflate(R.layout.item_month, parent, false);
-//            return new MonthViewHolder(view);
-//        }
-//
-//        @Override
-//        public void onBindViewHolder(@NonNull final MonthViewHolder holder, final int position) {
-//
-//
+        private void deleteItem(View view, final int position) {
+
+            Animation anim = AnimationUtils.loadAnimation(getApplicationContext(),
+                    R.anim.slide_bottom);
+            anim.setDuration(300);
+            view.startAnimation(anim);
+
+            new Handler().postDelayed(new Runnable() {
+                public void run() {
+
+                    absenceDateList.remove(position);
+                    notifyDataSetChanged();
+                    if (recyclerAbsence.getAdapter() != null) {
+                        if( recyclerAbsence.getAdapter().getItemCount()==0)
+                        {
+                            btnSaveAbsence.setVisibility(View.INVISIBLE);
+                            subHeadingAbsence.setVisibility(View.INVISIBLE);
+                        }
+                    }
+                }
+
+            }, anim.getDuration());
+        }
+
+        @Override
+        public MonthViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(getApplicationContext())
+                    .inflate(R.layout.item_absence_date, parent, false);
+            return new MonthViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(final MonthViewHolder holder, final int position) {
+
+
+            try {
+
+
+                holder.txtYear.setText(absenceDateList.getJSONObject(position).getString("year"));
+                holder.txtMonth.setText(absenceDateList.getJSONObject(position).getString("month"));
+                holder.txtDate.setText(absenceDateList.getJSONObject(position).getString("date"));
+                holder.txtSession.setText(absenceDateList.getJSONObject(position).getString("session"));
+
+
+                holder.btnDeleteDate.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        if (monthArray.size() == 1)
+                            subHeadingAbsence.setVisibility(View.INVISIBLE);
+                        deleteItem(holder.rltMonth, position);
+
+                    }
+                });
+            } catch (Exception e) {
+
+            }
+        }
+
 //            if (selectedItem == position)
 //                holder.rltMonthFocus.setSelected(true);
 //            else
@@ -248,15 +441,15 @@ public class Absence extends GetSafeBase {
 //                    recyclerMonthDate.getAdapter().notifyDataSetChanged();
 //                }
 //            });
-//        }
-//
-//        @Override
-//        public int getItemCount() {
-//            return monthArray.size();
-//        }
 //    }
 
-//    class DateViewHolder extends RecyclerView.ViewHolder {
+        @Override
+        public int getItemCount() {
+            return absenceDateList.length();
+        }
+    }
+
+    //    class DateViewHolder extends RecyclerView.ViewHolder {
 //        RelativeLayout rltDate;
 //        TextView txtDate;
 //
@@ -290,48 +483,48 @@ public class Absence extends GetSafeBase {
 //        }
 //    }
 //
-//    private String getDateSuffix(int i) {
-//        switch (i) {
-//            case 1:
-//            case 21:
-//            case 31:
-//                return ("st");
-//
-//            case 2:
-//            case 22:
-//                return ("nd");
-//
-//            case 3:
-//            case 23:
-//                return ("rd");
-//
-//            case 4:
-//            case 5:
-//            case 6:
-//            case 7:
-//            case 8:
-//            case 9:
-//            case 10:
-//            case 11:
-//            case 12:
-//            case 13:
-//            case 14:
-//            case 15:
-//            case 16:
-//            case 17:
-//            case 18:
-//            case 19:
-//            case 20:
-//            case 24:
-//            case 25:
-//            case 26:
-//            case 27:
-//            case 28:
-//            case 29:
-//            case 30:
-//                return ("th");
-//            default:
-//                return ("");
-//        }
-//    }
+    private String getDateSuffix(int i) {
+        switch (i) {
+            case 1:
+            case 21:
+            case 31:
+                return (String.valueOf(i) + "st ");
+
+            case 2:
+            case 22:
+                return (String.valueOf(i) + "nd ");
+
+            case 3:
+            case 23:
+                return (String.valueOf(i) + "rd ");
+
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+            case 11:
+            case 12:
+            case 13:
+            case 14:
+            case 15:
+            case 16:
+            case 17:
+            case 18:
+            case 19:
+            case 20:
+            case 24:
+            case 25:
+            case 26:
+            case 27:
+            case 28:
+            case 29:
+            case 30:
+                return (String.valueOf(i) + "th ");
+            default:
+                return ("");
+        }
+    }
 }

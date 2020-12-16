@@ -1,6 +1,7 @@
 package lk.hd192.project;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -34,6 +35,7 @@ public class Home extends GetSafeBase {
 
     FloatingActionButton fabAddKid;
 
+    Dialog dialog;
     ImageView sideMenuListener, selectChildDownArrow, selectChildUpArrow;
     DrawerLayout drawerLayout;
 
@@ -51,6 +53,7 @@ public class Home extends GetSafeBase {
         homeRecycler = findViewById(R.id.home_recycler);
         recyclerSelectChild = findViewById(R.id.recycler_select_child);
 
+        dialog = new Dialog(this,android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
 
         sideMenuListener = findViewById(R.id.btn_side_menu);
         drawerLayout = findViewById(R.id.main_drawer_layout);
@@ -82,7 +85,7 @@ public class Home extends GetSafeBase {
             public void onClick(View v) {
                 // customToast("Press and hold to add new kid", 0);
 
-                isDeviceLocationTurnedOn();
+                isDeviceLocationTurnedOn(dialog);
 
                 if (ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -141,7 +144,7 @@ public class Home extends GetSafeBase {
         drawerTransportLyt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isDeviceLocationTurnedOn();
+                isDeviceLocationTurnedOn(dialog);
                 if (ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
 
@@ -159,7 +162,7 @@ public class Home extends GetSafeBase {
         drawerAbsenceLyt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isDeviceLocationTurnedOn();
+                isDeviceLocationTurnedOn(dialog);
                 if (ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
 
@@ -177,7 +180,7 @@ public class Home extends GetSafeBase {
         drawerStatsLyt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isDeviceLocationTurnedOn();
+                isDeviceLocationTurnedOn(dialog);
                 if (ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
 
@@ -198,7 +201,7 @@ public class Home extends GetSafeBase {
         drawerExpensesLyt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isDeviceLocationTurnedOn();
+                isDeviceLocationTurnedOn(dialog);
                 if (ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
 //                    askForPermission(android.Manifest.permission.ACCESS_FINE_LOCATION, 100);
@@ -278,7 +281,7 @@ public class Home extends GetSafeBase {
                 public void onClick(View v) {
                     switch (position) {
                         case 0:
-                            isDeviceLocationTurnedOn();
+                            isDeviceLocationTurnedOn(dialog);
                             if (ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
 //                                askForPermission(android.Manifest.permission.ACCESS_FINE_LOCATION, 100);

@@ -2,30 +2,25 @@ package lk.hd192.project.Utils;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 
 import lk.hd192.project.R;
-import lk.hd192.project.Utils.TinyDB;
 
 
 public class GetSafeBase extends AppCompatActivity {
@@ -39,7 +34,7 @@ public class GetSafeBase extends AppCompatActivity {
     public static Double pickLat;
 
     public static Double pickLng;
-    public static  boolean isEnable;
+    public static boolean isEnable;
     public LocationManager locationManager;
     public static boolean MAP_SELECTED = false;
 
@@ -64,8 +59,7 @@ public class GetSafeBase extends AppCompatActivity {
 
     }
 
-    public void isDeviceLocationTurnedOn() {
-
+    public void isDeviceLocationTurnedOn(final Dialog dialog) {
 
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -77,9 +71,35 @@ public class GetSafeBase extends AppCompatActivity {
             isEnable = false;
 
         if (!isEnable) {
-            customToast("Please enable location services", 1);
-            Intent settings = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivity(settings);
+
+            Window window = dialog.getWindow();
+            window.setGravity(Gravity.BOTTOM);
+
+
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, 550);
+            dialog.setTitle(null);
+            dialog.setContentView(R.layout.toast_layout_location);
+
+            dialog.setCancelable(true);
+            dialog.setCanceledOnTouchOutside(true);
+
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            TextView msgToShow = dialog.findViewById(R.id.toast_message);
+            Button btnOk = dialog.findViewById(R.id.btn_ok);
+            btnOk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                    Intent settings = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(settings);
+                }
+            });
+            msgToShow.setText("Please enable location service");
+
+            dialog.show();
+
+
         }
 
     }
@@ -87,7 +107,7 @@ public class GetSafeBase extends AppCompatActivity {
 
     public void customToast(String message, int type) {
 
-        View toastView = getLayoutInflater().inflate(R.layout.custom_toast_layout, null);
+        View toastView = getLayoutInflater().inflate(R.layout.toast_layout_warning, null);
 
         toastView.setMinimumWidth(device_width);
         toastView.setMinimumHeight(100);
@@ -122,9 +142,8 @@ public class GetSafeBase extends AppCompatActivity {
             hud.dismiss();
         }
     }
-    public void showAlertDialogButtonClicked(Context context,String msg) {
-        final Dialog dialog = new Dialog(context,
-                android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
+
+    public void showWarningToast(final Dialog dialog, String msg, int type) {
 
 
         // Setting dialogview
@@ -132,17 +151,25 @@ public class GetSafeBase extends AppCompatActivity {
         window.setGravity(Gravity.BOTTOM);
 
 
-
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, device_height/3);
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, 550);
         dialog.setTitle(null);
-        dialog.setContentView(R.layout.custom_toast_layout);
+        switch (type) {
+            case 0:
+                dialog.setContentView(R.layout.toast_layout_warning);
+                break;
+            case 1:
+                dialog.setContentView(R.layout.toast_layout_location);
+                break;
+
+
+        }
         dialog.setCancelable(true);
         dialog.setCanceledOnTouchOutside(true);
 
-        dialog.getWindow().getAttributes().windowAnimations=R.style.DialogAnimation;
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
-        TextView msgToShow= dialog.findViewById(R.id.toast_message);
-        Button btnOk= dialog.findViewById(R.id.btn_ok);
+        TextView msgToShow = dialog.findViewById(R.id.toast_message);
+        Button btnOk = dialog.findViewById(R.id.btn_ok);
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

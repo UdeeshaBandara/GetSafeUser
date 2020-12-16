@@ -1,11 +1,13 @@
 package lk.hd192.project;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
@@ -17,12 +19,13 @@ import lk.hd192.project.Utils.GetSafeBase;
 public class Login extends GetSafeBase {
 
     EditText one, two, three, four, five, six, seven, eight, nine;
+    Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         one = findViewById(R.id.txt_number_one);
         two = findViewById(R.id.txt_number_two);
         three = findViewById(R.id.txt_number_three);
@@ -34,7 +37,7 @@ public class Login extends GetSafeBase {
         nine = findViewById(R.id.txt_number_nine);
 
         requestFocus();
-
+        dialog = new Dialog(this,android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
         findViewById(R.id.btn_login_next).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,9 +62,9 @@ public class Login extends GetSafeBase {
                 }
                 else{
                     YoYo.with(Techniques.Bounce)
-                            .duration(1000)
+                            .duration(2500)
                             .playOn(findViewById(R.id.lnr_number));
-                    customToast("Please enter correct number",1);
+                  showWarningToast(dialog,"Please enter correct phone number",0);
 
                 }
             }
