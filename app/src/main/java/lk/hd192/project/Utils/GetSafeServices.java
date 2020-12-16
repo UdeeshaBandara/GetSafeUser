@@ -18,8 +18,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import lk.hd192.project.GetSafeBase;
-
 public class GetSafeServices extends GetSafeBase {
 
 

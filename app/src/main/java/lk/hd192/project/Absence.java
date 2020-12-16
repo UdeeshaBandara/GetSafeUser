@@ -1,39 +1,33 @@
 package lk.hd192.project;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.SparseBooleanArray;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Absence extends AppCompatActivity {
+import lk.hd192.project.Utils.GetSafeBase;
+
+public class Absence extends GetSafeBase {
 
     Button btnMorning, btnEvening, btnBoth, btnBothSelect, btnMorningSelect, btnEveningSelect;
 
     RecyclerView recyclerMonth, recyclerMonthDate;
-    int year;
+    int currentYear,currentMonth,currentDate;
 
     SingleDateAndTimePicker monthPicker, dayPicker;
 
@@ -70,7 +64,9 @@ public class Absence extends AppCompatActivity {
         monthArray.add("November");
         monthArray.add("December");
 
-        year = Calendar.getInstance().get(Calendar.YEAR);
+        currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        currentMonth = Calendar.getInstance().get(Calendar.MONTH);
+        currentDate = Calendar.getInstance().get(Calendar.DATE);
         dateInFormat = new SimpleDateFormat("dd-MM-yyyy");
 
 
@@ -85,12 +81,18 @@ public class Absence extends AppCompatActivity {
 
         dayPicker.setEnabled(false);
 
+//customToast("you have nothing",1);
 
 
         monthPicker.addOnDateChangedListener(new SingleDateAndTimePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(String displayed, Date date) {
+                Log.e("date", date.getMonth()+"");
                 dayPicker.setEnabled(true);
+
+               if(currentDate>date.getMonth()){}
+
+
             }
         });
 
@@ -113,6 +115,7 @@ public class Absence extends AppCompatActivity {
                 btnMorning.setVisibility(View.VISIBLE);
                 btnEveningSelect.setVisibility(View.GONE);
                 btnEvening.setVisibility(View.VISIBLE);
+                showAlertDialogButtonClicked(getApplicationContext(),"You have nothing!");
 
 
             }
@@ -194,22 +197,6 @@ public class Absence extends AppCompatActivity {
 
 
     }
-
-
-//    public void updateChildrenAlpha() {
-//        for (int i = 0; i < getChildCount(); i++) {
-//            View child = getChildAt(i);
-//            float maxDist = /* distance where alpha is min */;
-//            float right = getDecoratedRight(child);
-//            float left = getDecoratedLeft(child);
-//            float childCenter = left + (right - left) / 2; // Get item center position
-//            float center = getWidth() / 2; // Get RecyclerView's center position
-//            child.setAlpha((Math.abs(center - childCenter) -  maxDist) / maxDist);
-//            // Map between 0f and 1f the abs value of the distance
-//            // between the center of item and center of the RecyclerView
-//            // and set it as alpha
-//        }
-//    }
 
 
 //    class MonthViewHolder extends RecyclerView.ViewHolder {

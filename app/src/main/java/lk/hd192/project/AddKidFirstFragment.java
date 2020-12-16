@@ -33,8 +33,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import lk.hd192.project.Utils.GetSafeBase;
+import lk.hd192.project.Utils.GetSafeBaseFragment;
 
-public class AddKidFirstFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
+
+public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePickerDialog.OnDateSetListener {
     int year;
     int month;
     int day;

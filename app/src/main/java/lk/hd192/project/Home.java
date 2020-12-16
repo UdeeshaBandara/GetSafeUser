@@ -20,13 +20,14 @@ import android.widget.RelativeLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+
+import lk.hd192.project.Utils.GetSafeBase;
 
 public class Home extends GetSafeBase {
     RecyclerView homeRecycler, recyclerSelectChild;
@@ -38,7 +39,7 @@ public class Home extends GetSafeBase {
 
 
     NavigationView navigationView;
-    RelativeLayout drawerSelectChildLyt, drawerTransportLyt, drawerLocationLyt, drawerStatsLyt, drawerExpensesLyt, drawerSwapLyt, drawerHelpLyt;
+    RelativeLayout drawerSelectChildLyt, drawerAbsenceLyt,drawerTransportLyt, drawerLocationLyt, drawerStatsLyt, drawerExpensesLyt, drawerSwapLyt, drawerHelpLyt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,7 @@ public class Home extends GetSafeBase {
         drawerSwapLyt = navigationView.findViewById(R.id.rlt_swap);
         drawerHelpLyt = navigationView.findViewById(R.id.rlt_help);
         drawerSelectChildLyt = navigationView.findViewById(R.id.rlt_select_child);
+        drawerAbsenceLyt = navigationView.findViewById(R.id.rlt_absence);
 
         homeRecycler.setAdapter(new FunctionItemAdapter());
         homeRecycler.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
@@ -149,6 +151,24 @@ public class Home extends GetSafeBase {
 
                     Intent intent = new Intent(getApplicationContext(), ExploreTransport.class);
                     startActivity(intent);
+
+                }
+
+            }
+        });
+        drawerAbsenceLyt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isDeviceLocationTurnedOn();
+                if (ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+
+                    askForPermission();
+                    return;
+                } else if (isEnable) {
+
+
+                    startActivity(new Intent(getApplicationContext(), Absence.class));
 
                 }
 

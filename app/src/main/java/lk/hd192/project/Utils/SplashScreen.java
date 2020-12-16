@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
 
-import lk.hd192.project.GetSafeBase;
 import lk.hd192.project.Welcome;
 
 public class SplashScreen extends GetSafeBase {

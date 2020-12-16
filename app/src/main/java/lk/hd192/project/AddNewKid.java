@@ -19,6 +19,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import java.util.ArrayList;
 import java.util.List;
 
+import lk.hd192.project.Utils.GetSafeBase;
 import lk.hd192.project.Utils.NonSwappableViewPager;
 
 public class AddNewKid extends GetSafeBase {

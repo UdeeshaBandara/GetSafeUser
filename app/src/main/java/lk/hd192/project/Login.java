@@ -1,7 +1,5 @@
 package lk.hd192.project;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -13,6 +11,8 @@ import android.widget.EditText;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+
+import lk.hd192.project.Utils.GetSafeBase;
 
 public class Login extends GetSafeBase {
 

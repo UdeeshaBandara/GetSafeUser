@@ -58,7 +58,9 @@
         <activity
             android:name=".Utils.SplashScreen"
             android:screenOrientation="portrait"
-            android:theme="@style/SplashTheme" />
+            android:theme="@style/SplashTheme" >
+
+        </activity>
 
         <meta-data
             android:name="com.google.android.gms.version"

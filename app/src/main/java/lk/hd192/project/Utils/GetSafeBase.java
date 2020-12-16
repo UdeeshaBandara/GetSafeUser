@@ -1,36 +1,46 @@
-package lk.hd192.project;
+package lk.hd192.project.Utils;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 
+import lk.hd192.project.R;
 import lk.hd192.project.Utils.TinyDB;
 
 
 public class GetSafeBase extends AppCompatActivity {
 
-    static KProgressHUD hud;
-    static int device_width, device_height;
+
+    public static KProgressHUD hud;
+    public static int device_width, device_height;
     public TinyDB tinyDB;
     public static String PICKUP_LAT, PICKUP_LOG, DROP_LAT, DROP_LOG, PICKUP_LOCATION, DROP_LOCATION, LOC_ADDRESS;
-    int dropNPickAddressDistinguish;
+    public int dropNPickAddressDistinguish;
     public static Double pickLat;
 
     public static Double pickLng;
     public static  boolean isEnable;
-    LocationManager locationManager;
+    public LocationManager locationManager;
     public static boolean MAP_SELECTED = false;
 
     public static String pickAddress;
@@ -111,5 +121,36 @@ public class GetSafeBase extends AppCompatActivity {
         if (hud.isShowing()) {
             hud.dismiss();
         }
+    }
+    public void showAlertDialogButtonClicked(Context context,String msg) {
+        final Dialog dialog = new Dialog(context,
+                android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
+
+
+        // Setting dialogview
+        Window window = dialog.getWindow();
+        window.setGravity(Gravity.BOTTOM);
+
+
+
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, device_height/3);
+        dialog.setTitle(null);
+        dialog.setContentView(R.layout.custom_toast_layout);
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(true);
+
+        dialog.getWindow().getAttributes().windowAnimations=R.style.DialogAnimation;
+
+        TextView msgToShow= dialog.findViewById(R.id.toast_message);
+        Button btnOk= dialog.findViewById(R.id.btn_ok);
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        msgToShow.setText(msg);
+
+        dialog.show();
     }
 }
