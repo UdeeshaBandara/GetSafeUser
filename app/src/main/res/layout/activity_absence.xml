@@ -16,8 +16,9 @@
         <LinearLayout
             android:id="@+id/lnr_session"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="37dp"
             android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <Button
@@ -114,30 +115,67 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/date_year"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
             android:layout_below="@id/lnr_session"
-            android:layout_marginTop="5dp"
             android:layout_marginHorizontal="15dp"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_month"
+            <com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker
+                android:id="@+id/month_picker"
                 android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/date_year"
                 android:layout_weight="4"
-                android:overScrollMode="never"
-                android:layout_height="200dp" />
+                app:fontFamily="@font/nunito_bold"
+                app:picker_curved="true"
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_month_date"
+                app:picker_curvedMaxAngle="70"
+                app:picker_cyclic="true"
+                app:picker_dayCount="31"
+                app:picker_displayDays="false"
+
+                app:picker_displayDaysOfMonth="false"
+                app:picker_displayHours="false"
+                app:picker_displayMinutes="false"
+                app:picker_displayMonth="true"
+                app:picker_displayMonthNumbers="false"
+                app:picker_displayYears="false"
+                app:picker_itemSpacing="20dp"
+
+                app:picker_selectorColor="@android:color/transparent"
+                app:picker_visibleItemCount="5" />
+
+            <com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker
+                android:id="@+id/day_picker"
                 android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/date_year"
+                android:layout_weight="4"
+                app:fontFamily="@font/nunito_bold"
+                app:picker_curved="true"
 
-                android:overScrollMode="never"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="6"
-                android:layout_height="200dp" />
+
+                app:picker_curvedMaxAngle="70"
+                app:picker_cyclic="true"
+                app:picker_dayCount="31"
+                app:picker_displayDays="true"
+                app:picker_displayDaysOfMonth="false"
+                app:picker_displayHours="false"
+                app:picker_displayMinutes="false"
+                app:picker_displayMonth="false"
+                app:picker_displayMonthNumbers="false"
+                app:picker_displayYears="false"
+                app:picker_itemSpacing="20dp"
+
+                app:picker_selectorColor="@android:color/transparent"
+                app:picker_visibleItemCount="5" />
+
 
         </LinearLayout>
+
 
     </RelativeLayout>
 

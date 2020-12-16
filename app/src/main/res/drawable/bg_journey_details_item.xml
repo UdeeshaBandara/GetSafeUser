@@ -3,9 +3,6 @@
     <item android:state_selected="false">
         <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
 
-            <stroke
-                android:width="0.5dp"
-                android:color="@color/dark_blue"></stroke>
             <corners android:radius= "20dp" />
         </shape>
     </item>

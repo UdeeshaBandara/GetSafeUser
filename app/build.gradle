@@ -77,5 +77,6 @@ dependencies {
     //lottie animation
     implementation 'com.airbnb.android:lottie:3.5.0'
 
+    implementation 'com.github.florent37:singledateandtimepicker:2.2.7'
 
 }
