@@ -97,7 +97,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/kidSchoolBox"
+                android:id="@+id/phone_number_main"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/kidsNameBox"
@@ -176,10 +176,10 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/kidBirthdayBox"
+                android:id="@+id/email_main"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/kidSchoolBox"
+                android:layout_below="@+id/phone_number_main"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="15dp">
@@ -257,7 +257,7 @@
                 android:id="@+id/kidGurdianDetailsBox"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/kidBirthdayBox"
+                android:layout_below="@+id/email_main"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="15dp">
