@@ -41,7 +41,7 @@ public class Home extends GetSafeBase {
 
 
     NavigationView navigationView;
-    RelativeLayout drawerSelectChildLyt, drawerAbsenceLyt,drawerTransportLyt, drawerLocationLyt, drawerStatsLyt, drawerExpensesLyt, drawerSwapLyt, drawerHelpLyt;
+    RelativeLayout drawerSideMenuHeading,drawerSelectChildLyt, drawerAbsenceLyt,drawerTransportLyt, drawerLocationLyt, drawerStatsLyt, drawerExpensesLyt, drawerSwapLyt, drawerHelpLyt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +63,7 @@ public class Home extends GetSafeBase {
         selectChildUpArrow = findViewById(R.id.select_child_up_arrow);
 
         drawerTransportLyt = navigationView.findViewById(R.id.rlt_transport_services);
+        drawerSideMenuHeading = navigationView.findViewById(R.id.side_menu_heading);
 
         drawerLocationLyt = navigationView.findViewById(R.id.rlt_locations);
         drawerStatsLyt = navigationView.findViewById(R.id.rlt_stats);
@@ -120,6 +121,12 @@ public class Home extends GetSafeBase {
             }
         });
 
+        drawerSideMenuHeading.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),EditProfile.class));
+            }
+        });
 
         drawerSelectChildLyt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -336,7 +343,8 @@ public class Home extends GetSafeBase {
             boolean somePermissionsForeverDenied = false;
             for (String permission : permissions) {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
-                    customToast("Permission denied.\nCannot open map", 1);
+                    showWarningToast(dialog, "Permission denied.\nCannot open map", 1);
+
                 } else {
                     if (ActivityCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {
                         startActivity(new Intent(getApplicationContext(), LiveLocation.class));

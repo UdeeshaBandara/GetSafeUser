@@ -127,14 +127,19 @@ public class ExploreTransport extends GetSafeBase {
         pickupMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Map.class));
+                Intent intent=new Intent(getApplicationContext(), Map.class);
+                intent.putExtra("clicked","pickup");
+                startActivity(intent);
+
                 dropNPickAddressDistinguish=1;
             }
         });
         dropMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Map.class));
+                Intent intent=new Intent(getApplicationContext(), Map.class);
+                intent.putExtra("clicked","drop");
+                startActivity(intent);
                 dropNPickAddressDistinguish=2;
             }
         });

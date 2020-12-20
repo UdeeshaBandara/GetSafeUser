@@ -3,6 +3,7 @@ package lk.hd192.project;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,7 +15,10 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,21 +37,29 @@ import lk.hd192.project.Utils.GetSafeBase;
 public class Map extends GetSafeBase {
 
     MapView mPickupLocation;
+    ImageView schoolMapMarker, vanMapMarker;
+    EditProfile editProfile;
     private GoogleMap googleMap;
     LocationManager locationManager;
     Button mConfirm;
     String locationProvider = LocationManager.GPS_PROVIDER;
     CameraPosition cameraPosition;
+    Dialog dialog;
+    TextView txtFromEdiProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        mPickupLocation=findViewById(R.id.map_pickupLocation);
-        mConfirm=findViewById(R.id.btn_confirmMapLocation);
+        mPickupLocation = findViewById(R.id.map_pickupLocation);
+        mConfirm = findViewById(R.id.btn_confirmMapLocation);
+        schoolMapMarker = findViewById(R.id.school_map_marker);
+        vanMapMarker = findViewById(R.id.van_map_marker);
 
-
+        dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
+        editProfile = new EditProfile();
 
         try {
             MapsInitializer.initialize(getApplicationContext());
@@ -57,17 +69,17 @@ public class Map extends GetSafeBase {
         }
         mPickupLocation.onCreate(savedInstanceState);
         mPickupLocation.onResume();
-        locationManager= (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
 
         mConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PICKUP_LAT=String.valueOf(googleMap.getCameraPosition().target.latitude);
-                PICKUP_LOG=String.valueOf(googleMap.getCameraPosition().target.longitude);
-                DROP_LAT=String.valueOf(googleMap.getCameraPosition().target.latitude);
-                DROP_LOG=String.valueOf(googleMap.getCameraPosition().target.longitude);
-                MAP_SELECTED=true;
+                PICKUP_LAT = String.valueOf(googleMap.getCameraPosition().target.latitude);
+                PICKUP_LOG = String.valueOf(googleMap.getCameraPosition().target.longitude);
+                DROP_LAT = String.valueOf(googleMap.getCameraPosition().target.latitude);
+                DROP_LOG = String.valueOf(googleMap.getCameraPosition().target.longitude);
+                MAP_SELECTED = true;
                 onBackPressed();
             }
         });
@@ -76,9 +88,27 @@ public class Map extends GetSafeBase {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        try {
+            if (getIntent().getStringExtra("clicked").equals("pickup")) {
+                vanMapMarker.setVisibility(View.VISIBLE);
+                schoolMapMarker.setVisibility(View.GONE);
+            } else {
+                vanMapMarker.setVisibility(View.GONE);
+                schoolMapMarker.setVisibility(View.VISIBLE);
+
+            }
+
+
+        } catch (Exception e) {
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
-        if(googleMap != null){
+        if (googleMap != null) {
             googleMap.clear();
 
             // add the markers just like how you did the first time
@@ -98,13 +128,12 @@ public class Map extends GetSafeBase {
                 googleMap.setMyLocationEnabled(true);
 
 
+                try {
 
-                try{
+                    if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 
-                    if( !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
-                    {
-                        customToast("Please enable location services",1);
-                        Intent settings=new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        showWarningToast(dialog, "Please enable location services", 1);
+                        Intent settings = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                         startActivity(settings);
 
                     }
@@ -125,7 +154,7 @@ public class Map extends GetSafeBase {
                         }
                     });
 
-                }catch (Exception e){
+                } catch (Exception e) {
 
                 }
             }
@@ -147,33 +176,33 @@ public class Map extends GetSafeBase {
         super.onBackPressed();
     }
 
-    public void locationAddress(double lat, double lon){
+    public void locationAddress(double lat, double lon) {
         Geocoder geocoder;
         List<Address> addressList;
 
         geocoder = new Geocoder(this, Locale.getDefault());
 
         try {
-            addressList = geocoder.getFromLocation(lat,lon,1);
+            addressList = geocoder.getFromLocation(lat, lon, 1);
 
-            Log.e("address", addressList.size()+" ");
+            Log.e("address", addressList.size() + " ");
 
-            if(addressList.size()==0){
+            if (addressList.size() == 0) {
 
 
-                customToast("Oops.. \nNo Address Found in this Area ",0);
+                showWarningToast(dialog, "Oops.. \nNo Address Found in this Area", 1);
                 mConfirm.setEnabled(false);
 
-            }else{
+            } else {
                 mConfirm.setEnabled(true);
                 LOC_ADDRESS = addressList.get(0).getAddressLine(0);
             }
 
 
-
-
         } catch (IOException e) {
-            customToast("Oops.. \nan error occurred",1);
+
+            showWarningToast(dialog, "Oops.. \nan error occurred", 0);
+
             e.printStackTrace();
         }
     }

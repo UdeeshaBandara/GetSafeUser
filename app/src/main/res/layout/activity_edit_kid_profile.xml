@@ -28,7 +28,7 @@
                 android:layout_marginTop="5dp"
 
                 android:fontFamily="@font/nunito_bold"
-                android:text="Your details"
+                android:text="Kid details"
                 android:textColor="@color/white"
                 android:textSize="25dp" />
 
@@ -43,28 +43,24 @@
         android:layout_marginTop="45dp"
         android:orientation="vertical">
 
-
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
 
             <com.makeramen.roundedimageview.RoundedImageView
-                android:id="@+id/img_parent"
+                android:id="@+id/img_kid"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center"
-                android:scaleType="centerCrop"
                 android:background="@drawable/bg_image_selector"
+                android:scaleType="centerCrop"
+                android:src="@drawable/icon_pic_select"
                 app:riv_border_color="#9F9F9F"
                 app:riv_border_width="2dp"
-                app:riv_corner_radius="100dp"
 
-                android:src="@drawable/icon_pic_select"
-
-                android:visibility="visible"/>
+                app:riv_corner_radius="100dp" />
 
             <com.makeramen.roundedimageview.RoundedImageView
                 android:id="@+id/img_update_image"
@@ -72,15 +68,15 @@
                 android:layout_height="100dp"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center"
-                android:scaleType="centerCrop"
                 android:background="@drawable/bg_image_selector"
-                app:riv_border_color="#9F9F9F"
-                app:riv_border_width="2dp"
-                app:riv_corner_radius="100dp"
-
+                android:scaleType="centerCrop"
                 android:src="@drawable/icon_pic_select"
+                android:visibility="gone"
+                app:riv_border_color="#9F9F9F"
 
-                android:visibility="gone" />
+                app:riv_border_width="2dp"
+
+                app:riv_corner_radius="100dp" />
 
         </RelativeLayout>
 
@@ -100,7 +96,7 @@
 
 
         <TextView
-            android:id="@+id/txt_parent_name"
+            android:id="@+id/txt_kid_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -115,7 +111,7 @@
             android:visibility="visible" />
 
         <EditText
-            android:id="@+id/edit_txt_parent_name"
+            android:id="@+id/edit_txt_kid_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -165,6 +161,7 @@
 
 
                     <LinearLayout
+                        android:id="@+id/lnr_school"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -182,12 +179,12 @@
                                 android:layout_height="20dp"
                                 android:fontFamily="@font/nunito_regular"
                                 android:gravity="center_vertical"
-                                android:hint="Mobile Number"
+                                android:hint="School Name"
                                 android:textColor="@color/black"
                                 android:textSize="14sp" />
 
                             <TextView
-                                android:id="@+id/txt_phone_number"
+                                android:id="@+id/txt_school_name"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_marginTop="6dp"
@@ -197,24 +194,6 @@
                                 android:textSize="18sp"
                                 android:visibility="visible" />
 
-                            <EditText
-                                android:id="@+id/edit_txt_phone_number"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_marginTop="6dp"
-                                android:background="@drawable/custom_edittext"
-                                android:fontFamily="@font/nunito_bold"
-                                android:imeOptions="actionDone"
-                                android:inputType="number"
-                                android:maxLength="10"
-                                android:paddingHorizontal="10dp"
-                                android:paddingVertical="5dp"
-                                android:singleLine="true"
-                                android:text="0774787978"
-                                android:textColor="@color/black"
-                                android:textSize="18sp"
-                                android:visibility="gone" />
-
 
                         </LinearLayout>
 
@@ -223,14 +202,14 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1">
 
-                            <TextView
-                                android:id="@+id/txt_tel_edit_indicator"
-                                android:layout_width="match_parent"
-                                android:layout_height="40dp"
+                            <ImageView
+                                android:id="@+id/img_school_edit_indicator"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
                                 android:layout_centerInParent="true"
                                 android:gravity="center"
-                                android:src="@drawable/icon_home_next"
-                                android:text="Edited"
+                                android:src="@drawable/down_arrow"
+
                                 android:visibility="invisible" />
 
                         </RelativeLayout>
@@ -266,6 +245,7 @@
                         android:background="#FFD5D6D6" />
 
                     <LinearLayout
+                        android:id="@+id/lnr_birthday"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
@@ -283,12 +263,12 @@
                                 android:layout_height="20dp"
                                 android:fontFamily="@font/nunito_regular"
                                 android:gravity="center_vertical"
-                                android:hint="Email"
+                                android:hint="Birthday"
                                 android:textColor="@color/black"
                                 android:textSize="14sp" />
 
                             <TextView
-                                android:id="@+id/txt_email"
+                                android:id="@+id/txt_birthday"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:background="@drawable/bg_blank_for_edit"
@@ -298,22 +278,6 @@
                                 android:textSize="18sp"
                                 android:visibility="visible" />
 
-                            <EditText
-                                android:id="@+id/edit_txt_email"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_marginTop="6dp"
-                                android:background="@drawable/custom_edittext"
-                                android:fontFamily="@font/nunito_bold"
-                                android:imeOptions="actionDone"
-                                android:paddingHorizontal="10dp"
-                                android:paddingVertical="5dp"
-
-                                android:singleLine="true"
-                                android:text="udeeshabandara@gmail.com"
-                                android:textColor="@color/black"
-                                android:textSize="18sp"
-                                android:visibility="gone" />
 
                         </LinearLayout>
 
@@ -322,14 +286,14 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1">
 
-                            <TextView
-                                android:id="@+id/txt_email_edit_indicator"
-                                android:layout_width="match_parent"
-                                android:layout_height="40dp"
+                            <ImageView
+                                android:id="@+id/img_birthday_edit_indicator"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
                                 android:layout_centerInParent="true"
                                 android:gravity="center"
-                                android:src="@drawable/icon_home_next"
-                                android:text="Edited"
+                                android:src="@drawable/journey_date"
+
                                 android:visibility="invisible" />
 
                         </RelativeLayout>
@@ -383,12 +347,12 @@
                                 android:layout_height="20dp"
                                 android:fontFamily="@font/nunito_regular"
                                 android:gravity="center_vertical"
-                                android:hint="Location"
+                                android:hint="Pickup address"
                                 android:textColor="@color/black"
                                 android:textSize="14sp" />
 
                             <TextView
-                                android:id="@+id/txt_parent_address"
+                                android:id="@+id/txt_pickup_address"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:fontFamily="@font/nunito_bold"
@@ -412,66 +376,9 @@
                                 android:src="@drawable/icon_location"
 
                                 android:visibility="invisible" />
+
                         </RelativeLayout>
 
-
-                    </LinearLayout>
-
-
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/kid_main"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/location_main"
-                android:layout_marginTop="15dp">
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <View
-                        android:id="@+id/SplitLine_hor4"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginHorizontal="15dp"
-                        android:background="#FFD5D6D6" />
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:layout_weight="6"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/kid_list_label"
-                            android:layout_width="match_parent"
-                            android:layout_height="20dp"
-                            android:layout_marginHorizontal="15dp"
-                            android:fontFamily="@font/nunito_regular"
-                            android:gravity="center_vertical"
-                            android:hint="Your kids (Select to edit)"
-                            android:textColor="@color/black"
-                            android:textSize="14sp" />
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/recycler_kid_list"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
-                            android:clipToPadding="false"
-                            android:overScrollMode="never"
-                            android:paddingLeft="15dp"
-                            android:paddingRight="5dp"
-                            android:scrollbars="none" />
 
                     </LinearLayout>
 

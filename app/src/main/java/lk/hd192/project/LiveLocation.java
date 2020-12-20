@@ -37,6 +37,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -90,6 +91,7 @@ public class LiveLocation extends GetSafeBase {
     Bitmap originMarker, finalMarker;
 
     Double dropLat, dropLon, currentLat, currentLon;
+    Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,11 +100,11 @@ public class LiveLocation extends GetSafeBase {
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
+
         getSafeServices = new GetSafeServices();
 
         mapView = findViewById(R.id.mapView);
-
-
 
 
         btnBack = findViewById(R.id.btn_location_back);
@@ -110,7 +112,6 @@ public class LiveLocation extends GetSafeBase {
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("message");
         Query lastQuery = myRef.orderByKey().limitToLast(1);
-
 
 
         if (ActivityCompat.checkSelfPermission(LiveLocation.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(LiveLocation.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -121,8 +122,8 @@ public class LiveLocation extends GetSafeBase {
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        originMarker = bitmapSizeByScale(BitmapFactory.decodeResource(getResources(), R.drawable.map_marker), 1);
-        finalMarker = bitmapSizeByScale(BitmapFactory.decodeResource(getResources(), R.drawable.map_marker), 1);
+        originMarker = bitmapSizeByScale(BitmapFactory.decodeResource(getResources(), R.drawable.van_map_marker), 1);
+        finalMarker = bitmapSizeByScale(BitmapFactory.decodeResource(getResources(), R.drawable.school_map_marker), 1);
 
         dropLat = 6.965495959761049;
         dropLon = 79.95475497680536;
@@ -179,14 +180,14 @@ public class LiveLocation extends GetSafeBase {
         lastQuery.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-             try {
-                 LocationUpdates locationUpdates = snapshot.getValue(LocationUpdates.class);
-                 dropLat = locationUpdates.getLatitude();
-                 dropLon = locationUpdates.getLongitude();
-                 googleMap.clear();
-                 drawMapPolyline();
-             }
-             catch(Exception e){}
+                try {
+                    LocationUpdates locationUpdates = snapshot.getValue(LocationUpdates.class);
+                    dropLat = locationUpdates.getLatitude();
+                    dropLon = locationUpdates.getLongitude();
+                    googleMap.clear();
+                    drawMapPolyline();
+                } catch (Exception e) {
+                }
 
             }
 
@@ -242,7 +243,9 @@ public class LiveLocation extends GetSafeBase {
             public void onMapReady(GoogleMap gMap) {
 
                 googleMap = gMap;
-
+                googleMap.setMapStyle(
+                        MapStyleOptions.loadRawResourceStyle(
+                                getApplicationContext(), R.raw.dark_map));
                 if (ActivityCompat.checkSelfPermission(LiveLocation.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(LiveLocation.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
                     askForPermission(android.Manifest.permission.ACCESS_FINE_LOCATION, 100);
@@ -331,9 +334,8 @@ public class LiveLocation extends GetSafeBase {
 
             if (addressList.size() == 0) {
 
+                showWarningToast(dialog, "Oops.. \nNo Address Found in this Area ", 1);
 
-                customToast("Oops.. \nNo Address Found in this Area ", 0);
-                //    mConfirm.setEnabled(false);
 
             } else {
 //                mConfirm.setEnabled(true);
@@ -342,7 +344,10 @@ public class LiveLocation extends GetSafeBase {
 
 
         } catch (IOException e) {
-            customToast("Oops.. \nan error occurred", 1);
+
+
+            showWarningToast(dialog, "Oops.. \nan error occurred ", 0);
+
             e.printStackTrace();
         }
     }
@@ -361,14 +366,23 @@ public class LiveLocation extends GetSafeBase {
         googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(finalMarker)).position(dest).title(""));
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
-
         builder.include(origin);
         builder.include(dest);
 
         LatLngBounds bounds = builder.build();
-        int padding = 100; // offset from edges of the map in pixels
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
-        googleMap.animateCamera(cu);
+
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 75));
+
+        CameraPosition camPos = new CameraPosition.Builder(googleMap.getCameraPosition()).target(bounds.getCenter()).tilt(55).build();
+        googleMap.animateCamera(CameraUpdateFactory
+                .newCameraPosition(camPos));
+//
+//        int padding = 1;
+//
+//        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,padding);
+
+
+//        googleMap.animateCamera(cu);
 
 
         String url = getDirectionsUrl(origin, dest);
@@ -540,7 +554,7 @@ public class LiveLocation extends GetSafeBase {
                 // Adding all the points in the route to LineOptions
                 lineOptions.addAll(points);
                 lineOptions.width(8);
-                lineOptions.color(getResources().getColor(R.color.dark_blue));
+                lineOptions.color(getResources().getColor(R.color.sec_color));
             }
 
             // Drawing polyline in the Google Map for the i-th route

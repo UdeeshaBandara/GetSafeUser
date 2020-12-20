@@ -105,28 +105,6 @@ public class GetSafeBase extends AppCompatActivity {
     }
 
 
-    public void customToast(String message, int type) {
-
-        View toastView = getLayoutInflater().inflate(R.layout.toast_layout_warning, null);
-
-        toastView.setMinimumWidth(device_width);
-        toastView.setMinimumHeight(100);
-
-        if (type == 1)
-            toastView.findViewById(R.id.lnr_bg_toast).setBackgroundColor(getResources().getColor(R.color.toast_warning_color));
-
-        TextView textView = toastView.findViewById(R.id.toast_message);
-
-        textView.setText(message);
-
-
-        Toast toast = new Toast(this);
-
-        toast.setView(toastView);
-        toast.setDuration(Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.TOP, 0, 0);
-        toast.show();
-    }
 
     static public void showHUD(String msg) {
 

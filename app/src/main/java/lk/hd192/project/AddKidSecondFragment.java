@@ -40,6 +40,7 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 
 import java.io.IOException;
 import java.util.List;
@@ -156,7 +157,7 @@ public class AddKidSecondFragment extends Fragment {
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(LAYOUT_INFLATER_SERVICE);
         popupView = inflater.inflate(R.layout.activity_map, null);
 
-        ;
+
 
         final PopupWindow popupWindow = new PopupWindow(popupView, GetSafeBase.device_width - 150, GetSafeBase.device_height - 250, true);
 
@@ -249,7 +250,9 @@ public class AddKidSecondFragment extends Fragment {
             @Override
             public void onMapReady(GoogleMap mMap) {
                 googleMap = mMap;
-
+                googleMap.setMapStyle(
+                        MapStyleOptions.loadRawResourceStyle(
+                                getActivity(), R.raw.dark_map));
                 if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     askForPermission(android.Manifest.permission.ACCESS_FINE_LOCATION, 100);
                     return;
