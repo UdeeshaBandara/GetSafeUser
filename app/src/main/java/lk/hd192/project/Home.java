@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -25,8 +26,12 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import lk.hd192.project.Utils.GetSafeBase;
 
@@ -49,7 +54,7 @@ public class Home extends GetSafeBase {
         setContentView(R.layout.activity_home);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
+        getDeviceToken();
         homeRecycler = findViewById(R.id.home_recycler);
         recyclerSelectChild = findViewById(R.id.recycler_select_child);
 
@@ -324,6 +329,27 @@ public class Home extends GetSafeBase {
         }
 
     }
+    public void getDeviceToken() {
+
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(getApplicationContext(), "Please Try Again !", Toast.LENGTH_SHORT).show();
+                            return;
+
+                        } else {
+                            String token = task.getResult().getToken();
+
+                            Log.e("TOKEN >> ", token);
+
+                        }
+
+                    }
+                });
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

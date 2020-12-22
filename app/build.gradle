@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
@@ -80,7 +80,16 @@ dependencies {
     //date picker in absence
     implementation 'com.github.florent37:singledateandtimepicker:2.2.7'
 
-
     //image cropper
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
+
+    implementation platform('com.google.firebase:firebase-bom:26.2.0')
+
+    // Declare the dependencies for the Firebase Cloud Messaging and Analytics libraries
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-messaging'
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-core:18.0.0'
 }
+
+apply plugin: 'com.google.gms.google-services'
