@@ -70,7 +70,7 @@ public class Home extends GetSafeBase {
         drawerTransportLyt = navigationView.findViewById(R.id.rlt_transport_services);
         drawerSideMenuHeading = navigationView.findViewById(R.id.side_menu_heading);
 
-        drawerLocationLyt = navigationView.findViewById(R.id.rlt_locations);
+
         drawerStatsLyt = navigationView.findViewById(R.id.rlt_stats);
         drawerExpensesLyt = navigationView.findViewById(R.id.rlt_expenses);
         drawerSwapLyt = navigationView.findViewById(R.id.rlt_swap);
@@ -204,12 +204,7 @@ public class Home extends GetSafeBase {
 
             }
         });
-        drawerLocationLyt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            }
-        });
         drawerExpensesLyt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

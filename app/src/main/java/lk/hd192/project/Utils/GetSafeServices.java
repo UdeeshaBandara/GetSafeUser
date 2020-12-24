@@ -24,7 +24,7 @@ public class GetSafeServices extends GetSafeBase {
     String requestResponse = "";
 
 
-    String TAG = "Kathandara Service >> ";
+    String TAG = "Get Safe Service >> ";
 
 
     public GetSafeServices() {
@@ -102,8 +102,8 @@ public class GetSafeServices extends GetSafeBase {
     }
 
 
-    // Network Service Class for JSONObject Requests
-    public void networkJsonRequest(Context context, final HashMap<String, String> parameters, String url, int method, final VolleyJsonCallback callback) {
+    // Network Service Class for Google API Requests
+    public void googleAPIRequest(Context context, final HashMap<String, String> parameters, String url, int method, final VolleyJsonCallback callback) {
 
 
         int requestMethod = 0;
@@ -161,6 +161,71 @@ public class GetSafeServices extends GetSafeBase {
 
     }
 
+    public void networkJsonRequest(Context context, final HashMap<String, String> parameters, String url, int method, final VolleyJsonCallback callback) {
+
+
+        int requestMethod = 0;
+
+        if (method == 1) {
+
+            requestMethod = Request.Method.GET;
+
+        } else if (method == 2) {
+
+            requestMethod = Request.Method.POST;
+
+        } else {
+
+            requestMethod = Request.Method.GET;
+
+        }
+
+        JsonObjectRequest req = new JsonObjectRequest(requestMethod, url, new JSONObject(parameters), new Response.Listener<JSONObject>() { //Json request
+            @Override
+            public void onResponse(JSONObject response) {
+
+
+                callback.onSuccessResponse(response); // send response back to the calling class
+                // Log.e(TAG + "JSON REQ ", response + "");
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                NetworkResponse networkResponse = error.networkResponse;
+                if (networkResponse != null && networkResponse.data != null) {
+                    String jsonError = new String(networkResponse.data);
+                    Log.e(TAG, "volley JSON error : " + jsonError); // volley error description
+
+                }
+
+                try {
+                    callback.onSuccessResponse(new JSONObject(new String(networkResponse.data)));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+
+        int MY_SOCKET_TIMEOUT_MS = 20000;
+        req.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        Volley.newRequestQueue(context).add(req);
+
+
+    }
+
 
     // Network Service Class for JSONObject Requests with HashMap<String, Object>
     public void networkJsonRequestWithDifHashMap(Context context, final HashMap<String, Object> parameters, String url, int method, final VolleyJsonCallback callback) {
@@ -192,7 +257,7 @@ public class GetSafeServices extends GetSafeBase {
                 }
 
             }
-        }){
+        }) {
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -200,7 +265,7 @@ public class GetSafeServices extends GetSafeBase {
 
 //                headers.put("Authorization", tinyDB.getString("TOKEN"));
 
-                Log.e("Headers ",headers + "");
+                Log.e("Headers ", headers + "");
 
                 return headers;
             }
@@ -216,83 +281,79 @@ public class GetSafeServices extends GetSafeBase {
     }
 
 
-    // Network Request : JSON OBJ with HEADERS
-    public void networkJsonRequestWithHeaders(Context context, final HashMap<String, String> parameters, String url, int method, final VolleyJsonCallback callback) {
-
-
-        int requestMethod = 0;
-
-        if (method == 1) {
-
-            requestMethod = Request.Method.GET;
-
-        } else if (method == 2) {
-
-            requestMethod = Request.Method.POST;
-
-        } else {
-
-            requestMethod = Request.Method.PUT;
-
-        }
-
-        JsonObjectRequest req = new JsonObjectRequest(requestMethod, url, new JSONObject(parameters), new Response.Listener<JSONObject>() { //Json request
-            @Override
-            public void onResponse(JSONObject response) {
-
-
-                callback.onSuccessResponse(response); // send response back to the calling class
-                Log.e(TAG + "JSON REQ ", response + "");
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-                Log.e(TAG + "JSON REQ ERR > ", error + "");
-
-                NetworkResponse networkResponse = error.networkResponse;
-                if (networkResponse != null && networkResponse.data != null) {
-                    String jsonError = new String(networkResponse.data);
-                    Log.e(TAG, "volley JSON error : " + jsonError); // volley error description
-                }
-
-                try {
-                    callback.onSuccessResponse(new JSONObject(new String(networkResponse.data)));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }){
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", tinyDB.getString("TOKEN"));
-
-//                headers.put("Authorization", "Bearer TThfab87wy438rf38vbqb3yf78qybfiqc387fcgnq387fg8cn3ncfg8k");
-
-                Log.e("Headers ",headers + "");
-
-                return headers;
-            }
-        };
-
-        int MY_SOCKET_TIMEOUT_MS = 20000;
-        req.setRetryPolicy(new DefaultRetryPolicy(
-                MY_SOCKET_TIMEOUT_MS,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-        Volley.newRequestQueue(context).add(req);
-
-
-    }
-
-
-
-
+//    // Network Request : JSON OBJ with HEADERS
+//    public void networkJsonRequestWithHeaders(Context context, final HashMap<String, String> parameters, String url, int method, final VolleyJsonCallback callback) {
+//
+//
+//        int requestMethod = 0;
+//
+//        if (method == 1) {
+//
+//            requestMethod = Request.Method.GET;
+//
+//        } else if (method == 2) {
+//
+//            requestMethod = Request.Method.POST;
+//
+//        } else {
+//
+//            requestMethod = Request.Method.PUT;
+//
+//        }
+//
+//        JsonObjectRequest req = new JsonObjectRequest(requestMethod, url, new JSONObject(parameters), new Response.Listener<JSONObject>() { //Json request
+//            @Override
+//            public void onResponse(JSONObject response) {
+//
+//
+//                callback.onSuccessResponse(response); // send response back to the calling class
+//                Log.e(TAG + "JSON REQ ", response + "");
+//
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//
+//                Log.e(TAG + "JSON REQ ERR > ", error + "");
+//
+//                NetworkResponse networkResponse = error.networkResponse;
+//                if (networkResponse != null && networkResponse.data != null) {
+//                    String jsonError = new String(networkResponse.data);
+//                    Log.e(TAG, "volley JSON error : " + jsonError); // volley error description
+//                }
+//
+//                try {
+//                    callback.onSuccessResponse(new JSONObject(new String(networkResponse.data)));
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
+//        }) {
+//
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                HashMap<String, String> headers = new HashMap<String, String>();
+//                headers.put("Authorization", tinyDB.getString("TOKEN"));
+//
+////                headers.put("Authorization", "Bearer TThfab87wy438rf38vbqb3yf78qybfiqc387fcgnq387fg8cn3ncfg8k");
+//
+//                Log.e("Headers ", headers + "");
+//
+//                return headers;
+//            }
+//        };
+//
+//        int MY_SOCKET_TIMEOUT_MS = 20000;
+//        req.setRetryPolicy(new DefaultRetryPolicy(
+//                MY_SOCKET_TIMEOUT_MS,
+//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+//
+//        Volley.newRequestQueue(context).add(req);
+//
+//
+//    }
 
 
 }

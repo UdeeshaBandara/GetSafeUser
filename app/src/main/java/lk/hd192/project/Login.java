@@ -14,12 +14,21 @@ import android.widget.EditText;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 
+import org.json.JSONObject;
+
+import java.util.HashMap;
+
 import lk.hd192.project.Utils.GetSafeBase;
+import lk.hd192.project.Utils.GetSafeServices;
+import lk.hd192.project.Utils.TinyDB;
+import lk.hd192.project.Utils.VolleyJsonCallback;
 
 public class Login extends GetSafeBase {
 
     EditText one, two, three, four, five, six, seven, eight, nine;
     Dialog dialog;
+    GetSafeServices getSafeServices;
+    TinyDB tinyDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +45,11 @@ public class Login extends GetSafeBase {
         eight = findViewById(R.id.txt_number_eight);
         nine = findViewById(R.id.txt_number_nine);
 
+        tinyDB = new TinyDB(getApplicationContext());
+        getSafeServices = new GetSafeServices();
+
         requestFocus();
-        dialog = new Dialog(this,android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
+        dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
         findViewById(R.id.btn_login_next).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,28 +59,65 @@ public class Login extends GetSafeBase {
                         !TextUtils.isEmpty(two.getText().toString()) &
                         !TextUtils.isEmpty(three.getText().toString()) &
                         !TextUtils.isEmpty(four.getText().toString()) &
-                        !TextUtils.isEmpty(five.getText().toString())&
-                        !TextUtils.isEmpty(six.getText().toString())&
-                        !TextUtils.isEmpty(seven.getText().toString())&
-                        !TextUtils.isEmpty(eight.getText().toString())&
+                        !TextUtils.isEmpty(five.getText().toString()) &
+                        !TextUtils.isEmpty(six.getText().toString()) &
+                        !TextUtils.isEmpty(seven.getText().toString()) &
+                        !TextUtils.isEmpty(eight.getText().toString()) &
                         !TextUtils.isEmpty(nine.getText().toString())) {
 
-                    startActivity(new Intent(getApplicationContext(), OTP.class));
-                    finish();
+                    userSendOtp();
 
 
-
-
-                }
-                else{
+                } else {
                     YoYo.with(Techniques.Bounce)
                             .duration(2500)
                             .playOn(findViewById(R.id.lnr_number));
-                  showWarningToast(dialog,"Please enter correct phone number",0);
+                    showWarningToast(dialog, "Please enter correct phone number", 0);
 
                 }
             }
         });
+    }
+
+
+    private void userSendOtp() {
+
+        HashMap<String, String> tempParam = new HashMap<>();
+
+        tempParam.put("phone", one.getText().toString() +
+                two.getText().toString() +
+                three.getText().toString() +
+                four.getText().toString() +
+                five.getText().toString() +
+                six.getText().toString() +
+                seven.getText().toString() +
+                eight.getText().toString() +
+                nine.getText().toString());
+
+
+        getSafeServices.networkJsonRequest(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.USER_SEND_OTP), 2, new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+
+                    if (result.getBoolean("OTPsent")) {
+
+                        OTP.optType = 0;
+
+                        startActivity(new Intent(getApplicationContext(), OTP.class));
+
+                    } else
+                        showWarningToast(dialog, "Something went wrong. Please try again", 0);
+
+
+                } catch (Exception e) {
+
+                }
+
+            }
+        });
+
     }
 
     private void requestFocus() {
@@ -247,12 +296,11 @@ public class Login extends GetSafeBase {
                         !TextUtils.isEmpty(two.getText().toString()) &
                         !TextUtils.isEmpty(three.getText().toString()) &
                         !TextUtils.isEmpty(four.getText().toString()) &
-                        !TextUtils.isEmpty(five.getText().toString())&
-                        !TextUtils.isEmpty(six.getText().toString())&
-                        !TextUtils.isEmpty(seven.getText().toString())&
-                        !TextUtils.isEmpty(eight.getText().toString())&
+                        !TextUtils.isEmpty(five.getText().toString()) &
+                        !TextUtils.isEmpty(six.getText().toString()) &
+                        !TextUtils.isEmpty(seven.getText().toString()) &
+                        !TextUtils.isEmpty(eight.getText().toString()) &
                         !TextUtils.isEmpty(nine.getText().toString())) {
-
 
 
                     View view = Login.this.getCurrentFocus();
@@ -271,7 +319,6 @@ public class Login extends GetSafeBase {
 
             }
         });
-
 
 
     }

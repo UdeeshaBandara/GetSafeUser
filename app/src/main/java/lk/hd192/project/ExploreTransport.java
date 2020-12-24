@@ -209,7 +209,7 @@ public class ExploreTransport extends GetSafeBase {
 //        AIzaSyAa4hHCIoe2ENqjwTljcJkNnYluHlvRwYY
 
 
-        getSafeServices.networkJsonRequest(this, tempParam, getString(R.string.AUTO_COMPLETE) + "?input=" + code + "&key=" + getString(R.string.API_KEY) + "&sessiontoken=1234567890&components=country:lk", 1, new VolleyJsonCallback() {
+        getSafeServices.googleAPIRequest(this, tempParam, getString(R.string.AUTO_COMPLETE) + "?input=" + code + "&key=" + getString(R.string.API_KEY) + "&sessiontoken=1234567890&components=country:lk", 1, new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 
@@ -306,7 +306,7 @@ public class ExploreTransport extends GetSafeBase {
 //        AIzaSyAa4hHCIoe2ENqjwTljcJkNnYluHlvRwYY
 
 
-        getSafeServices.networkJsonRequest(this, tempParam, getString(R.string.AUTO_COMPLETE) + "?input=" + code + "&key=" + getString(R.string.API_KEY) + "&sessiontoken=1234567890&components=country:lk", 1, new VolleyJsonCallback() {
+        getSafeServices.googleAPIRequest(this, tempParam, getString(R.string.AUTO_COMPLETE) + "?input=" + code + "&key=" + getString(R.string.API_KEY) + "&sessiontoken=1234567890&components=country:lk", 1, new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 
@@ -364,7 +364,7 @@ public class ExploreTransport extends GetSafeBase {
         tempParam.put("", "");
 
 
-        getSafeServices.networkJsonRequest(this, tempParam, getString(R.string.REVERSE_GEO) + "?address=" + pickUpText + "&key=" + getString(R.string.API_KEY), 1, new VolleyJsonCallback() {
+        getSafeServices.googleAPIRequest(this, tempParam, getString(R.string.REVERSE_GEO) + "?address=" + pickUpText + "&key=" + getString(R.string.API_KEY), 1, new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 
@@ -391,7 +391,7 @@ public class ExploreTransport extends GetSafeBase {
         tempParam.put("", "");
 
 
-        getSafeServices.networkJsonRequest(this, tempParam, getString(R.string.REVERSE_GEO) + "?address=" + dropText + "&key=" + getString(R.string.API_KEY), 1, new VolleyJsonCallback() {
+        getSafeServices.googleAPIRequest(this, tempParam, getString(R.string.REVERSE_GEO) + "?address=" + dropText + "&key=" + getString(R.string.API_KEY), 1, new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 

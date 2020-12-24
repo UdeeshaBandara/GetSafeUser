@@ -5,6 +5,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
 
+import org.json.JSONObject;
+
+import java.util.HashMap;
+
+import lk.hd192.project.Home;
+import lk.hd192.project.Login;
+import lk.hd192.project.R;
 import lk.hd192.project.Welcome;
 
 public class SplashScreen extends GetSafeBase {
@@ -22,64 +29,60 @@ public class SplashScreen extends GetSafeBase {
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        Log.e("is logged", String.valueOf(tinyDB.getBoolean("Is_Logged") == true));
 
-        if (tinyDB.getBoolean("Is_Logged") == true) {
-            // getCurrentUserData();
-            startActivity(new Intent(SplashScreen.this, Welcome.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
-            finish();
-        }
-        else {
 
-            startActivity(new Intent(SplashScreen.this, Welcome.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
-            finish();
-        }
+
+        validateToken();
+
+
+//        if (tinyDB.getBoolean("Is_Logged") == true) {
+//            // getCurrentUserData();
+//            startActivity(new Intent(SplashScreen.this, Welcome.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
+//            finish();
+//        }
+//        else {
+//
+//            startActivity(new Intent(SplashScreen.this, Welcome.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
+//            finish();
+//        }
 
 
     }
 
+    private void validateToken() {
 
-//    public void getCurrentUserData() {
-//
-//        HashMap<String, String> tempParams = new HashMap<>();
-//        tempParams.put("token", tinyDB.getString("token"));
-//
-//        getSafeServices.networkJsonRequest(getApplicationContext(), tempParams, getString(R.string.BASE_URL) + getString(R.string.CURRENT_USER_DATA), 2, new VolleyJsonCallback() {
-//            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-//            @Override
-//            public void onSuccessResponse(JSONObject result) {
-//
-//
-//                try {
-//
-//                    if (result.getInt("available") == 1) {
-//
-//                        startActivity(new Intent(getApplicationContext(), Home.class));
-//
-//                    } else {
-//
-//
-////
-////                        Spannable centeredText = new SpannableString(result.getString("message"));
-////                        centeredText.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),
-////                                0, result.getString("message").length() - 1,
-////                                Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-////
-////                        Toast.makeText(getApplicationContext(), centeredText, Toast.LENGTH_LONG).show();
-////                        startActivity(new Intent(SplashScreen.this, Login.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
-////
-//
-//                    }
-//
-//                    finishAffinity();
-//                } catch (Exception e) {
-//
-//
-//                    e.printStackTrace();
-//                }
-//
-//            }
-//        });
-//    }
+
+        HashMap<String, String> tempParam = new HashMap<>();
+
+        tempParam.put("otp", tinyDB.getString("token"));
+
+
+        getSafeServices.networkJsonRequest(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.REGISTER_SEND_OTP), 2, new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+
+                    //add API response filed
+                    if (result.getBoolean("valid"))
+
+                        startActivity(new Intent(SplashScreen.this, Welcome.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
+                    else
+
+                        startActivity(new Intent(SplashScreen.this, Login.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
+
+
+                    finish();
+
+
+                } catch (Exception e) {
+
+                }
+
+            }
+        });
+
+    }
+
 
 }
