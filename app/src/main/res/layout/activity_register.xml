@@ -4,9 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_main"
     tools:context=".Register">
 
+    <ImageView
+        android:id="@+id/bg_main_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_main_top" />
+
+
+    <ImageView
+        android:id="@+id/bg_main_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_main_bottom" />
 
     <ImageView
         android:id="@+id/main_logo"
@@ -78,10 +93,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:layout_marginTop="15dp"
-                    android:hint="Mobile no"
+                    android:hint="Mobile no (77 XXXX XXX)"
                     android:inputType="number"
                     android:paddingRight="10dp"
                     android:maxLines="1"
+                    android:maxLength="10"
                     android:drawablePadding="5dp"
                     android:background="@drawable/custom_edittext"
                     android:drawableLeft="@drawable/icon_mobile"
@@ -124,4 +140,21 @@
 
         </RelativeLayout>
     </ScrollView>
+    <View
+        android:id="@+id/disable_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#92292828"
+        android:visibility="gone"
+      />
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/loading"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/loading" />
 </RelativeLayout>

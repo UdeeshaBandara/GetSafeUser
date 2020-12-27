@@ -297,7 +297,7 @@ public class EditProfile extends GetSafeBase {
                         Uri uri = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName() + ".provider", file);
                         m_intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
                         startActivityForResult(m_intent, 0);
-                        Log.e("after switch","ok");
+                        Log.e("after switch", "ok");
 
                     }
 
@@ -394,14 +394,14 @@ public class EditProfile extends GetSafeBase {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.e("onactivityResult",data+"");
+        Log.e("onactivityResult", data + "");
 
         if ((requestCode == 1 | requestCode == 0) & resultCode == RESULT_OK & null != data) {
             Uri imgURL;
-            Log.e("inside big if","ok");
+            Log.e("inside big if", "ok");
             //set aspect ratio of image
             if (resultCode != RESULT_CANCELED) {
-                Log.e("inside small if","ok");
+                Log.e("inside small if", "ok");
                 switch (requestCode) {
                     case 0:
                         if (resultCode == RESULT_OK && data != null) {
@@ -411,7 +411,7 @@ public class EditProfile extends GetSafeBase {
                             //Uri of camera image
                             Uri uri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider", file);
 
-Log.e("CropImage","before");
+                            Log.e("CropImage", "before");
 
                             CropImage.activity(uri).setAspectRatio(1, 1).start(this);
 

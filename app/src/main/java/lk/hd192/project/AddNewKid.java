@@ -108,6 +108,7 @@ public class AddNewKid extends GetSafeBase {
             public void onClick(View v) {
                 mainSaveAnimation.setVisibility(View.VISIBLE);
                 mainSaveAnimation.playAnimation();
+                mainSaveAnimation.setVisibility(View.GONE);
 
             }
         });

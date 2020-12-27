@@ -211,9 +211,67 @@ public class GetSafeServices extends GetSafeBase {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/json; charset=utf-8");
+                headers.put("Bearer", tinyDB.getString("token"));
                 return headers;
             }
         };
+
+        int MY_SOCKET_TIMEOUT_MS = 20000;
+        req.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        Volley.newRequestQueue(context).add(req);
+
+
+    }
+    public void networkJsonRequestWithoutHeader(Context context, final HashMap<String, String> parameters, String url, int method, final VolleyJsonCallback callback) {
+
+
+        int requestMethod = 0;
+
+        if (method == 1) {
+
+            requestMethod = Request.Method.GET;
+
+        } else if (method == 2) {
+
+            requestMethod = Request.Method.POST;
+
+        } else {
+
+            requestMethod = Request.Method.GET;
+
+        }
+
+        JsonObjectRequest req = new JsonObjectRequest(requestMethod, url, new JSONObject(parameters), new Response.Listener<JSONObject>() { //Json request
+            @Override
+            public void onResponse(JSONObject response) {
+
+
+                callback.onSuccessResponse(response); // send response back to the calling class
+                // Log.e(TAG + "JSON REQ ", response + "");
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                NetworkResponse networkResponse = error.networkResponse;
+                if (networkResponse != null && networkResponse.data != null) {
+                    String jsonError = new String(networkResponse.data);
+                    Log.e(TAG, "volley JSON error : " + jsonError); // volley error description
+
+                }
+
+                try {
+                    callback.onSuccessResponse(new JSONObject(new String(networkResponse.data)));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
 
         int MY_SOCKET_TIMEOUT_MS = 20000;
         req.setRetryPolicy(new DefaultRetryPolicy(

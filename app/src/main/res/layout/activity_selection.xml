@@ -4,9 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_main"
-    tools:context=".Selection">
 
+    tools:context=".Selection">
+    <ImageView
+        android:id="@+id/bg_main_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_main_top" />
+
+
+    <ImageView
+        android:id="@+id/bg_main_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_main_bottom" />
     <ImageView
         android:id="@+id/main_logo"
         android:layout_width="wrap_content"

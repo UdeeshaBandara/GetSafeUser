@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -32,21 +33,31 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.makeramen.roundedimageview.RoundedImageView;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.InputStream;
 
 import lk.hd192.project.Utils.GetSafeBase;
 
 public class Home extends GetSafeBase {
     RecyclerView homeRecycler, recyclerSelectChild;
 
-    FloatingActionButton fabAddKid;
+    RoundedImageView fabAddKid;
+    JSONArray homeOptions;
+    JSONObject oneOption, twoOption, threeOption, fourOption, fiveOption;
 
     Dialog dialog;
-    ImageView sideMenuListener, selectChildDownArrow, selectChildUpArrow;
+    ImageView sideMenuListener, selectChildDownArrow, selectChildUpArrow, btnNotification;
     DrawerLayout drawerLayout;
-
+    String imageUrl;
 
     NavigationView navigationView;
-    RelativeLayout drawerSideMenuHeading,drawerSelectChildLyt, drawerAbsenceLyt,drawerTransportLyt, drawerLocationLyt, drawerStatsLyt, drawerExpensesLyt, drawerSwapLyt, drawerHelpLyt;
+    RelativeLayout drawerSideMenuHeading, drawerSelectChildLyt, drawerAbsenceLyt, drawerTransportLyt, drawerLocationLyt, drawerStatsLyt, drawerExpensesLyt, drawerSwapLyt, drawerHelpLyt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,11 +65,42 @@ public class Home extends GetSafeBase {
         setContentView(R.layout.activity_home);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        getDeviceToken();
+
+
+        homeOptions = new JSONArray();
+        oneOption = new JSONObject();
+        twoOption = new JSONObject();
+        threeOption = new JSONObject();
+        fourOption = new JSONObject();
+        fiveOption = new JSONObject();
+        try {
+
+            oneOption.put("heading", "Current Journey");
+            oneOption.put("subHeading", "Live location");
+            homeOptions.put(oneOption);
+
+            twoOption.put("heading", "Journey Details");
+            twoOption.put("subHeading", "See stats about \nprevious journeys");
+            homeOptions.put(twoOption);
+            threeOption.put("heading", "Talk to driver");
+            threeOption.put("subHeading", "Chat with driver");
+            homeOptions.put(threeOption);
+            fourOption.put("heading", "Your Payments");
+            fourOption.put("subHeading", "Make payments");
+            homeOptions.put(fourOption);
+            fiveOption.put("heading", "Your Calendar");
+            fiveOption.put("subHeading", "Schedule absent days");
+            homeOptions.put(fiveOption);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
         homeRecycler = findViewById(R.id.home_recycler);
         recyclerSelectChild = findViewById(R.id.recycler_select_child);
 
-        dialog = new Dialog(this,android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
+        dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
 
         sideMenuListener = findViewById(R.id.btn_side_menu);
         drawerLayout = findViewById(R.id.main_drawer_layout);
@@ -66,6 +108,7 @@ public class Home extends GetSafeBase {
         fabAddKid = findViewById(R.id.fab_add_kid);
         selectChildDownArrow = findViewById(R.id.select_child_down_arrow);
         selectChildUpArrow = findViewById(R.id.select_child_up_arrow);
+        btnNotification = findViewById(R.id.btn_notification);
 
         drawerTransportLyt = navigationView.findViewById(R.id.rlt_transport_services);
         drawerSideMenuHeading = navigationView.findViewById(R.id.side_menu_heading);
@@ -84,6 +127,13 @@ public class Home extends GetSafeBase {
         recyclerSelectChild.setAdapter(new StudentItemAdapter());
         recyclerSelectChild.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
 
+        btnNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Notification.class));
+            }
+        });
+
         drawerMenu();
 
         fabAddKid.setOnClickListener(new View.OnClickListener() {
@@ -98,10 +148,9 @@ public class Home extends GetSafeBase {
 
                     askForPermission();
                     return;
-                }
-               else if (isEnable)
+                } else if (isEnable)
 
-                startActivity(new Intent(getApplicationContext(), AddNewKid.class));
+                    startActivity(new Intent(getApplicationContext(), AddNewKid.class));
             }
         });
 
@@ -129,7 +178,7 @@ public class Home extends GetSafeBase {
         drawerSideMenuHeading.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),EditProfile.class));
+                startActivity(new Intent(getApplicationContext(), EditProfile.class));
             }
         });
 
@@ -262,10 +311,17 @@ public class Home extends GetSafeBase {
 
     class FunctionViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout homeSelection;
+        RoundedImageView itemHomeImage;
+        TextView txtOptionName, optionHeadingOne;
+        ImageView optionIconOne;
 
         public FunctionViewHolder(@NonNull View itemView) {
             super(itemView);
             homeSelection = itemView.findViewById(R.id.home_selection);
+            itemHomeImage = itemView.findViewById(R.id.item_home_image);
+            txtOptionName = itemView.findViewById(R.id.txt_option_name);
+            optionHeadingOne = itemView.findViewById(R.id.option_heading_one);
+            optionIconOne = itemView.findViewById(R.id.option_icon_one);
         }
     }
 
@@ -283,11 +339,25 @@ public class Home extends GetSafeBase {
         @Override
         public void onBindViewHolder(@NonNull FunctionViewHolder holder, final int position) {
 
+            Uri uri = Uri.parse("android.resource://lk.hd192.project/drawable/home" + String.valueOf(position) + "");
+            Picasso.get().load(uri).into(holder.itemHomeImage);
+            Uri uri1 = Uri.parse("android.resource://lk.hd192.project/drawable/home_icon" + String.valueOf(position) + "");
+            Picasso.get().load(uri1).into(holder.optionIconOne);
+
+
+            try {
+                holder.txtOptionName.setText(homeOptions.getJSONObject(position).getString("heading"));
+                holder.optionHeadingOne.setText(homeOptions.getJSONObject(position).getString("subHeading"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
             holder.homeSelection.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     switch (position) {
                         case 0:
+
                             isDeviceLocationTurnedOn(dialog);
                             if (ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -323,26 +393,6 @@ public class Home extends GetSafeBase {
             return 5;
         }
 
-    }
-    public void getDeviceToken() {
-
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            Toast.makeText(getApplicationContext(), "Please Try Again !", Toast.LENGTH_SHORT).show();
-                            return;
-
-                        } else {
-                            String token = task.getResult().getToken();
-
-                            Log.e("TOKEN >> ", token);
-
-                        }
-
-                    }
-                });
     }
 
 

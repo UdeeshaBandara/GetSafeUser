@@ -158,4 +158,6 @@ public class GetSafeBase extends AppCompatActivity {
 
         dialog.show();
     }
+
+
 }

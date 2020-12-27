@@ -272,11 +272,7 @@
                     android:layout_marginTop="15dp"
                     android:orientation="horizontal">
 
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="5"
-                        android:src="@drawable/icon_van_bus" />
+
 
                     <ImageView
                         android:layout_width="0dp"

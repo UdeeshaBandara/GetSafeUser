@@ -11,6 +11,7 @@ import java.util.HashMap;
 
 import lk.hd192.project.Home;
 import lk.hd192.project.Login;
+import lk.hd192.project.OTP;
 import lk.hd192.project.R;
 import lk.hd192.project.Welcome;
 
@@ -28,23 +29,19 @@ public class SplashScreen extends GetSafeBase {
 
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+Log.e("islogged",tinyDB.getBoolean("isLogged")+"");
 
 
+        if (tinyDB.getBoolean("isLogged") == true)
+            validateToken();
 
 
-        validateToken();
-
-
-//        if (tinyDB.getBoolean("Is_Logged") == true) {
-//            // getCurrentUserData();
-//            startActivity(new Intent(SplashScreen.this, Welcome.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
-//            finish();
-//        }
-//        else {
-//
-//            startActivity(new Intent(SplashScreen.this, Welcome.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
-//            finish();
-//        }
+        else {
+            OTP.optType = 0;
+            Log.e("otpType", OTP.optType+"");
+            startActivity(new Intent(SplashScreen.this, Welcome.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
+            finish();
+        }
 
 
     }
@@ -54,23 +51,24 @@ public class SplashScreen extends GetSafeBase {
 
         HashMap<String, String> tempParam = new HashMap<>();
 
-        tempParam.put("otp", tinyDB.getString("token"));
 
 
-        getSafeServices.networkJsonRequest(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.REGISTER_SEND_OTP), 2, new VolleyJsonCallback() {
+
+        getSafeServices.networkJsonRequest(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.VALIDATE_TOKEN), 1, new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 
                 try {
 
-                    //add API response filed
-                    if (result.getBoolean("valid"))
+                    if (result.getBoolean("logged-in-status"))
 
-                        startActivity(new Intent(SplashScreen.this, Welcome.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
-                    else
 
+                        startActivity(new Intent(SplashScreen.this, Home.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
+                    else {
+                        OTP.optType = 0;
                         startActivity(new Intent(SplashScreen.this, Login.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
-
+                    }
+                    Log.e("token",tinyDB.getString("token"));
 
                     finish();
 

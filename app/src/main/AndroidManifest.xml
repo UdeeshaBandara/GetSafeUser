@@ -6,7 +6,6 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -21,6 +20,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name=".Messaging"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan">
+
+        </activity>
+        <activity android:name=".Notification" />
+        <activity
+            android:name=".InitLocation"
+            android:windowSoftInputMode="adjustResize" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -32,11 +41,9 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".EditKidProfile">
-
-        </activity>
-        <activity android:name=".EditProfile"></activity>
-        <activity android:name=".Absence"></activity>
+        <activity android:name=".EditKidProfile" />
+        <activity android:name=".EditProfile" />
+        <activity android:name=".Absence" />
         <activity android:name=".AddNewKid" />
         <activity android:name=".Map" />
 
@@ -46,13 +53,17 @@
 
         <activity
             android:name=".Login"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".ExploreTransport"></activity>
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ExploreTransport" />
         <activity android:name=".DriverProfile" />
         <activity android:name=".JourneyDetails" />
-        <activity android:name=".Journey">
-
-        </activity>
+        <activity android:name=".Journey" />
         <activity android:name=".LiveLocation" />
         <activity
             android:name=".OTP"
@@ -61,19 +72,17 @@
         <activity
             android:name=".Register"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"></activity>
         <activity android:name=".Selection" />
         <activity android:name=".Welcome" />
-        <activity android:name=".Home" />
+        <activity android:name=".Home">
+
+        </activity>
         <activity
             android:name=".Utils.SplashScreen"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
         </activity>
         <activity
@@ -87,6 +96,7 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/icon_location" />
@@ -94,7 +104,6 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
         <meta-data
-
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
         <meta-data

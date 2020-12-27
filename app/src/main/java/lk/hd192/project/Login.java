@@ -6,13 +6,23 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import org.json.JSONObject;
 
@@ -29,6 +39,7 @@ public class Login extends GetSafeBase {
     Dialog dialog;
     GetSafeServices getSafeServices;
     TinyDB tinyDB;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +52,14 @@ public class Login extends GetSafeBase {
         four = findViewById(R.id.txt_number_four);
         five = findViewById(R.id.txt_number_five);
         six = findViewById(R.id.txt_number_six);
+        mAuth = FirebaseAuth.getInstance();
         seven = findViewById(R.id.txt_number_seven);
         eight = findViewById(R.id.txt_number_eight);
         nine = findViewById(R.id.txt_number_nine);
 
         tinyDB = new TinyDB(getApplicationContext());
         getSafeServices = new GetSafeServices();
-
+        tinyDB.putString("email","mccbcpl@gmail.com");
         requestFocus();
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
         findViewById(R.id.btn_login_next).setOnClickListener(new View.OnClickListener() {
@@ -64,9 +76,10 @@ public class Login extends GetSafeBase {
                         !TextUtils.isEmpty(seven.getText().toString()) &
                         !TextUtils.isEmpty(eight.getText().toString()) &
                         !TextUtils.isEmpty(nine.getText().toString())) {
+                    Log.e("existingUserSendOtp", "ok");
+//                    existingUserSendOtp();
 
-                    userSendOtp();
-
+                    firebaseLogin();
 
                 } else {
                     YoYo.with(Techniques.Bounce)
@@ -80,7 +93,7 @@ public class Login extends GetSafeBase {
     }
 
 
-    private void userSendOtp() {
+    private void existingUserSendOtp() {
 
         HashMap<String, String> tempParam = new HashMap<>();
 
@@ -93,18 +106,21 @@ public class Login extends GetSafeBase {
                 seven.getText().toString() +
                 eight.getText().toString() +
                 nine.getText().toString());
+        //    tempParam.put("fcm_token", token);
+        Log.e("inside", "ok");
 
-
-        getSafeServices.networkJsonRequest(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.USER_SEND_OTP), 2, new VolleyJsonCallback() {
+        getSafeServices.networkJsonRequestWithoutHeader(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.USER_SEND_OTP), 2, new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 
                 try {
+                    Log.e("success", "ok");
+                    Log.e("result", result+"");
 
-                    if (result.getBoolean("OTPsent")) {
+                    if (result.getBoolean("otp_sent_status")) {
 
-                        OTP.optType = 0;
-
+                        OTP.otpToken = result.getString("otp_token");
+                        firebaseLogin();
                         startActivity(new Intent(getApplicationContext(), OTP.class));
 
                     } else
@@ -119,6 +135,38 @@ public class Login extends GetSafeBase {
         });
 
     }
+    private void firebaseLogin(){
+
+        mAuth.signInWithEmailAndPassword( tinyDB.getString("email"), one.getText().toString() +
+                two.getText().toString() +
+                three.getText().toString() +
+                four.getText().toString() +
+                five.getText().toString() +
+                six.getText().toString() +
+                seven.getText().toString() +
+                eight.getText().toString() +
+                nine.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+
+                    Log.e("firebase login","success");
+                    startActivity(new Intent(getApplicationContext(),Messaging.class));
+                    finishAffinity();
+
+                } else {
+
+                }
+            }
+        });
+
+
+
+
+    }
+
+
+
 
     private void requestFocus() {
 

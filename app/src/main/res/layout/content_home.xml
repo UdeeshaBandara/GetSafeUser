@@ -11,8 +11,7 @@
         android:id="@+id/home_heading"
         android:layout_width="match_parent"
         android:layout_height="270dp"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/bg_home_heading">
+        android:layout_alignParentTop="true">
 
 
         <RelativeLayout
@@ -41,12 +40,36 @@
                 android:id="@+id/btn_notification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-
                 android:src="@drawable/icon_notification" />
+
+            <RelativeLayout
+
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="5dp"
+
+                android:layout_marginRight="5dp"
+                android:background="@drawable/notification_count">
+
+                <TextView
+                    android:id="@+id/notification_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="2"
+                    android:layout_marginBottom="222dp"
+                    android:layout_alignParentTop="true"
+                    android:fontFamily="@font/nunito_bold"
+                    android:textColor="@color/white" />
+
+
+            </RelativeLayout>
+
 
         </RelativeLayout>
 
@@ -61,17 +84,6 @@
             android:textColor="@color/dark_blue"
             android:textSize="28sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginBottom="15dp"
-            android:fontFamily="@font/nunito_bold"
-            android:text="Your child was safely dropped of at school at 07:21 AM"
-            android:textColor="@color/dark_blue"
-            android:textSize="13sp" />
 
     </RelativeLayout>
 
@@ -101,17 +113,18 @@
         android:layout_height="match_parent"
         android:layout_below="@id/home_sub_heading"
         android:layout_marginHorizontal="10dp"
+        android:overScrollMode="never"
+        android:clipToPadding="false"
+        android:paddingBottom="70dp"
         android:layout_marginTop="5dp" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/fab_add_kid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_marginRight="15dp"
         android:layout_marginBottom="15dp"
-        android:background="@color/dark_blue"
-        android:backgroundTint="@color/dark_blue"
-        android:src="@drawable/icon_forward" />
+        android:src="@drawable/fab_add_kid" />
 </RelativeLayout>

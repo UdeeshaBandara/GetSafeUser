@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp">
+
+
+    <LinearLayout
+        android:id="@+id/lnr_from"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="5dp"
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+        <ImageView
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_gravity="bottom"
+            android:background="@drawable/bg_msg_from" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_msg_from_main">
+
+            <TextView
+                android:id="@+id/txt_msg_from"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_semibold"
+                android:padding="10dp"
+                android:text="Hello"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/txt_msg_from_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_alignBottom="@+id/txt_msg_from"
+                android:layout_marginBottom="12dp"
+                android:layout_toEndOf="@+id/txt_msg_from"
+                android:fontFamily="@font/nunito_regular"
+                android:gravity="bottom"
+                android:paddingRight="10dp"
+                android:text="12:23"
+                android:textColor="@color/black"
+                android:textSize="8sp" />
+        </RelativeLayout>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/lnr_to"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lnr_from"
+        android:layout_alignParentRight="true"
+        android:layout_margin="5dp"
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/bg_to_main">
+
+            <TextView
+                android:id="@+id/txt_msg_to"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+
+                android:fontFamily="@font/nunito_semibold"
+                android:padding="10dp"
+                android:text="Hello"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/txt_msg_to_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_alignBottom="@+id/txt_msg_to"
+                android:layout_marginBottom="12dp"
+                android:layout_toEndOf="@+id/txt_msg_to"
+                android:fontFamily="@font/nunito_regular"
+                android:gravity="bottom"
+
+                android:text="12:23"
+                android:paddingRight="10dp"
+                android:textColor="@color/white"
+                android:textSize="8sp" />
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="-17dp"
+            android:background="@drawable/bg_msg_to" />
+
+    </LinearLayout>
+
+</RelativeLayout>
