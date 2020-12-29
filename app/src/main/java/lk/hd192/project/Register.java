@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -92,6 +94,12 @@ public class Register extends GetSafeBase {
                     txtFullName.setSelection(result.length());
 
                 }
+                String result2=s.toString().replaceAll("\\d", "");
+                if (!s.toString().equals(result2)) {
+                    txtFullName.setText(result2);
+                    txtFullName.setSelection(result2.length());
+
+                }
             }
         });
         txt_mobile.addTextChangedListener(new TextWatcher() {
@@ -112,6 +120,23 @@ public class Register extends GetSafeBase {
                     s.clear();
                 }
             }
+        });
+        txtFullName.setFilters(new InputFilter[]{
+                new InputFilter() {
+                    @Override
+                    public CharSequence filter(CharSequence cs, int start,
+                                               int end, Spanned spanned, int dStart, int dEnd) {
+
+                        if (cs.equals("")) {
+                            return cs;
+                        }
+                        else if (cs.toString().matches("[a-zA-Z ]+")) {
+                            return cs;
+                        }else return "";
+
+
+                    }
+                }
         });
 
 
@@ -145,8 +170,8 @@ public class Register extends GetSafeBase {
                     txt_mobile.setError("Please enter your name");
                     txt_mobile.requestFocus(0);
                 } else {
-//                    registerUser();
-registerFirebaseUser();
+                    registerUser();
+//registerFirebaseUser();
                 }
             }
         });
@@ -165,8 +190,8 @@ registerFirebaseUser();
         tempParam.put("email", txt_email.getText().toString());
         tempParam.put("phone", txt_mobile.getText().toString());
         tempParam.put("name", txtFullName.getText().toString());
-        tempParam.put("type", "Parent");
-        tempParam.put("fcm_token", "token");
+//        tempParam.put("type", "Parent");
+//        tempParam.put("fcm_token", "token");
 
 
         getSafeServices.networkJsonRequestWithoutHeader(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.SAVE_USER), 2, new VolleyJsonCallback() {
@@ -219,6 +244,8 @@ registerFirebaseUser();
                         OTP.otpToken = result.getString("otp_token");
                         registerFirebaseUser();
 
+                        startActivity(new Intent(getApplicationContext(), OTP.class));
+                                        finishAffinity();
 
 
                     } else
@@ -249,8 +276,8 @@ registerFirebaseUser();
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
 
-                                        startActivity(new Intent(getApplicationContext(), Messaging.class));
-                                        finishAffinity();
+//                                        startActivity(new Intent(getApplicationContext(), Messaging.class));
+//                                        finishAffinity();
 
                                     }
                                 }

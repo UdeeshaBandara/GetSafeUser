@@ -17,6 +17,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -40,11 +41,18 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 import lk.hd192.project.Utils.GetSafeBase;
+import lk.hd192.project.Utils.GetSafeServices;
+import lk.hd192.project.Utils.SplashScreen;
+import lk.hd192.project.Utils.TinyDB;
+import lk.hd192.project.Utils.VolleyJsonCallback;
 
 public class InitLocation extends GetSafeBase {
 
@@ -59,6 +67,9 @@ public class InitLocation extends GetSafeBase {
     String locationProvider = LocationManager.GPS_PROVIDER;
     CameraPosition cameraPosition;
     MapView mPickupLocation;
+    GetSafeServices getSafeServices;
+    Double latitude,longitude;
+    TinyDB tinyDB;
 
     public static LatLng pinnedLocation;
 
@@ -66,7 +77,7 @@ public class InitLocation extends GetSafeBase {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_init_location);
-
+        tinyDB = new TinyDB(getApplicationContext());
 
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
 
@@ -74,8 +85,12 @@ public class InitLocation extends GetSafeBase {
         txtAddTwo = findViewById(R.id.txt_address_two);
         txtAddressPick = findViewById(R.id.txt_address_pick);
         btnRegisterFinish = findViewById(R.id.btn_register_finish);
-
+        getSafeServices = new GetSafeServices();
         txtAddressPick.setInputType(InputType.TYPE_NULL);
+
+
+
+
         txtAddressPick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,7 +118,7 @@ public class InitLocation extends GetSafeBase {
                             .playOn(txtAddTwo);
                     txtAddTwo.setError("Please enter your address");
                     txtAddTwo.requestFocus(0);
-                }else if (txtAddressPick.getText().toString().isEmpty()) {
+                } else if (txtAddressPick.getText().toString().isEmpty()) {
 
 
                     YoYo.with(Techniques.Bounce)
@@ -111,8 +126,7 @@ public class InitLocation extends GetSafeBase {
                             .playOn(txtAddressPick);
                     txtAddressPick.setError("Please pick your address");
                     txtAddressPick.requestFocus(0);
-                }
-                else{
+                } else {
 
                     //add init location save API call
                     saveInitLocation();
@@ -126,8 +140,42 @@ public class InitLocation extends GetSafeBase {
     private void saveInitLocation() {
 
         //add init location save API call
-        startActivity(new Intent(getApplicationContext(), Home.class));
-        finishAffinity();
+
+        HashMap<String, String> tempParam = new HashMap<>();
+        tempParam.put("latitude", latitude.toString());
+        tempParam.put("longitude", longitude.toString());
+        tempParam.put("add1", txtAddOne.getText().toString());
+        tempParam.put("add2", txtAddTwo.getText().toString());
+
+
+        getSafeServices.networkJsonRequest(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.ADD_PARENT_LOCATION), 2, tinyDB.getString("token"),
+        new VolleyJsonCallback() {
+
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+Log.e("loc response",result+"");
+
+                    if (result.getBoolean("location_saved_status")) {
+
+                        startActivity(new Intent(getApplicationContext(), Home.class));
+                        finishAffinity();
+
+                    } else
+                        showWarningToast(dialog, result.getString("validation_errors"), 0);
+
+
+                } catch (Exception e) {
+                    Log.e("ex loc",e.getMessage());
+                    showWarningToast(dialog, "Something went wrong. Please try again", 0);
+
+                }
+
+            }
+        });
+
+
 
 
     }
@@ -233,6 +281,8 @@ public class InitLocation extends GetSafeBase {
                         public void onCameraChange(CameraPosition cameraPosition) {
 
                             locationAddress(cameraPosition.target.latitude, cameraPosition.target.longitude);
+                            latitude=cameraPosition.target.latitude;
+                            longitude= cameraPosition.target.longitude;
                             pinnedLocation = new LatLng(cameraPosition.target.latitude, cameraPosition.target.longitude);
 
 

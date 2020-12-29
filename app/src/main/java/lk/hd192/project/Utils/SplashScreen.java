@@ -18,6 +18,7 @@ import lk.hd192.project.Welcome;
 public class SplashScreen extends GetSafeBase {
     GetSafeServices getSafeServices;
     TinyDB tinyDB;
+    public static String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +33,13 @@ public class SplashScreen extends GetSafeBase {
 Log.e("islogged",tinyDB.getBoolean("isLogged")+"");
 
 
-        if (tinyDB.getBoolean("isLogged") == true)
+        if (tinyDB.getBoolean("isLogged")) {
+            token = tinyDB.getString("token");
+            Log.e("token splash",token);
             validateToken();
 
 
-        else {
+        } else {
             OTP.optType = 0;
             Log.e("otpType", OTP.optType+"");
             startActivity(new Intent(SplashScreen.this, Welcome.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
@@ -54,11 +57,11 @@ Log.e("islogged",tinyDB.getBoolean("isLogged")+"");
 
 
 
-        getSafeServices.networkJsonRequest(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.VALIDATE_TOKEN), 1, new VolleyJsonCallback() {
+        getSafeServices.networkJsonRequest(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.VALIDATE_TOKEN), 1,token, new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 
-                try {
+                try { //startActivity(new Intent(SplashScreen.this, Home.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
 
                     if (result.getBoolean("logged-in-status"))
 

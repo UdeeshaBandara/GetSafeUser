@@ -12,9 +12,11 @@
     <string name="REGISTER_SEND_OTP">/register/sendotp</string>
     <string name="REGISTER_VALIDATE_OTP">/register/validateotp</string>
 
+
     <string name="USER_SEND_OTP">/user/sendotp</string>
     <string name="USER_VALIDATE_OTP">/user/validateotp</string>
 
+    <string name="ADD_PARENT_LOCATION">/location/user/pickup/add</string>
 
     <string name="VALIDATE_TOKEN">/login</string>
 

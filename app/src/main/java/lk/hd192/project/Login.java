@@ -77,9 +77,9 @@ public class Login extends GetSafeBase {
                         !TextUtils.isEmpty(eight.getText().toString()) &
                         !TextUtils.isEmpty(nine.getText().toString())) {
                     Log.e("existingUserSendOtp", "ok");
-//                    existingUserSendOtp();
+                    existingUserSendOtp();
 
-                    firebaseLogin();
+//                    firebaseLogin();
 
                 } else {
                     YoYo.with(Techniques.Bounce)
@@ -151,8 +151,8 @@ public class Login extends GetSafeBase {
                 if (task.isSuccessful()) {
 
                     Log.e("firebase login","success");
-                    startActivity(new Intent(getApplicationContext(),Messaging.class));
-                    finishAffinity();
+//                    startActivity(new Intent(getApplicationContext(),Messaging.class));
+//                    finishAffinity();
 
                 } else {
 

@@ -33,6 +33,7 @@ import java.util.HashMap;
 
 import lk.hd192.project.Utils.GetSafeBase;
 import lk.hd192.project.Utils.GetSafeServices;
+import lk.hd192.project.Utils.SplashScreen;
 import lk.hd192.project.Utils.TinyDB;
 import lk.hd192.project.Utils.VolleyJsonCallback;
 
@@ -64,6 +65,8 @@ public class OTP extends GetSafeBase {
         otpHeading = findViewById(R.id.otp_heading);
         resendCountdown = findViewById(R.id.resend_countdown);
         resendCountdownTitle = findViewById(R.id.resend_countdown_title);
+
+
 
 
         loading = findViewById(R.id.loading);
@@ -223,11 +226,11 @@ public class OTP extends GetSafeBase {
             public void onSuccessResponse(JSONObject result) {
                 hideLoading();
                 try {
-                    Log.e("resposne", result + "");
+                    Log.e("response", result + "");
 
                     if (result.getBoolean("otp_token_validity")) {
                         tinyDB.putBoolean("isLogged", true);
-                        tinyDB.putString("token", result.getJSONObject("token").toString());
+                        tinyDB.putString("token", result.getString("access_token"));
                         startActivity(new Intent(getApplicationContext(), InitLocation.class));
                         finishAffinity();
 
@@ -237,7 +240,7 @@ public class OTP extends GetSafeBase {
 
                 } catch (Exception e) {
                     hideLoading();
-                    Log.e("resposne", result + "");
+                    Log.e("ex", e.getMessage());
                 }
 
             }
@@ -253,8 +256,6 @@ public class OTP extends GetSafeBase {
 
         tempParam.put("otp", confirmOTP_1.getText().toString() + confirmOTP_2.getText().toString() + confirmOTP_3.getText().toString() + confirmOTP_4.getText().toString());
         tempParam.put("otp-token", OTP.otpToken);
-        Log.e("existingUser otp token", OTP.otpToken);
-        Log.e("existingUserValidateOTP", "ok");
         // tempParam.put("fcm-token", fcm_token);
         showLoading();
         getSafeServices.networkJsonRequestWithoutHeader(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.USER_VALIDATE_OTP), 2, new VolleyJsonCallback() {
@@ -268,14 +269,18 @@ public class OTP extends GetSafeBase {
                     if (result.getBoolean("otp_token_validity")) {
 
                         tinyDB.putBoolean("isLogged", true);
-                        tinyDB.putString("token", result.getJSONObject("access_token").toString());
+                        tinyDB.putString("token", result.getString("access_token"));
+                        SplashScreen.token=result.getString("access_token");
                         startActivity(new Intent(getApplicationContext(), Home.class));
+                        finishAffinity();
 
                     } else
                         showWarningToast(dialog, "Something went wrong. Please try again", 0);
 
 
                 } catch (Exception e) {
+
+                    Log.e("exec",e.getMessage());
 
                 }
 
@@ -303,6 +308,7 @@ public class OTP extends GetSafeBase {
 
                         } else {
 
+                            Log.e("fcm_token",task.getResult().getToken());
                             if (optType == 0)
                                 existingUserValidateOTP(task.getResult().getToken());
                             else if (optType == 1)

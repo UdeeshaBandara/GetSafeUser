@@ -15,6 +15,9 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
 
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +32,11 @@ public class GetSafeServices extends GetSafeBase {
 
     public GetSafeServices() {
 
+
+
     }
+
+
 
     // Network Service Class for String Requests
     public void networkStringRequest(Context context, final HashMap<String, String> parameters, String url, int method, final VolleyCallback callback) {
@@ -161,7 +168,7 @@ public class GetSafeServices extends GetSafeBase {
 
     }
 
-    public void networkJsonRequest(Context context, final HashMap<String, String> parameters, String url, int method, final VolleyJsonCallback callback) {
+    public void networkJsonRequest(Context context, final HashMap<String, String> parameters, String url, int method, final String token, final VolleyJsonCallback callback) {
 
 
         int requestMethod = 0;
@@ -210,8 +217,10 @@ public class GetSafeServices extends GetSafeBase {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                headers.put("Bearer", tinyDB.getString("token"));
+               Log.e("bearer",token);
+
+                headers.put("Authorization","Bearer "+token);
+                headers.put("Cookie","laravel_session=LLKt1gLxCazYn080pnhdLWqraKj2kotuoe8EEQkh");
                 return headers;
             }
         };
@@ -228,7 +237,7 @@ public class GetSafeServices extends GetSafeBase {
     }
     public void networkJsonRequestWithoutHeader(Context context, final HashMap<String, String> parameters, String url, int method, final VolleyJsonCallback callback) {
 
-
+        //CookieHandler.setDefault(new CookieManager(null,CookiePolicy.ACCEPT_ALL));
         int requestMethod = 0;
 
         if (method == 1) {
@@ -271,7 +280,14 @@ public class GetSafeServices extends GetSafeBase {
                 }
 
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Cookie","laravel_session=LLKt1gLxCazYn080pnhdLWqraKj2kotuoe8EEQkh");
+                return headers;
+            }
+        };
 
         int MY_SOCKET_TIMEOUT_MS = 20000;
         req.setRetryPolicy(new DefaultRetryPolicy(
