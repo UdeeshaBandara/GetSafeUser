@@ -29,7 +29,7 @@ public class AddNewKid extends GetSafeBase {
 
     TextView txtSubHeading;
     LottieAnimationView kidAnimation, locationAnimation, doneAnimation, btnNext, mainSaveAnimation;
-    public static boolean firstCompleted = true, secondCompleted = false;
+    public static boolean firstCompleted = false, secondCompleted = false;
     int currentPage = 1;
     AddKidFirstFragment addKidFirstFragment;
     AddKidSecondFragment addKidSecondFragment;
@@ -37,7 +37,7 @@ public class AddNewKid extends GetSafeBase {
     Button btnSave;
     public static boolean isEditing = false, isLocationRemembered;
 
-    public static String FirstName, LastName, SchoolName, Gender, Birthday, AddOne, AddTwo, City, PinnedLoc;
+    public static String FirstName, LastName, SchoolName, Gender="null", Birthday, AddOne, AddTwo, City, PinnedLoc,kidId,kidLocId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +78,8 @@ public class AddNewKid extends GetSafeBase {
                 if (currentPage == 1) {
                     addKidFirstFragment.validateFields();
                     if (firstCompleted & currentPage == 1) {
+                        addKidFirstFragment.addKidBasicDetails();
+
                         nonSwappableViewPager.setCurrentItem(1);
                         txtSubHeading.setText("Location Details");
                         kidAnimation.setVisibility(View.GONE);
@@ -88,7 +90,9 @@ public class AddNewKid extends GetSafeBase {
                 } else if (currentPage == 2) {
 
                     addKidSecondFragment.validateFields();
+
                     if (secondCompleted) {
+                        addKidSecondFragment.addKidLocationDetails();
                         addKidThirdFragment.updateFields();
                         nonSwappableViewPager.setCurrentItem(2);
                         txtSubHeading.setText("Confirm Details");

@@ -60,15 +60,21 @@ import com.tsongkha.spinnerdatepicker.DatePicker;
 import com.tsongkha.spinnerdatepicker.DatePickerDialog;
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 import lk.hd192.project.Utils.GetSafeBase;
+import lk.hd192.project.Utils.GetSafeServices;
+import lk.hd192.project.Utils.VolleyCallback;
+import lk.hd192.project.Utils.VolleyJsonCallback;
 
 public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDateSetListener {
     View popupView;
@@ -83,15 +89,17 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
     SchoolBottomSheet schoolBottomSheet;
     RecyclerView bottomSheetRecycler;
     Button mConfirm;
+    JSONObject kidDetails,kidLocation;
     ImageView imgLocEditIndicator, imgBirthdayEditIndicator, imgSchoolEditIndicator, imgUpdateImage, imgKid;
     GoogleMap googleMap;
     String locationProvider = LocationManager.GPS_PROVIDER;
     CameraPosition cameraPosition;
     MapView mPickupLocation;
+    GetSafeServices getSafeServices;
     public static LatLng pinnedLocation;
     Button btnEditDone;
     private ProgressDialog progressDialog;
-    String originalName = "Udeesha Induras Bandara Kalumahanage", originalNumber = "0774787978", originalEmail = "udeeshabandara@gmail.com", originalAddress = "Gajaba road,makola";
+    String originalName = "", kid_id, originalSchool = "", originalLocation = "", originalBirthday = "";
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -109,7 +117,9 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
         imgLocEditIndicator = findViewById(R.id.img_loc_edit_indicator);
         imgSchoolEditIndicator = findViewById(R.id.img_school_edit_indicator);
         imgUpdateImage = findViewById(R.id.img_update_image);
+        getSafeServices = new GetSafeServices();
 
+        kidDetails = new JSONObject();
         lnrLocation = findViewById(R.id.lnr_location);
         lnrBirthday = findViewById(R.id.lnr_birthday);
         lnrSchool = findViewById(R.id.lnr_school);
@@ -125,9 +135,16 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
         day = c.get(Calendar.DAY_OF_MONTH);
         simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
 
+        try {
+            kid_id = getIntent().getStringExtra("kid_id");
+            Log.e("kid",kid_id);
+
+        } catch (Exception e) {
+            Log.e("kid id err",e.getMessage());
+        }
 
         //add init network call
-        setOriginalValues();
+        getChildById();
 
         imgKid.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -381,6 +398,76 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
 //        txtParentAddress.setText(originalAddress);
 
 
+    }
+
+    public void getChildById() {
+
+        HashMap<String, String> param = new HashMap<>();
+        param.put("id", kid_id);
+
+
+        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_KID_BY_ID), 2, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+
+                    kidDetails = result;
+                    Log.e("kiddetails",kidDetails+"");
+                    if(kidDetails.getBoolean("status")) {
+
+                        originalName = kidDetails.getJSONObject("child").getString("name");
+                        originalBirthday = kidDetails.getJSONObject("child").getString("birthday");
+
+                        String[] separated = originalBirthday.split("T");
+                        originalBirthday= separated[0];
+
+
+                        originalSchool = kidDetails.getJSONObject("child").getString("school_name");
+                        getLocationDetails();
+                        txtKidName.setText(originalName);
+                        txtBirthday.setText(originalBirthday);
+                        txtSchoolName.setText(originalSchool);
+
+                    }
+
+                } catch (Exception e) {
+
+                }
+
+            }
+        });
+
+
+    }
+
+    private void getLocationDetails() {
+        HashMap<String, String> param = new HashMap<>();
+        param.put("id", kid_id);
+
+
+        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_KID_LOCATION_BY_ID), 2, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+
+                    kidLocation = result;
+                    Log.e("kid loc",kidLocation+"");
+                    if(kidDetails.getBoolean("status")) {
+
+                        originalLocation = kidDetails.getJSONObject("child").getString("name");
+
+                        txtPickupAddress.setText(originalLocation);
+
+                    }
+
+                } catch (Exception e) {
+
+                }
+
+            }
+        });
     }
 
     public void loadMap() {

@@ -63,15 +63,23 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.theartofdev.edmodo.cropper.CropImage;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 import lk.hd192.project.Utils.GetSafeBase;
+import lk.hd192.project.Utils.GetSafeServices;
+import lk.hd192.project.Utils.SplashScreen;
+import lk.hd192.project.Utils.TinyDB;
+import lk.hd192.project.Utils.VolleyJsonCallback;
 
 public class EditProfile extends GetSafeBase {
     View popupView;
@@ -82,14 +90,17 @@ public class EditProfile extends GetSafeBase {
     Dialog dialog;
     Button mConfirm;
     GoogleMap googleMap;
+    TinyDB tinyDB;
     String locationProvider = LocationManager.GPS_PROVIDER;
     CameraPosition cameraPosition;
     MapView mPickupLocation;
+    JSONObject kidList;
+    GetSafeServices getSafeServices;
     private ProgressDialog progressDialog;
     ImageView imgUpdateImage, imgLocEditIndicator, imgParent;
     public static LatLng pinnedLocation;
     Button btnEditDone;
-    String imgDecodableString = "", originalName = "Udeesha Induras Bandara Kalumahanage", originalNumber = "0774787978", originalEmail = "udeeshabandara@gmail.com", originalAddress = "Gajaba road,makola";
+    String imgDecodableString = "", originalName, originalNumber, originalEmail, originalAddress;
 
 
     @Override
@@ -98,10 +109,11 @@ public class EditProfile extends GetSafeBase {
         setContentView(R.layout.activity_edit_profile);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
+        tinyDB = new TinyDB(getApplicationContext());
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
-
-
+//        tinyDB.putString("token","1|q2pWwtm1SMNxGFSk9tzUkvB2cAGWPVK1zZ4e014y");
+        kidList = new JSONObject();
+        getSafeServices = new GetSafeServices();
         recyclerKidList = findViewById(R.id.recycler_kid_list);
         txtPhoneNumber = findViewById(R.id.txt_phone_number);
         editTxtPhoneNumber = findViewById(R.id.edit_txt_phone_number);
@@ -122,6 +134,7 @@ public class EditProfile extends GetSafeBase {
 
         recyclerKidList.setAdapter(new StudentItemAdapter());
         recyclerKidList.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
+
 
 
         btnEditDone.setOnClickListener(new View.OnClickListener() {
@@ -263,6 +276,8 @@ public class EditProfile extends GetSafeBase {
 
             }
         });
+
+        getAllChildren();
 
     }
 
@@ -693,6 +708,38 @@ public class EditProfile extends GetSafeBase {
     }
 
 
+    private void loadUserDetails() {
+
+        HashMap<String, String> tempParam = new HashMap<>();
+
+
+        getSafeServices.networkJsonRequest(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.VALIDATE_TOKEN), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try { //startActivity(new Intent(SplashScreen.this, Home.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
+                    Log.e("res", result + "");
+
+                    originalName = result.getJSONObject("user").getString("name");
+//                    originalAddress = result.getString("");
+                    originalEmail = result.getJSONObject("user").getString("email");
+                    originalNumber = result.getJSONObject("user").getString("phone_no");
+
+                    txtParentName.setText(originalName);
+                    txtPhoneNumber.setText(originalNumber);
+                    txtEmail.setText(originalEmail);
+                    txtParentAddress.setText(originalAddress);
+                } catch (Exception e) {
+                    Log.e("pro", e.getMessage());
+
+                }
+
+            }
+        });
+
+    }
+
+
     private void updateUserWithNewValues() {
         //add network call inside last if to update user with new values
 //        boolean isValidName=true,isValidNumber=true,isValidEmail=true;
@@ -707,7 +754,7 @@ public class EditProfile extends GetSafeBase {
         } else
             txtParentName.setText(editTxtParentName.getText());
 
-        if (TextUtils.isEmpty(editTxtPhoneNumber.getText().toString()) | editTxtPhoneNumber.getText().length() < 10) {
+        if (TextUtils.isEmpty(editTxtPhoneNumber.getText().toString()) | editTxtPhoneNumber.getText().length() < 9) {
 //            isValidNumber=false;
             showWarningToast(dialog, "Your phone number is not valid", 0);
             txtPhoneNumber.setText(originalNumber);
@@ -734,10 +781,7 @@ public class EditProfile extends GetSafeBase {
     private void setOriginalValues() {
 
         //add init network call to get already exist details
-        txtParentName.setText(originalName);
-        txtPhoneNumber.setText(originalNumber);
-        txtEmail.setText(originalEmail);
-        txtParentAddress.setText(originalAddress);
+        loadUserDetails();
 
 
     }
@@ -745,10 +789,14 @@ public class EditProfile extends GetSafeBase {
 
     class StudentViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout rltKidEdit;
+        TextView txtKidName, txtKidSchool;
 
         public StudentViewHolder(@NonNull View itemView) {
             super(itemView);
             rltKidEdit = itemView.findViewById(R.id.rlt_kid_edit);
+            txtKidName = itemView.findViewById(R.id.txt_kid_name);
+
+            txtKidSchool = itemView.findViewById(R.id.txt_kid_school);
         }
     }
 
@@ -763,12 +811,27 @@ public class EditProfile extends GetSafeBase {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull StudentViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull StudentViewHolder holder, final int position) {
+
+            try {
+                holder.txtKidName.setText(kidList.getJSONArray("children").getJSONObject(position).getString("name"));
+
+                holder.txtKidSchool.setText(kidList.getJSONArray("children").getJSONObject(position).getString("school_name"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
             holder.rltKidEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(getApplicationContext(), EditKidProfile.class));
+                    try {
+                        Intent intent = new Intent(getApplicationContext(), EditKidProfile.class);
+
+                        intent.putExtra("kid_id", kidList.getJSONArray("children").getJSONObject(position).getString("id"));
+                        startActivity(intent);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
 
@@ -776,7 +839,33 @@ public class EditProfile extends GetSafeBase {
 
         @Override
         public int getItemCount() {
-            return 3;
+            return kidList.length();
         }
+    }
+
+    public void getAllChildren() {
+        HashMap<String, String> tempParam = new HashMap<>();
+
+
+        getSafeServices.networkJsonRequest(getApplicationContext(), tempParam, getString(R.string.BASE_URL) + getString(R.string.GET_ALL_KID), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+
+                    Log.e("edi kid res",result+"");
+                    kidList = result;
+
+                    recyclerKidList.getAdapter().notifyDataSetChanged();
+
+
+                } catch (Exception e) {
+
+                }
+
+            }
+        });
+
+
     }
 }

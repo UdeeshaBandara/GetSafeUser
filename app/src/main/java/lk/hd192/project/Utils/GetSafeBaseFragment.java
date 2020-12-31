@@ -1,9 +1,13 @@
 package lk.hd192.project.Utils;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +46,43 @@ public class GetSafeBaseFragment extends Fragment {
 
     }
 
+    public void showWarningToast(final Dialog dialog, String msg, int type) {
+
+
+        // Setting dialogview
+        Window window = dialog.getWindow();
+        window.setGravity(Gravity.BOTTOM);
+
+
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, 550);
+        dialog.setTitle(null);
+        switch (type) {
+            case 0:
+                dialog.setContentView(R.layout.toast_layout_warning);
+                break;
+            case 1:
+                dialog.setContentView(R.layout.toast_layout_location);
+                break;
+
+
+        }
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(true);
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        TextView msgToShow = dialog.findViewById(R.id.toast_message);
+        Button btnOk = dialog.findViewById(R.id.btn_ok);
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        msgToShow.setText(msg);
+
+        dialog.show();
+    }
 
 
     public void customToast(String message, int type) {

@@ -9,10 +9,13 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.CookieHandler;
@@ -39,7 +42,7 @@ public class GetSafeServices extends GetSafeBase {
 
 
     // Network Service Class for String Requests
-    public void networkStringRequest(Context context, final HashMap<String, String> parameters, String url, int method, final VolleyCallback callback) {
+    public void networkStringRequest(Context context, final HashMap<String, String> parameters, String url, int method, final String token, final VolleyCallback callback) {
 
         int requestMethod = 0;
 
@@ -82,9 +85,12 @@ public class GetSafeServices extends GetSafeBase {
         }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("Content-Type", "application/json; charset=utf-8");
-                return params;
+                Map<String, String> headers = new HashMap<>();
+                Log.e("bearer",token);
+
+                headers.put("Authorization","Bearer "+token);
+                headers.put("Cookie","laravel_session=1KqRlqKRjnlC24w0MORyPThmE6zKy9JeH67F5zR9");
+                return headers;
             }
 
             @Override
@@ -208,6 +214,74 @@ public class GetSafeServices extends GetSafeBase {
 
                 try {
                     callback.onSuccessResponse(new JSONObject(new String(networkResponse.data)));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+               Log.e("bearer",token);
+
+                headers.put("Authorization","Bearer "+token);
+                headers.put("Cookie","laravel_session=1KqRlqKRjnlC24w0MORyPThmE6zKy9JeH67F5zR9");
+                return headers;
+            }
+        };
+
+        int MY_SOCKET_TIMEOUT_MS = 20000;
+        req.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        req.setShouldCache(false);
+        Volley.newRequestQueue(context).add(req);
+
+
+    }
+    public void networkJsonArrayRequest(Context context, final HashMap<String, String> parameters, String url, int method, final String token, final VolleyJsonArrayCallback callback) throws JSONException {
+
+
+        int requestMethod = 0;
+
+        if (method == 1) {
+
+            requestMethod = Request.Method.GET;
+
+        } else if (method == 2) {
+
+            requestMethod = Request.Method.POST;
+
+        } else {
+
+            requestMethod = Request.Method.GET;
+
+        }
+
+        JsonArrayRequest req = new JsonArrayRequest(requestMethod, url, new JSONArray(parameters), new Response.Listener<JSONArray>() { //Json request
+            @Override
+            public void onResponse(JSONArray response) {
+
+
+                callback.onSuccessResponse(response); // send response back to the calling class
+                // Log.e(TAG + "JSON REQ ", response + "");
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                NetworkResponse networkResponse = error.networkResponse;
+                if (networkResponse != null && networkResponse.data != null) {
+                    String jsonError = new String(networkResponse.data);
+                    Log.e(TAG, "volley JSON error : " + jsonError); // volley error description
+
+                }
+
+                try {
+                    callback.onSuccessResponse(new JSONArray(new String(networkResponse.data)));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

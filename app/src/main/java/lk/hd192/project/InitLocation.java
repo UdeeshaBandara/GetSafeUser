@@ -28,6 +28,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
@@ -59,8 +60,10 @@ public class InitLocation extends GetSafeBase {
     View popupView;
 
 
-    EditText txtAddOne, txtAddTwo, txtAddressPick;
+    EditText txtAddOne, txtAddTwo,txtCity ;
+    RelativeLayout txtAddressPick;
     Button btnRegisterFinish;
+    TextView txtLocation;
     Dialog dialog;
     Button mConfirm;
     GoogleMap googleMap;
@@ -80,13 +83,15 @@ public class InitLocation extends GetSafeBase {
         tinyDB = new TinyDB(getApplicationContext());
 
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
-
+tinyDB.putString("token","1|f98J3xwT1zI9NnYJ0cX3uMcis88IQiQrHYLC6cv9");
         txtAddOne = findViewById(R.id.txt_address_one);
         txtAddTwo = findViewById(R.id.txt_address_two);
         txtAddressPick = findViewById(R.id.txt_address_pick);
         btnRegisterFinish = findViewById(R.id.btn_register_finish);
+        txtCity = findViewById(R.id.txt_city);
+        txtLocation = findViewById(R.id.txt_location);
         getSafeServices = new GetSafeServices();
-        txtAddressPick.setInputType(InputType.TYPE_NULL);
+
 
 
 
@@ -118,13 +123,12 @@ public class InitLocation extends GetSafeBase {
                             .playOn(txtAddTwo);
                     txtAddTwo.setError("Please enter your address");
                     txtAddTwo.requestFocus(0);
-                } else if (txtAddressPick.getText().toString().isEmpty()) {
+                } else if (txtLocation.getText().toString().isEmpty()) {
 
 
                     YoYo.with(Techniques.Bounce)
                             .duration(1000)
                             .playOn(txtAddressPick);
-                    txtAddressPick.setError("Please pick your address");
                     txtAddressPick.requestFocus(0);
                 } else {
 
@@ -237,7 +241,7 @@ Log.e("loc response",result+"");
         mConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                txtAddressPick.setText(GetSafeBase.LOC_ADDRESS);
+                txtLocation.setText(GetSafeBase.LOC_ADDRESS);
                 popupWindow.dismiss();
             }
         });

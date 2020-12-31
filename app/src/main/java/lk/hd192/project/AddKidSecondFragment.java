@@ -1,5 +1,6 @@
 package lk.hd192.project;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,6 +17,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -42,32 +44,42 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 import lk.hd192.project.Utils.GetSafeBase;
+import lk.hd192.project.Utils.GetSafeBaseFragment;
+import lk.hd192.project.Utils.GetSafeServices;
+import lk.hd192.project.Utils.TinyDB;
+import lk.hd192.project.Utils.VolleyJsonCallback;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 
-public class AddKidSecondFragment extends Fragment {
+public class AddKidSecondFragment extends GetSafeBaseFragment {
 
     RelativeLayout pinLocation;
 
     View popupView;
-
+TinyDB tinyDB;
     LinearLayout lnrRemember;
     MapView mPickupLocation;
     GoogleMap googleMap;
     LocationManager locationManager;
     Button mConfirm;
+    Dialog dialog;
     String locationProvider = LocationManager.GPS_PROVIDER;
     CameraPosition cameraPosition;
     LottieAnimationView rememberAnimation;
     EditText txtAddressOne, txtAddressTwo, txtCity;
     TextView txtLocation;
 
+    Double latitude,longitude;
+GetSafeServices getSafeServices;
     public static LatLng pinnedLocation;
 
 
@@ -86,6 +98,9 @@ public class AddKidSecondFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        getSafeServices= new GetSafeServices();
+        tinyDB=new TinyDB(getActivity());
+        dialog = new Dialog(getActivity(), android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
         pinLocation = view.findViewById(R.id.pin_location);
         txtAddressOne = view.findViewById(R.id.txt_address_one);
         txtAddressTwo = view.findViewById(R.id.txt_address_two);
@@ -236,13 +251,54 @@ public class AddKidSecondFragment extends Fragment {
             txtLocation.setError("Please select kid pickup location");
             AddNewKid.secondCompleted = false;
         } else {
-
             AddNewKid.secondCompleted = true;
-            AddNewKid.AddOne = txtAddressOne.getText().toString();
-            AddNewKid.AddTwo = txtAddressTwo.getText().toString();
-            AddNewKid.City = txtCity.getText().toString();
+
+
 
         }
+    }
+
+    public void addKidLocationDetails() {
+
+
+        HashMap<String, String> tempParam = new HashMap<>();
+        tempParam.put("id",AddNewKid.kidId);
+        tempParam.put("latitude", latitude.toString());
+        tempParam.put("longitude", longitude.toString());
+        tempParam.put("add1", txtAddressOne.getText().toString());
+        tempParam.put("add2",txtAddressTwo.getText().toString());
+
+
+        getSafeServices.networkJsonRequest(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.ADD_KID_LOC), 2, tinyDB.getString("token"),
+                new VolleyJsonCallback() {
+
+                    @Override
+                    public void onSuccessResponse(JSONObject result) {
+
+                        try {
+                            Log.e("loc response", result + "");
+
+                            if (result.getBoolean("location_saved_status")) {
+
+                                AddNewKid.kidLocId = result.getJSONObject("location").getString("locationable_id");
+
+                                AddNewKid.AddOne = txtAddressOne.getText().toString();
+                                AddNewKid.AddTwo = txtAddressTwo.getText().toString();
+                                AddNewKid.City = txtCity.getText().toString();
+
+                            } else
+                                showWarningToast(dialog, result.getString("validation_errors"), 0);
+
+
+                        } catch (Exception e) {
+                            Log.e("ex loc", e.getMessage());
+                            showWarningToast(dialog, "Something went wrong. Please try again", 0);
+
+                        }
+
+                    }
+                });
+
     }
 
     public void loadMap() {
@@ -283,6 +339,8 @@ public class AddKidSecondFragment extends Fragment {
                         public void onCameraChange(CameraPosition cameraPosition) {
 
                             locationAddress(cameraPosition.target.latitude, cameraPosition.target.longitude);
+                            latitude=cameraPosition.target.latitude;
+                            longitude= cameraPosition.target.longitude;
                             pinnedLocation = new LatLng(cameraPosition.target.latitude, cameraPosition.target.longitude);
 
 

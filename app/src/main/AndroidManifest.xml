@@ -31,6 +31,7 @@
             android:name=".InitLocation"
             android:windowSoftInputMode="adjustResize" >
 
+
         </activity>
 
         <provider
@@ -74,8 +75,11 @@
         <activity android:name=".Selection" />
         <activity android:name=".Welcome" />
         <activity android:name=".Home">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
         <activity
@@ -83,11 +87,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"

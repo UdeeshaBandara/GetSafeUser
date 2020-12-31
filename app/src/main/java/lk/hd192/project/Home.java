@@ -18,7 +18,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -29,7 +28,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
@@ -40,18 +38,25 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.InputStream;
+import java.util.HashMap;
 
 import lk.hd192.project.Utils.GetSafeBase;
+import lk.hd192.project.Utils.GetSafeServices;
+import lk.hd192.project.Utils.SplashScreen;
+import lk.hd192.project.Utils.TinyDB;
+import lk.hd192.project.Utils.VolleyJsonArrayCallback;
+import lk.hd192.project.Utils.VolleyJsonCallback;
 
 public class Home extends GetSafeBase {
     RecyclerView homeRecycler, recyclerSelectChild;
 
     RoundedImageView fabAddKid;
     JSONArray homeOptions;
-    JSONObject oneOption, twoOption, threeOption, fourOption, fiveOption;
+
+    JSONObject oneOption, twoOption, threeOption, fourOption, fiveOption,kidList;
 
     Dialog dialog;
+    GetSafeServices getSafeServices;
     ImageView sideMenuListener, selectChildDownArrow, selectChildUpArrow, btnNotification;
     DrawerLayout drawerLayout;
     String imageUrl;
@@ -65,14 +70,16 @@ public class Home extends GetSafeBase {
         setContentView(R.layout.activity_home);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-
+        getSafeServices = new GetSafeServices();
+        tinyDB = new TinyDB(getApplicationContext());
+        kidList = new JSONObject();
         homeOptions = new JSONArray();
         oneOption = new JSONObject();
         twoOption = new JSONObject();
         threeOption = new JSONObject();
         fourOption = new JSONObject();
         fiveOption = new JSONObject();
+        tinyDB.putString("token","1|q2pWwtm1SMNxGFSk9tzUkvB2cAGWPVK1zZ4e014y");
         try {
 
             oneOption.put("heading", "Current Journey");
@@ -92,13 +99,11 @@ public class Home extends GetSafeBase {
             fiveOption.put("subHeading", "Schedule absent days");
             homeOptions.put(fiveOption);
 
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+
         }
 
 
-        homeRecycler = findViewById(R.id.home_recycler);
-        recyclerSelectChild = findViewById(R.id.recycler_select_child);
 
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
 
@@ -120,6 +125,9 @@ public class Home extends GetSafeBase {
         drawerHelpLyt = navigationView.findViewById(R.id.rlt_help);
         drawerSelectChildLyt = navigationView.findViewById(R.id.rlt_select_child);
         drawerAbsenceLyt = navigationView.findViewById(R.id.rlt_absence);
+
+        homeRecycler = findViewById(R.id.home_recycler);
+        recyclerSelectChild = navigationView.findViewById(R.id.recycler_select_child);
 
         homeRecycler.setAdapter(new FunctionItemAdapter());
         homeRecycler.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
@@ -161,6 +169,11 @@ public class Home extends GetSafeBase {
                 return false;
             }
         });
+
+
+            getAllChildren();
+
+//        getDeviceToken();
 
     }
 
@@ -270,14 +283,18 @@ public class Home extends GetSafeBase {
             }
         });
 
+
     }
 
     class StudentViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout rltItemStudent;
+        TextView studentName,studentSchool;
 
         public StudentViewHolder(@NonNull View itemView) {
             super(itemView);
             rltItemStudent = itemView.findViewById(R.id.rlt_item_student);
+            studentName = itemView.findViewById(R.id.student_name);
+            studentSchool = itemView.findViewById(R.id.student_school);
         }
     }
 
@@ -292,20 +309,36 @@ public class Home extends GetSafeBase {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull StudentViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull StudentViewHolder holder, final int position) {
+            try {
+
+                holder.studentName.setText(kidList.getJSONArray("children").getJSONObject(position).getString("name"));
+                holder.studentSchool.setText(kidList.getJSONArray("children").getJSONObject(position).getString("school_name"));
 
             holder.rltItemStudent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
+                   try {
+                       Intent intent= new Intent(getApplicationContext(),EditKidProfile.class);
+
+                       intent.putExtra("kid_id",kidList.getJSONArray("children").getJSONObject(position).getString("id"));
+                       startActivity(intent);
+                    } catch (Exception e) {
+
+                    }
                 }
             });
+            } catch (Exception e) {
+
+            }
+
 
         }
 
         @Override
         public int getItemCount() {
-            return 3;
+            return kidList.length();
         }
     }
 
@@ -475,4 +508,65 @@ public class Home extends GetSafeBase {
 
         }
     }
+
+    public void getAllChildren(){
+       HashMap<String, String> tempParam = new HashMap<>();
+
+
+
+
+        getSafeServices.networkJsonRequest(getApplicationContext(), tempParam, getString(R.string.BASE_URL) + getString(R.string.GET_ALL_KID), 1,tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+
+                    kidList =result;
+
+                    recyclerSelectChild.getAdapter().notifyDataSetChanged();
+
+
+
+
+                } catch (Exception e) {
+
+                }
+
+            }
+        });
+
+
+
+    }
+
+
+//    public void getDeviceToken() {
+//
+//
+//        FirebaseInstanceId.getInstance().getInstanceId()
+//                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+//                        if (!task.isSuccessful()) {
+//                            showWarningToast(dialog, "Please try again", 0);
+//
+//
+//                            return;
+//
+//
+//                        } else {
+//
+//                            Log.e("fcm_token",task.getResult().getToken());
+////                            if (optType == 0)
+////                                existingUserValidateOTP(task.getResult().getToken());
+////                            else if (optType == 1)
+////                                newUserValidateOTP(task.getResult().getToken());
+////
+//
+//                        }
+//
+//                    }
+//                });
+//    }
+
 }
