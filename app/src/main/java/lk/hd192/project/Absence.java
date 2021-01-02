@@ -1,6 +1,5 @@
 package lk.hd192.project;
 
-import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -8,7 +7,6 @@ import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -27,11 +25,9 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
-import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -163,7 +159,7 @@ public class Absence extends GetSafeBase {
 
 
                     if (btnBothSelect.getVisibility() == View.GONE & btnEveningSelect.getVisibility() == View.GONE & btnMorningSelect.getVisibility() == View.GONE)
-                        showWarningToast(dialog, "Please select session", 0);
+                        showToast(dialog, "Please select session", 0);
 
                     else {
                         if (btnBothSelect.getVisibility() == View.VISIBLE)

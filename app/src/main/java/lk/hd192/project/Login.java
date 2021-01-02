@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -21,8 +20,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 
 import org.json.JSONObject;
 
@@ -85,7 +82,7 @@ public class Login extends GetSafeBase {
                     YoYo.with(Techniques.Bounce)
                             .duration(2500)
                             .playOn(findViewById(R.id.lnr_number));
-                    showWarningToast(dialog, "Please enter correct phone number", 0);
+                    showToast(dialog, "Please enter correct phone number", 0);
 
                 }
             }
@@ -124,7 +121,7 @@ public class Login extends GetSafeBase {
                         startActivity(new Intent(getApplicationContext(), OTP.class));
 
                     } else
-                        showWarningToast(dialog, "Something went wrong. Please try again", 0);
+                        showToast(dialog, "Something went wrong. Please try again", 0);
 
 
                 } catch (Exception e) {

@@ -30,7 +30,7 @@
                 android:fontFamily="@font/nunito_bold"
                 android:text="Your details"
                 android:textColor="@color/white"
-                android:textSize="25dp" />
+                android:textSize="22dp" />
 
 
         </RelativeLayout>
@@ -383,7 +383,7 @@
                                 android:layout_height="20dp"
                                 android:fontFamily="@font/nunito_regular"
                                 android:gravity="center_vertical"
-                                android:hint="Location"
+                                android:hint="Your Location"
                                 android:textColor="@color/black"
                                 android:textSize="14sp" />
 
@@ -409,7 +409,87 @@
                                 android:layout_height="30dp"
                                 android:layout_centerInParent="true"
                                 android:gravity="center"
-                                android:src="@drawable/icon_location"
+                                android:src="@drawable/side_menu_icon_location"
+
+                                android:visibility="invisible" />
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/location_drop_main"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/location_main"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <View
+                        android:id="@+id/split_drop"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#FFD5D6D6" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:id="@+id/lnr_drop_location"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:orientation="vertical">
+
+                            <TextView
+
+                                android:layout_width="match_parent"
+                                android:layout_height="20dp"
+                                android:fontFamily="@font/nunito_regular"
+                                android:gravity="center_vertical"
+                                android:hint="Your Drop-off Location"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/txt_parent_drop_address"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:fontFamily="@font/nunito_semibold"
+
+                                android:textColor="@color/black"
+                                android:textSize="18sp" />
+
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <ImageView
+                                android:id="@+id/img_drop_loc_edit_indicator"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_centerInParent="true"
+                                android:gravity="center"
+                                android:src="@drawable/side_menu_icon_location"
 
                                 android:visibility="invisible" />
                         </RelativeLayout>
@@ -427,7 +507,7 @@
                 android:id="@+id/kid_main"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/location_main"
+                android:layout_below="@+id/location_drop_main"
                 android:layout_marginTop="15dp">
 
 
@@ -507,6 +587,24 @@
         android:layout_marginBottom="15dp"
         android:background="@drawable/bg_button_contact_driver"
         android:text="Save"
+        android:visibility="gone"
         android:textAllCaps="false" />
+    <View
+        android:id="@+id/disable_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#92292828"
+        android:visibility="gone"
+        />
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/loading"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/loading" />
 
 </RelativeLayout>

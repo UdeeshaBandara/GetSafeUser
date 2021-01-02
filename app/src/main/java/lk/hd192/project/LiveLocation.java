@@ -27,7 +27,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -334,7 +333,7 @@ public class LiveLocation extends GetSafeBase {
 
             if (addressList.size() == 0) {
 
-                showWarningToast(dialog, "Oops.. \nNo Address Found in this Area ", 1);
+                showToast(dialog, "Oops.. \nNo Address Found in this Area ", 1);
 
 
             } else {
@@ -346,7 +345,7 @@ public class LiveLocation extends GetSafeBase {
         } catch (IOException e) {
 
 
-            showWarningToast(dialog, "Oops.. \nan error occurred ", 0);
+            showToast(dialog, "Oops.. \nan error occurred ", 0);
 
             e.printStackTrace();
         }

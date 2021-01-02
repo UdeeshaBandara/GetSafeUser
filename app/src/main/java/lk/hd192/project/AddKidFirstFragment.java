@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.tsongkha.spinnerdatepicker.DatePicker;
 import com.tsongkha.spinnerdatepicker.DatePickerDialog;
@@ -38,6 +39,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Objects;
 
 import lk.hd192.project.Utils.GetSafeBase;
 import lk.hd192.project.Utils.GetSafeBaseFragment;
@@ -59,6 +61,7 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
     GetSafeServices getSafeServices;
     RadioGroup rbnGrpGender;
     TinyDB tinyDB;
+    AddNewKid addNewKid;
 
     public AddKidFirstFragment() {
         // Required empty public constructor
@@ -78,6 +81,7 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
         rbnGrpGender = view.findViewById(R.id.rbn_grp_gender);
         getSafeServices = new GetSafeServices();
         tinyDB = new TinyDB(getActivity());
+
         if (AddNewKid.isEditing) {
 
 
@@ -87,7 +91,7 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
             calenderBirthday.setText(AddNewKid.Birthday);
 
         }
-
+        addNewKid = new AddNewKid();
         final Calendar c = Calendar.getInstance();
         year = c.get(Calendar.YEAR);
         month = c.get(Calendar.MONTH);
@@ -179,13 +183,13 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
         tempParam.put("gender", AddNewKid.Gender);
         tempParam.put("guardian", "");
 
-
+        ((AddNewKid) Objects.requireNonNull(getActivity())).showLoading();
         getSafeServices.networkJsonRequest(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.ADD_NEW_KID), 2, tinyDB.getString("token"),
                 new VolleyJsonCallback() {
 
                     @Override
                     public void onSuccessResponse(JSONObject result) {
-
+                        ((AddNewKid) Objects.requireNonNull(getActivity())).hideLoading();
                         try {
                             Log.e("loc response", result + "");
 
@@ -203,7 +207,9 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
 
 
                         } catch (Exception e) {
+                            addNewKid.hideLoading();
                             Log.e("ex loc", e.getMessage());
+
                             showWarningToast(dialog, "Something went wrong. Please try again", 0);
 
                         }

@@ -98,9 +98,8 @@ public class AddKidThirdFragment extends Fragment {
         editDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             //   addNewKid.goToFirstStep();
-
-                AddNewKid.isEditing = true;
+                //   addNewKid.goToFirstStep();
+                startActivity(new Intent(getActivity(), EditKidProfile.class));
             }
         });
 
@@ -269,15 +268,15 @@ public class AddKidThirdFragment extends Fragment {
             }
         } else {
             switch (requestCode) {
-    //
-    //                case 100:
-    //                    try {
-    //                        MapsInitializer.initialize(getActivity());
-    //                        loadMap();
-    //                    } catch (Exception e) {
-    //                        e.printStackTrace();
-    //                    }
-    //                    break;
+                //
+                //                case 100:
+                //                    try {
+                //                        MapsInitializer.initialize(getActivity());
+                //                        loadMap();
+                //                    } catch (Exception e) {
+                //                        e.printStackTrace();
+                //                    }
+                //                    break;
             }
         }
     }

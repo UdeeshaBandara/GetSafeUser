@@ -37,7 +37,7 @@ public class GetSafeBase extends AppCompatActivity {
     public static boolean isEnable;
     public LocationManager locationManager;
     public static boolean MAP_SELECTED = false;
-
+    public static String userType = "staff";
     public static String pickAddress;
 
     @Override
@@ -105,7 +105,6 @@ public class GetSafeBase extends AppCompatActivity {
     }
 
 
-
     static public void showHUD(String msg) {
 
         hud.setLabel(msg);
@@ -121,7 +120,7 @@ public class GetSafeBase extends AppCompatActivity {
         }
     }
 
-    public void showWarningToast(final Dialog dialog, String msg, int type) {
+    public void showToast(final Dialog dialog, String msg, int type) {
 
 
         // Setting dialogview
@@ -137,6 +136,9 @@ public class GetSafeBase extends AppCompatActivity {
                 break;
             case 1:
                 dialog.setContentView(R.layout.toast_layout_location);
+                break;
+            case 2:
+                dialog.setContentView(R.layout.toast_layout_success);
                 break;
 
 

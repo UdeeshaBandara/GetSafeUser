@@ -26,11 +26,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
 
@@ -42,9 +38,7 @@ import java.util.HashMap;
 
 import lk.hd192.project.Utils.GetSafeBase;
 import lk.hd192.project.Utils.GetSafeServices;
-import lk.hd192.project.Utils.SplashScreen;
 import lk.hd192.project.Utils.TinyDB;
-import lk.hd192.project.Utils.VolleyJsonArrayCallback;
 import lk.hd192.project.Utils.VolleyJsonCallback;
 
 public class Home extends GetSafeBase {
@@ -447,7 +441,7 @@ public class Home extends GetSafeBase {
             boolean somePermissionsForeverDenied = false;
             for (String permission : permissions) {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
-                    showWarningToast(dialog, "Permission denied.\nCannot open map", 1);
+                    showToast(dialog, "Permission denied.\nCannot open map", 1);
 
                 } else {
                     if (ActivityCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {

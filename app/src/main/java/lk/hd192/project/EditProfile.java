@@ -1,9 +1,7 @@
 package lk.hd192.project;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -17,10 +15,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -42,6 +38,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -53,6 +50,9 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -61,6 +61,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import org.json.JSONException;
@@ -68,7 +69,6 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -77,30 +77,34 @@ import java.util.Locale;
 
 import lk.hd192.project.Utils.GetSafeBase;
 import lk.hd192.project.Utils.GetSafeServices;
-import lk.hd192.project.Utils.SplashScreen;
 import lk.hd192.project.Utils.TinyDB;
 import lk.hd192.project.Utils.VolleyJsonCallback;
 
 public class EditProfile extends GetSafeBase {
     View popupView;
     RecyclerView recyclerKidList;
-    TextView txtPhoneNumber, txtEmail, txtParentAddress, txtParentName, txtHeading;
+    TextView txtPhoneNumber, txtEmail, txtParentAddress, txtParentDropAddress, txtParentName, txtHeading;
     EditText editTxtPhoneNumber, editTxtEmail, editTxtParentName;
-    LinearLayout lnrLocation;
+    LinearLayout lnrLocation, locationDropMain;
     Dialog dialog;
     Button mConfirm;
     GoogleMap googleMap;
     TinyDB tinyDB;
+    View view;
+    LottieAnimationView loading;
     String locationProvider = LocationManager.GPS_PROVIDER;
     CameraPosition cameraPosition;
     MapView mPickupLocation;
     JSONObject kidList;
     GetSafeServices getSafeServices;
     private ProgressDialog progressDialog;
-    ImageView imgUpdateImage, imgLocEditIndicator, imgParent;
-    public static LatLng pinnedLocation;
+    ImageView imgUpdateImage, imgLocEditIndicator, imgDropLocEditIndicator, imgParent;
+    public static LatLng pinnedLocation, pinnedDropLocation;
     Button btnEditDone;
-    String imgDecodableString = "", originalName, originalNumber, originalEmail, originalAddress;
+    Boolean isDropLocation;
+    Double latitude, dropLatitude, longitude, dropLongitude;
+
+    String imgDecodableString = "", originalName, originalNumber, originalEmail, originalAddressOne, originalAddressTwo, originalDropAddressOne, originalDropAddressTwo;
 
 
     @Override
@@ -121,20 +125,30 @@ public class EditProfile extends GetSafeBase {
         txtEmail = findViewById(R.id.txt_email);
         txtParentAddress = findViewById(R.id.txt_parent_address);
         lnrLocation = findViewById(R.id.lnr_location);
+        locationDropMain = findViewById(R.id.location_drop_main);
         btnEditDone = findViewById(R.id.btn_edit_done);
         editTxtParentName = findViewById(R.id.edit_txt_parent_name);
         txtParentName = findViewById(R.id.txt_parent_name);
         txtHeading = findViewById(R.id.txt_heading);
         imgUpdateImage = findViewById(R.id.img_update_image);
         imgLocEditIndicator = findViewById(R.id.img_loc_edit_indicator);
+        imgDropLocEditIndicator = findViewById(R.id.img_drop_loc_edit_indicator);
         imgParent = findViewById(R.id.img_parent);
+        txtParentDropAddress = findViewById(R.id.txt_parent_drop_address);
+        loading = findViewById(R.id.loading);
+        view = findViewById(R.id.disable_layout);
+
+
+        if (userType.equals("staff"))
+            locationDropMain.setVisibility(View.VISIBLE);
+        else if (userType.equals("kid"))
+            locationDropMain.setVisibility(View.GONE);
 
         //init network call to get already exist details
-        setOriginalValues();
+        loadUserDetails();
 
         recyclerKidList.setAdapter(new StudentItemAdapter());
         recyclerKidList.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
-
 
 
         btnEditDone.setOnClickListener(new View.OnClickListener() {
@@ -153,6 +167,7 @@ public class EditProfile extends GetSafeBase {
                     editTxtPhoneNumber.setText(txtPhoneNumber.getText());
                     imgUpdateImage.setVisibility(View.VISIBLE);
                     imgLocEditIndicator.setVisibility(View.VISIBLE);
+                    imgDropLocEditIndicator.setVisibility(View.VISIBLE);
                     txtParentName.setVisibility(View.GONE);
                     txtEmail.setVisibility(View.GONE);
                     txtPhoneNumber.setVisibility(View.GONE);
@@ -162,11 +177,12 @@ public class EditProfile extends GetSafeBase {
                     btnEditDone.setText("Edit");
                     txtHeading.setText("Your details");
 
-                    updateUserWithNewValues();
+                    validateUserNewValues();
                     imgUpdateImage.setVisibility(View.GONE);
                     editTxtParentName.setVisibility(View.GONE);
                     editTxtEmail.setVisibility(View.GONE);
                     imgLocEditIndicator.setVisibility(View.INVISIBLE);
+                    imgDropLocEditIndicator.setVisibility(View.INVISIBLE);
                     editTxtPhoneNumber.setVisibility(View.GONE);
                     txtParentName.setVisibility(View.VISIBLE);
                     txtEmail.setVisibility(View.VISIBLE);
@@ -194,6 +210,7 @@ public class EditProfile extends GetSafeBase {
                     }
                 }
         });
+
         editTxtParentName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -246,7 +263,40 @@ public class EditProfile extends GetSafeBase {
             @Override
             public void onClick(View v) {
                 if (btnEditDone.getText().toString().equals("Done")) {
+                    isDropLocation = false;
                     onCreateMapPopup(v, savedInstanceState);
+                    View view = EditProfile.this.getCurrentFocus();
+
+                    if (view != null) {
+                        InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    }
+                }
+            }
+        });
+        locationDropMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (btnEditDone.getText().toString().equals("Done")) {
+                    isDropLocation = true;
+                    onCreateMapPopup(v, savedInstanceState);
+                    View view = EditProfile.this.getCurrentFocus();
+
+                    if (view != null) {
+                        InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    }
+                }
+            }
+        });
+
+        findViewById(R.id.img_loc_edit_indicator).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (btnEditDone.getText().toString().equals("Done")) {
+                    isDropLocation = false;
+                    onCreateMapPopup(v, savedInstanceState);
+
                     View view = EditProfile.this.getCurrentFocus();
 
                     if (view != null) {
@@ -347,7 +397,7 @@ public class EditProfile extends GetSafeBase {
             boolean somePermissionsForeverDenied = false;
             for (String permission : permissions) {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
-                    showWarningToast(dialog, "Permission denied.\nCannot open camera", 0);
+                    showToast(dialog, "Permission denied.\nCannot open camera", 0);
 
                 } else {
                     if (ActivityCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {
@@ -610,8 +660,10 @@ public class EditProfile extends GetSafeBase {
         mConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                txtParentAddress.setText(GetSafeBase.LOC_ADDRESS);
-                popupWindow.dismiss();
+                showAddressPopup(popupWindow);
+
+//                txtParentAddress.setText(GetSafeBase.LOC_ADDRESS);
+
             }
         });
 
@@ -643,6 +695,10 @@ public class EditProfile extends GetSafeBase {
 
                     if (pinnedLocation == null)
                         cameraPosition = new CameraPosition.Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(15).build();
+                    if (pinnedDropLocation == null)
+                        cameraPosition = new CameraPosition.Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(15).build();
+                    else if (isDropLocation)
+                        cameraPosition = new CameraPosition.Builder().target(pinnedDropLocation).zoom(15).build();
                     else
                         cameraPosition = new CameraPosition.Builder().target(pinnedLocation).zoom(15).build();
 
@@ -656,7 +712,19 @@ public class EditProfile extends GetSafeBase {
                             locationAddress(cameraPosition.target.latitude, cameraPosition.target.longitude);
                             pinnedLocation = new LatLng(cameraPosition.target.latitude, cameraPosition.target.longitude);
 
+                            if (isDropLocation) {
+                                dropLatitude = cameraPosition.target.latitude;
+                                dropLongitude = cameraPosition.target.longitude;
+                                pinnedDropLocation = new LatLng(cameraPosition.target.latitude, cameraPosition.target.longitude);
 
+                            } else {
+
+                                latitude = cameraPosition.target.latitude;
+                                longitude = cameraPosition.target.longitude;
+                                pinnedLocation = new LatLng(cameraPosition.target.latitude, cameraPosition.target.longitude);
+
+
+                            }
                         }
                     });
 
@@ -708,82 +776,57 @@ public class EditProfile extends GetSafeBase {
     }
 
 
-    private void loadUserDetails() {
-
-        HashMap<String, String> tempParam = new HashMap<>();
-
-
-        getSafeServices.networkJsonRequest(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.VALIDATE_TOKEN), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
-            @Override
-            public void onSuccessResponse(JSONObject result) {
-
-                try { //startActivity(new Intent(SplashScreen.this, Home.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
-                    Log.e("res", result + "");
-
-                    originalName = result.getJSONObject("user").getString("name");
-//                    originalAddress = result.getString("");
-                    originalEmail = result.getJSONObject("user").getString("email");
-                    originalNumber = result.getJSONObject("user").getString("phone_no");
-
-                    txtParentName.setText(originalName);
-                    txtPhoneNumber.setText(originalNumber);
-                    txtEmail.setText(originalEmail);
-                    txtParentAddress.setText(originalAddress);
-                } catch (Exception e) {
-                    Log.e("pro", e.getMessage());
-
-                }
-
-            }
-        });
-
-    }
-
-
-    private void updateUserWithNewValues() {
+    private void validateUserNewValues() {
         //add network call inside last if to update user with new values
-//        boolean isValidName=true,isValidNumber=true,isValidEmail=true;
+        boolean isValidated = true;
         Log.e("updateUserWithNewValues", "executed");
 
         if (TextUtils.isEmpty(editTxtParentName.getText().toString()) | editTxtParentName.getText().toString().equals(" ") | editTxtParentName.getText().length() < 3) {
 
-//            isValidName=false;
-            showWarningToast(dialog, "Your name is not valid", 0);
+            isValidated = false;
+            showToast(dialog, "Your name is not valid", 0);
             txtParentName.setText(originalName);
 
         } else
             txtParentName.setText(editTxtParentName.getText());
 
         if (TextUtils.isEmpty(editTxtPhoneNumber.getText().toString()) | editTxtPhoneNumber.getText().length() < 9) {
-//            isValidNumber=false;
-            showWarningToast(dialog, "Your phone number is not valid", 0);
+            isValidated = false;
+            showToast(dialog, "Your phone number is not valid", 0);
             txtPhoneNumber.setText(originalNumber);
 
         } else
             txtPhoneNumber.setText(editTxtPhoneNumber.getText());
 
         if (TextUtils.isEmpty(editTxtEmail.getText().toString()) | !Patterns.EMAIL_ADDRESS.matcher(editTxtEmail.getText()).matches()) {
-//            isValidEmail=false;
-            showWarningToast(dialog, "Your email is not valid", 0);
+            isValidated = false;
+            showToast(dialog, "Your email is not valid", 0);
             txtEmail.setText(originalEmail);
 
         } else txtEmail.setText(editTxtEmail.getText());
 
+//        if (TextUtils.isEmpty(txtParentAddress.getText().toString()) | TextUtils.isEmpty(txtParentDropAddress.getText().toString())) {
+//            isValidated = false;
+//            txtParentDropAddress.setText(originalDropAddress);
+//            showWarningToast(dialog, "Your address is not valid", 0);
+//
+//
+//        } else txtParentDropAddress.setText(editTxtEmail.getText());
+//
+
+        if (isValidated) {
+            updateUserPickupLocation();
+            if (userType.equals("staff"))
+                updateUserDropLocation();
+        }
 
     }
+
 
     private void hideKeyboard() {
         editTxtEmail.onEditorAction(EditorInfo.IME_ACTION_DONE);
         editTxtPhoneNumber.onEditorAction(EditorInfo.IME_ACTION_DONE);
         editTxtParentName.onEditorAction(EditorInfo.IME_ACTION_DONE);
-    }
-
-    private void setOriginalValues() {
-
-        //add init network call to get already exist details
-        loadUserDetails();
-
-
     }
 
 
@@ -853,7 +896,7 @@ public class EditProfile extends GetSafeBase {
 
                 try {
 
-                    Log.e("edi kid res",result+"");
+
                     kidList = result;
 
                     recyclerKidList.getAdapter().notifyDataSetChanged();
@@ -866,6 +909,223 @@ public class EditProfile extends GetSafeBase {
             }
         });
 
+
+    }
+
+    private void updateUserPickupLocation() {
+
+        HashMap<String, String> tempParam = new HashMap<>();
+        tempParam.put("latitude", latitude.toString());
+        tempParam.put("longitude", longitude.toString());
+
+
+        tempParam.put("add1", originalAddressOne);
+        tempParam.put("add2", originalAddressTwo);
+
+        showLoading();
+        getSafeServices.networkJsonRequest(getApplicationContext(), tempParam, getString(R.string.BASE_URL) + getString(R.string.UPDATE_USER_PICKUP), 3, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+
+                    if (result.getBoolean("location_saved_status"))
+                        if (userType.equals("kid")) {
+                            showToast(dialog, "Updated Successfully", 2);
+                            hideLoading();
+                        }
+
+
+                } catch (Exception e) {
+                    hideLoading();
+                }
+
+            }
+        });
+
+    }
+
+    private void updateUserDropLocation() {
+
+        HashMap<String, String> tempParam = new HashMap<>();
+        tempParam.put("latitude", dropLatitude.toString());
+        tempParam.put("longitude", dropLongitude.toString());
+
+
+        tempParam.put("add1", originalDropAddressOne);
+        tempParam.put("add2", originalDropAddressTwo);
+        showLoading();
+
+        getSafeServices.networkJsonRequest(getApplicationContext(), tempParam, getString(R.string.BASE_URL) + getString(R.string.UPDATE_USER_DROP), 3, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+                    hideLoading();
+                    if (result.getBoolean("location_saved_status"))
+                        showToast(dialog, "Updated Successfully", 2);
+
+
+                } catch (Exception e) {
+                    hideLoading();
+                }
+
+            }
+        });
+
+    }
+
+    private void loadUserDetails() {
+
+        HashMap<String, String> tempParam = new HashMap<>();
+        showLoading();
+
+        getSafeServices.networkJsonRequest(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.VALIDATE_TOKEN), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+                    originalName = result.getJSONObject("user").getString("name");
+                    originalEmail = result.getJSONObject("user").getString("email");
+                    originalNumber = result.getJSONObject("user").getString("phone_no");
+
+                    txtParentName.setText(originalName);
+                    txtPhoneNumber.setText(originalNumber);
+                    txtEmail.setText(originalEmail);
+                    loadUserLocationDetails();
+
+                } catch (Exception e) {
+
+
+                }
+
+            }
+        });
+
+    }
+
+    private void loadUserLocationDetails() {
+
+        HashMap<String, String> tempParam = new HashMap<>();
+
+
+        getSafeServices.networkJsonRequest(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.USER_LOCATION), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+                    hideLoading();
+                    if (result.getBoolean("status")) {
+
+                        originalAddressOne = result.getJSONObject("location").getString("pick_up_add1");
+                        originalAddressTwo = " " + result.getJSONObject("location").getString("pick_up_add2");
+                        originalDropAddressOne = result.getJSONObject("location").getString("drop_off_add1");
+                        originalDropAddressTwo = " " + result.getJSONObject("location").getString("drop_off_add2");
+
+                        txtParentAddress.setText(originalAddressOne + originalAddressTwo);
+                        txtParentDropAddress.setText(originalDropAddressOne + originalDropAddressTwo);
+                        longitude = result.getJSONObject("location").getDouble("pick_up_longitude");
+                        latitude = result.getJSONObject("location").getDouble("pick_up_latitude");
+                        pinnedLocation = new LatLng(latitude, longitude);
+                        dropLatitude = result.getJSONObject("location").getDouble("drop_off_latitude");
+                        dropLongitude = result.getJSONObject("location").getDouble("drop_off_longitude");
+                        pinnedDropLocation = new LatLng(dropLatitude, dropLatitude);
+
+                    }
+
+                } catch (Exception e) {
+                    hideLoading();
+
+                }
+
+            }
+        });
+
+    }
+
+    public void showAddressPopup(final PopupWindow popupWindow) {
+
+
+        Window window = dialog.getWindow();
+        window.setGravity(Gravity.TOP);
+
+
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.setTitle(null);
+
+        dialog.setContentView(R.layout.address_popup);
+
+
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.CalendarAnimation;
+
+        final EditText txtAddOne = dialog.findViewById(R.id.txt_add_one);
+        final EditText txtAddTwo = dialog.findViewById(R.id.txt_add_two);
+        Button btnOk = dialog.findViewById(R.id.btn_ok);
+
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                if (TextUtils.isEmpty(txtAddOne.getText().toString())) {
+
+
+                    YoYo.with(Techniques.Bounce)
+                            .duration(1000)
+                            .playOn(txtAddOne);
+                    txtAddOne.setError("Please enter address line one");
+                    txtAddOne.requestFocus(0);
+                } else if (TextUtils.isEmpty(txtAddTwo.getText().toString())) {
+
+
+                    YoYo.with(Techniques.Bounce)
+                            .duration(1000)
+                            .playOn(txtAddTwo);
+                    txtAddTwo.setError("Please enter address line two");
+                    txtAddTwo.requestFocus(0);
+                } else {
+                    if (isDropLocation) {
+
+                        originalDropAddressOne = txtAddOne.getText().toString();
+                        originalDropAddressTwo = " " + txtAddTwo.getText().toString();
+                        txtParentDropAddress.setText(originalDropAddressOne + originalDropAddressTwo);
+
+                    } else {
+                        originalAddressOne = txtAddOne.getText().toString();
+                        originalAddressTwo = " " + txtAddTwo.getText().toString();
+                        txtParentAddress.setText(originalAddressOne + originalAddressTwo);
+
+
+                    }
+                    popupWindow.dismiss();
+                    dialog.dismiss();
+                }
+
+
+            }
+        });
+
+
+        dialog.show();
+    }
+
+    void showLoading() {
+
+        view.setVisibility(View.VISIBLE);
+        loading.setVisibility(View.VISIBLE);
+        loading.playAnimation();
+
+
+    }
+
+    void hideLoading() {
+
+
+        loading.setVisibility(View.GONE);
+        view.setVisibility(View.GONE);
 
     }
 }

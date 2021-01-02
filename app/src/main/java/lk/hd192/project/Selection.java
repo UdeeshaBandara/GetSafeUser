@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import static lk.hd192.project.Utils.GetSafeBase.userType;
+
 public class Selection extends AppCompatActivity {
 
     @Override
@@ -17,6 +19,7 @@ public class Selection extends AppCompatActivity {
         findViewById(R.id.school).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                userType="kid";
                 startActivity(new Intent(getApplicationContext(),Register.class));
 
             }
@@ -24,6 +27,7 @@ public class Selection extends AppCompatActivity {
         findViewById(R.id.staff).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                userType="staff";
                 startActivity(new Intent(getApplicationContext(),Register.class));
 
             }

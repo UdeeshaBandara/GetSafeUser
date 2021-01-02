@@ -35,6 +35,8 @@ public class AddNewKid extends GetSafeBase {
     AddKidSecondFragment addKidSecondFragment;
     AddKidThirdFragment addKidThirdFragment;
     Button btnSave;
+    View view;
+    LottieAnimationView loading;
     public static boolean isEditing = false, isLocationRemembered;
 
     public static String FirstName, LastName, SchoolName, Gender="null", Birthday, AddOne, AddTwo, City, PinnedLoc,kidId,kidLocId;
@@ -53,7 +55,8 @@ public class AddNewKid extends GetSafeBase {
         kidAnimation = findViewById(R.id.kid_animation);
         doneAnimation = findViewById(R.id.done_animation);
         locationAnimation = findViewById(R.id.location_animation);
-
+        loading = findViewById(R.id.loading);
+        view = findViewById(R.id.disable_layout);
         mainSaveAnimation = findViewById(R.id.main_save_animation);
         btnSave = findViewById(R.id.btn_save);
 
@@ -193,5 +196,21 @@ public class AddNewKid extends GetSafeBase {
         sectionsPager.addFragment(addKidThirdFragment);
 
         viewPager.setAdapter(sectionsPager);
+    }
+    public void showLoading() {
+
+        view.setVisibility(View.VISIBLE);
+        loading.setVisibility(View.VISIBLE);
+        loading.playAnimation();
+
+
+    }
+
+    public void hideLoading() {
+
+
+        loading.setVisibility(View.GONE);
+        view.setVisibility(View.GONE);
+
     }
 }

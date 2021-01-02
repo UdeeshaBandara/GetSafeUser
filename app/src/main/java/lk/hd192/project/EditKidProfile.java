@@ -27,12 +27,12 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -46,6 +46,9 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -73,7 +76,6 @@ import java.util.Locale;
 
 import lk.hd192.project.Utils.GetSafeBase;
 import lk.hd192.project.Utils.GetSafeServices;
-import lk.hd192.project.Utils.VolleyCallback;
 import lk.hd192.project.Utils.VolleyJsonCallback;
 
 public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDateSetListener {
@@ -89,7 +91,9 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
     SchoolBottomSheet schoolBottomSheet;
     RecyclerView bottomSheetRecycler;
     Button mConfirm;
-    JSONObject kidDetails,kidLocation;
+    View view;
+    LottieAnimationView loading;
+    JSONObject kidDetails, kidLocation;
     ImageView imgLocEditIndicator, imgBirthdayEditIndicator, imgSchoolEditIndicator, imgUpdateImage, imgKid;
     GoogleMap googleMap;
     String locationProvider = LocationManager.GPS_PROVIDER;
@@ -99,7 +103,9 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
     public static LatLng pinnedLocation;
     Button btnEditDone;
     private ProgressDialog progressDialog;
-    String originalName = "", kid_id, originalSchool = "", originalLocation = "", originalBirthday = "";
+    Double latitude, longitude;
+
+    String originalName = "", kid_id, originalSchool = "", originalLocation = "", originalBirthday = "", originalAddressTwo, originalAddressOne,originalGender,originalGuardian;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -118,16 +124,16 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
         imgSchoolEditIndicator = findViewById(R.id.img_school_edit_indicator);
         imgUpdateImage = findViewById(R.id.img_update_image);
         getSafeServices = new GetSafeServices();
-
         kidDetails = new JSONObject();
         lnrLocation = findViewById(R.id.lnr_location);
         lnrBirthday = findViewById(R.id.lnr_birthday);
         lnrSchool = findViewById(R.id.lnr_school);
         btnEditDone = findViewById(R.id.btn_edit_done);
         imgKid = findViewById(R.id.img_kid);
-
         editTxtKidName = findViewById(R.id.edit_txt_kid_name);
         txtHeading = findViewById(R.id.txt_heading);
+        loading = findViewById(R.id.loading);
+        view = findViewById(R.id.disable_layout);
 
         final Calendar c = Calendar.getInstance();
         year = c.get(Calendar.YEAR);
@@ -137,10 +143,10 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
 
         try {
             kid_id = getIntent().getStringExtra("kid_id");
-            Log.e("kid",kid_id);
+
 
         } catch (Exception e) {
-            Log.e("kid id err",e.getMessage());
+
         }
 
         //add init network call
@@ -234,6 +240,20 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
             }
         });
         lnrLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (btnEditDone.getText().toString().equals("Done")) {
+                    onCreateMapPopup(v, savedInstanceState);
+                    View view = EditKidProfile.this.getCurrentFocus();
+
+                    if (view != null) {
+                        InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    }
+                }
+            }
+        });
+        imgLocEditIndicator.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (btnEditDone.getText().toString().equals("Done")) {
@@ -389,23 +409,13 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
 //        editTxtParentName.onEditorAction(EditorInfo.IME_ACTION_DONE);
     }
 
-    private void setOriginalValues() {
-
-        //add init network call to get already exist details
-        txtKidName.setText(originalName);
-//        txtPhoneNumber.setText(originalNumber);
-//        txtEmail.setText(originalEmail);
-//        txtParentAddress.setText(originalAddress);
-
-
-    }
 
     public void getChildById() {
 
         HashMap<String, String> param = new HashMap<>();
         param.put("id", kid_id);
 
-
+        showLoading();
         getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_KID_BY_ID), 2, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
@@ -413,15 +423,16 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
                 try {
 
                     kidDetails = result;
-                    Log.e("kiddetails",kidDetails+"");
-                    if(kidDetails.getBoolean("status")) {
+
+                    if (kidDetails.getBoolean("status")) {
 
                         originalName = kidDetails.getJSONObject("child").getString("name");
                         originalBirthday = kidDetails.getJSONObject("child").getString("birthday");
 
                         String[] separated = originalBirthday.split("T");
-                        originalBirthday= separated[0];
-
+                        originalBirthday = separated[0];
+                        originalGender = kidDetails.getJSONObject("child").getString("gender");
+                        originalGuardian = kidDetails.getJSONObject("child").getString("guardian");
 
                         originalSchool = kidDetails.getJSONObject("child").getString("school_name");
                         getLocationDetails();
@@ -432,7 +443,7 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
                     }
 
                 } catch (Exception e) {
-
+                    hideLoading();
                 }
 
             }
@@ -445,25 +456,31 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
         HashMap<String, String> param = new HashMap<>();
         param.put("id", kid_id);
 
-
+        Log.e("kid id", kid_id);
         getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_KID_LOCATION_BY_ID), 2, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 
                 try {
+                    hideLoading();
 
                     kidLocation = result;
-                    Log.e("kid loc",kidLocation+"");
-                    if(kidDetails.getBoolean("status")) {
 
-                        originalLocation = kidDetails.getJSONObject("child").getString("name");
+                    if (kidDetails.getBoolean("status")) {
+
+                        originalAddressOne = kidLocation.getJSONObject("location").getString("pick_up_add1");
+                        originalAddressTwo = " " + kidLocation.getJSONObject("location").getString("pick_up_add2");
+                        originalLocation = originalAddressOne + originalAddressTwo;
+                        longitude = Double.parseDouble(kidLocation.getJSONObject("location").getString("pick_up_longitude"));
+                        latitude = Double.parseDouble(kidLocation.getJSONObject("location").getString("pick_up_latitude"));
 
                         txtPickupAddress.setText(originalLocation);
 
                     }
 
                 } catch (Exception e) {
-
+                    Log.e("ex from loc", e.getMessage());
+                    hideLoading();
                 }
 
             }
@@ -507,6 +524,8 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
                         public void onCameraChange(CameraPosition cameraPosition) {
 
                             locationAddress(cameraPosition.target.latitude, cameraPosition.target.longitude);
+                            latitude = cameraPosition.target.latitude;
+                            longitude = cameraPosition.target.longitude;
                             pinnedLocation = new LatLng(cameraPosition.target.latitude, cameraPosition.target.longitude);
 
 
@@ -617,8 +636,9 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
         mConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                txtPickupAddress.setText(GetSafeBase.LOC_ADDRESS);
-                popupWindow.dismiss();
+
+                showAddressPopup(popupWindow);
+
             }
         });
 
@@ -627,33 +647,87 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
 
     private void updateUserWithNewValues() {
         //add network call inside last if to update user with new values
-//        boolean isValidName=true,isValidNumber=true,isValidEmail=true;
+
         Log.e("updateUserWithNewValues", "executed");
-
+        boolean isValidated = true;
         if (TextUtils.isEmpty(editTxtKidName.getText().toString()) | editTxtKidName.getText().toString().equals(" ") | editTxtKidName.getText().length() < 3) {
-
-//            isValidName=false;
-            showWarningToast(dialog, "Your name is not valid", 0);
+            isValidated = false;
+            showToast(dialog, "Your name is not valid", 0);
             txtKidName.setText(originalName);
 
         } else
             txtKidName.setText(editTxtKidName.getText());
 
-//        if (TextUtils.isEmpty(edi.getText().toString()) | editTxtPhoneNumber.getText().length() < 10) {
-////            isValidNumber=false;
-//            showWarningToast(dialog, "Your phone number is not valid", 0);
-//            txtPhoneNumber.setText(originalNumber);
-//
-//        } else
-//            txtPhoneNumber.setText(editTxtPhoneNumber.getText());
-//
-//        if (TextUtils.isEmpty(editTxtEmail.getText().toString()) | !Patterns.EMAIL_ADDRESS.matcher(editTxtEmail.getText()).matches()) {
-////            isValidEmail=false;
-//            showWarningToast(dialog, "Your email is not valid", 0);
-//            txtEmail.setText(originalEmail);
-//
-//        } else txtEmail.setText(editTxtEmail.getText());
+        if (isValidated)
+            updateKidDetails();
+    }
 
+    private void updateKidDetails() {
+        HashMap<String, String> param = new HashMap<>();
+        param.put("id", kid_id);
+        param.put("name", txtKidName.getText().toString());
+        param.put("school-name", txtSchoolName.getText().toString());
+        param.put("birthday", txtBirthday.getText().toString());
+        param.put("gender", originalGender);
+        param.put("guardian", originalGuardian);
+
+
+        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.EDIT_KID), 3, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+                    hideLoading();
+
+
+
+                    if (result.getBoolean("updated_status")) {
+
+                     updateChildPickupLocations();
+
+                    }
+
+                } catch (Exception e) {
+
+                    hideLoading();
+                }
+
+            }
+        });
+    }
+
+    private void updateChildPickupLocations() {
+        HashMap<String, String> param = new HashMap<>();
+        param.put("id", kid_id);
+        param.put("latitude", latitude.toString());
+        param.put("longitude", longitude.toString());
+        param.put("add1", originalAddressOne);
+        param.put("add2", originalAddressTwo);
+
+
+
+        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.UPDATE_KID_LOCATION), 3, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+                    hideLoading();
+
+
+
+                    if (result.getBoolean("location_saved_status")) {
+
+                        showToast(dialog, "Updated Successfully", 2);
+
+                    }
+
+                } catch (Exception e) {
+
+                    hideLoading();
+                }
+
+            }
+        });
 
     }
 
@@ -804,4 +878,83 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
 
     }
 
+    public void showAddressPopup(final PopupWindow popupWindow) {
+
+
+        Window window = dialog.getWindow();
+        window.setGravity(Gravity.TOP);
+
+
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.setTitle(null);
+
+        dialog.setContentView(R.layout.address_popup);
+
+
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.CalendarAnimation;
+
+        final EditText txtAddOne = dialog.findViewById(R.id.txt_add_one);
+        final EditText txtAddTwo = dialog.findViewById(R.id.txt_add_two);
+        Button btnOk = dialog.findViewById(R.id.btn_ok);
+
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                if (TextUtils.isEmpty(txtAddOne.getText().toString())) {
+
+
+                    YoYo.with(Techniques.Bounce)
+                            .duration(1000)
+                            .playOn(txtAddOne);
+                    txtAddOne.setError("Please enter address line one");
+                    txtAddOne.requestFocus(0);
+                } else if (TextUtils.isEmpty(txtAddTwo.getText().toString())) {
+
+
+                    YoYo.with(Techniques.Bounce)
+                            .duration(1000)
+                            .playOn(txtAddTwo);
+                    txtAddTwo.setError("Please enter address line two");
+                    txtAddTwo.requestFocus(0);
+                } else {
+
+
+                    originalAddressOne = txtAddOne.getText().toString();
+                    originalAddressTwo = " " + txtAddTwo.getText().toString();
+                    txtPickupAddress.setText(originalAddressOne + originalAddressTwo);
+
+
+                    popupWindow.dismiss();
+                    dialog.dismiss();
+                }
+
+
+            }
+        });
+
+
+        dialog.show();
+    }
+
+    void showLoading() {
+
+        view.setVisibility(View.VISIBLE);
+        loading.setVisibility(View.VISIBLE);
+        loading.playAnimation();
+
+
+    }
+
+    void hideLoading() {
+
+
+        loading.setVisibility(View.GONE);
+        view.setVisibility(View.GONE);
+
+    }
 }

@@ -44,8 +44,10 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".EditKidProfile" />
-        <activity android:name=".EditProfile" />
+        <activity android:name=".EditKidProfile"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".EditProfile"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".Absence" />
         <activity android:name=".AddNewKid" />
         <activity android:name=".Map" />
@@ -75,11 +77,13 @@
         <activity android:name=".Selection" />
         <activity android:name=".Welcome" />
         <activity android:name=".Home">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
 
         </activity>
         <activity

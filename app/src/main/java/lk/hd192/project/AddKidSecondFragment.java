@@ -65,21 +65,22 @@ public class AddKidSecondFragment extends GetSafeBaseFragment {
     RelativeLayout pinLocation;
 
     View popupView;
-TinyDB tinyDB;
+    TinyDB tinyDB;
     LinearLayout lnrRemember;
     MapView mPickupLocation;
     GoogleMap googleMap;
     LocationManager locationManager;
     Button mConfirm;
     Dialog dialog;
+    AddNewKid addNewKid;
     String locationProvider = LocationManager.GPS_PROVIDER;
     CameraPosition cameraPosition;
     LottieAnimationView rememberAnimation;
     EditText txtAddressOne, txtAddressTwo, txtCity;
     TextView txtLocation;
 
-    Double latitude,longitude;
-GetSafeServices getSafeServices;
+    Double latitude, longitude;
+    GetSafeServices getSafeServices;
     public static LatLng pinnedLocation;
 
 
@@ -98,8 +99,8 @@ GetSafeServices getSafeServices;
     public void onViewCreated(@NonNull View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        getSafeServices= new GetSafeServices();
-        tinyDB=new TinyDB(getActivity());
+        getSafeServices = new GetSafeServices();
+        tinyDB = new TinyDB(getActivity());
         dialog = new Dialog(getActivity(), android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
         pinLocation = view.findViewById(R.id.pin_location);
         txtAddressOne = view.findViewById(R.id.txt_address_one);
@@ -111,7 +112,7 @@ GetSafeServices getSafeServices;
 
         rememberAnimation.setSpeed(0.35f);
         rememberAnimation.setMinAndMaxProgress(0.0f, 0.7f);
-
+        addNewKid = new AddNewKid();
 
         if (AddNewKid.isEditing) {
 
@@ -171,7 +172,6 @@ GetSafeServices getSafeServices;
 
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(LAYOUT_INFLATER_SERVICE);
         popupView = inflater.inflate(R.layout.activity_map, null);
-
 
 
         final PopupWindow popupWindow = new PopupWindow(popupView, GetSafeBase.device_width - 150, GetSafeBase.device_height - 250, true);
@@ -254,7 +254,6 @@ GetSafeServices getSafeServices;
             AddNewKid.secondCompleted = true;
 
 
-
         }
     }
 
@@ -262,19 +261,19 @@ GetSafeServices getSafeServices;
 
 
         HashMap<String, String> tempParam = new HashMap<>();
-        tempParam.put("id",AddNewKid.kidId);
+        tempParam.put("id", AddNewKid.kidId);
         tempParam.put("latitude", latitude.toString());
         tempParam.put("longitude", longitude.toString());
         tempParam.put("add1", txtAddressOne.getText().toString());
-        tempParam.put("add2",txtAddressTwo.getText().toString());
+        tempParam.put("add2", txtAddressTwo.getText().toString());
 
-
+        addNewKid.showLoading();
         getSafeServices.networkJsonRequest(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.ADD_KID_LOC), 2, tinyDB.getString("token"),
                 new VolleyJsonCallback() {
 
                     @Override
                     public void onSuccessResponse(JSONObject result) {
-
+                        addNewKid.hideLoading();
                         try {
                             Log.e("loc response", result + "");
 
@@ -339,8 +338,8 @@ GetSafeServices getSafeServices;
                         public void onCameraChange(CameraPosition cameraPosition) {
 
                             locationAddress(cameraPosition.target.latitude, cameraPosition.target.longitude);
-                            latitude=cameraPosition.target.latitude;
-                            longitude= cameraPosition.target.longitude;
+                            latitude = cameraPosition.target.latitude;
+                            longitude = cameraPosition.target.longitude;
                             pinnedLocation = new LatLng(cameraPosition.target.latitude, cameraPosition.target.longitude);
 
 

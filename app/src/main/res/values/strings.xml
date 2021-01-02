@@ -7,7 +7,7 @@
     <string name="REVERSE_GEO">https://maps.googleapis.com/maps/api/geocode/json</string>
 
 
-    <string name="BASE_URL">http://192.168.1.4:8000/v1/getsafe/api</string>
+    <string name="BASE_URL">http://192.168.1.2:8000/v1/getsafe/api</string>
     <string name="SAVE_USER">/register/saveuser</string>
     <string name="REGISTER_SEND_OTP">/register/sendotp</string>
     <string name="REGISTER_VALIDATE_OTP">/register/validateotp</string>
@@ -15,7 +15,18 @@
     <string name="USER_SEND_OTP">/user/sendotp</string>
     <string name="USER_VALIDATE_OTP">/user/validateotp</string>
 
+
+
+    <string name="UPDATE_FCM">/fcmtoken/add</string>
+
+
+
+
     <string name="ADD_PARENT_LOCATION">/location/user/pickup/add</string>
+    <string name="ADD_PARENT_DROP_LOCATION">/location/user/dropoff/add</string>
+    <string name="USER_LOCATION">/location/user/get</string>
+    <string name="UPDATE_USER_PICKUP">/location/user/pickup/edit</string>
+    <string name="UPDATE_USER_DROP">/location/user/dropoff/edit</string>
 
 
 
@@ -24,6 +35,9 @@
     <string name="GET_ALL_KID">/child/getchildren</string>
     <string name="GET_KID_BY_ID">/child/getchild</string>
     <string name="GET_KID_LOCATION_BY_ID">/location/child/get</string>
+    <string name="EDIT_KID">/child/editchild</string>
+    <string name="UPDATE_KID_LOCATION">/location/child/pickup/edit</string>
+
 
 
 

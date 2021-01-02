@@ -187,6 +187,10 @@ public class GetSafeServices extends GetSafeBase {
 
             requestMethod = Request.Method.POST;
 
+        }else if (method == 3) {
+
+            requestMethod = Request.Method.PUT;
+
         } else {
 
             requestMethod = Request.Method.GET;

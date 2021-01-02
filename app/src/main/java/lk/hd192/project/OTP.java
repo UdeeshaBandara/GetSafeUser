@@ -2,22 +2,16 @@ package lk.hd192.project;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -67,8 +61,6 @@ public class OTP extends GetSafeBase {
         resendCountdownTitle = findViewById(R.id.resend_countdown_title);
 
 
-
-
         loading = findViewById(R.id.loading);
         view = findViewById(R.id.disable_layout);
 
@@ -100,7 +92,12 @@ public class OTP extends GetSafeBase {
         findViewById(R.id.btn_otp_next).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getDeviceToken();
+
+                if (optType == 0)
+                    existingUserValidateOTP();
+                else if (optType == 1)
+                    newUserValidateOTP();
+
 
             }
         });
@@ -207,9 +204,11 @@ public class OTP extends GetSafeBase {
 
             }
         });
+        getDeviceToken();
+
     }
 
-    private void newUserValidateOTP(String fcm_token) {
+    private void newUserValidateOTP() {
 
         HashMap<String, String> tempParam = new HashMap<>();
 
@@ -217,7 +216,6 @@ public class OTP extends GetSafeBase {
 
         tempParam.put("otp-token", OTP.otpToken);
 
-        //tempParam.put("fcm-token", fcm_token);
 
         showLoading();
         getSafeServices.networkJsonRequestWithoutHeader(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.REGISTER_VALIDATE_OTP), 2, new VolleyJsonCallback() {
@@ -231,11 +229,12 @@ public class OTP extends GetSafeBase {
                     if (result.getBoolean("otp_token_validity")) {
                         tinyDB.putBoolean("isLogged", true);
                         tinyDB.putString("token", result.getString("access_token"));
+                        getDeviceToken();
                         startActivity(new Intent(getApplicationContext(), InitLocation.class));
                         finishAffinity();
 
                     } else
-                        showWarningToast(dialog, "Something went wrong. Please try again", 0);
+                        showToast(dialog, "Something went wrong. Please try again", 0);
 
 
                 } catch (Exception e) {
@@ -250,13 +249,13 @@ public class OTP extends GetSafeBase {
     }
 
 
-    private void existingUserValidateOTP(String fcm_token) {
+    private void existingUserValidateOTP() {
 
         HashMap<String, String> tempParam = new HashMap<>();
 
         tempParam.put("otp", confirmOTP_1.getText().toString() + confirmOTP_2.getText().toString() + confirmOTP_3.getText().toString() + confirmOTP_4.getText().toString());
         tempParam.put("otp-token", OTP.otpToken);
-        // tempParam.put("fcm-token", fcm_token);
+
         showLoading();
         getSafeServices.networkJsonRequestWithoutHeader(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.USER_VALIDATE_OTP), 2, new VolleyJsonCallback() {
             @Override
@@ -270,17 +269,18 @@ public class OTP extends GetSafeBase {
 
                         tinyDB.putBoolean("isLogged", true);
                         tinyDB.putString("token", result.getString("access_token"));
-                        SplashScreen.token=result.getString("access_token");
+                        SplashScreen.token = result.getString("access_token");
+                        getDeviceToken();
                         startActivity(new Intent(getApplicationContext(), Home.class));
                         finishAffinity();
 
                     } else
-                        showWarningToast(dialog, "Something went wrong. Please try again", 0);
+                        showToast(dialog, "Something went wrong. Please try again", 0);
 
 
                 } catch (Exception e) {
 
-                    Log.e("exec",e.getMessage());
+                    Log.e("exec", e.getMessage());
 
                 }
 
@@ -291,7 +291,6 @@ public class OTP extends GetSafeBase {
     }
 
 
-
     public void getDeviceToken() {
 
 
@@ -300,7 +299,7 @@ public class OTP extends GetSafeBase {
                     @Override
                     public void onComplete(@NonNull Task<InstanceIdResult> task) {
                         if (!task.isSuccessful()) {
-                            showWarningToast(dialog, "Please try again", 0);
+                            showToast(dialog, "Please try again", 0);
 
 
                             return;
@@ -308,11 +307,7 @@ public class OTP extends GetSafeBase {
 
                         } else {
 
-                            Log.e("fcm_token",task.getResult().getToken());
-                            if (optType == 0)
-                                existingUserValidateOTP(task.getResult().getToken());
-                            else if (optType == 1)
-                                newUserValidateOTP(task.getResult().getToken());
+                            updateUserFcmToken(task.getResult().getToken());
 
 
                         }
@@ -321,6 +316,37 @@ public class OTP extends GetSafeBase {
                 });
     }
 
+    private void updateUserFcmToken(final String fcmToken) {
+
+        HashMap<String, String> tempParam = new HashMap<>();
+
+        tempParam.put("fcm_token", fcmToken);
+
+        showLoading();
+        getSafeServices.networkJsonRequest(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.UPDATE_FCM), 2, tinyDB.getString("token"),new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+                hideLoading();
+                try {
+
+                    if (result.getBoolean("saved_status")) {
+
+                        tinyDB.putString("fcmToken", fcmToken);
+
+
+                    } else
+                        showToast(dialog, result.getString("validation_errors"), 0);
+
+
+                } catch (Exception e) {
+
+
+                }
+
+            }
+        });
+
+    }
 
     void showLoading() {
 

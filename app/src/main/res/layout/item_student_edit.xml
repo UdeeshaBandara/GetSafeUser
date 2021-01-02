@@ -4,12 +4,13 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginLeft="5dp"
+    android:background="@drawable/bg_3d_button"
     android:layout_marginRight="5dp">
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_3d_button"
+
         android:elevation="55dp"
         android:padding="10dp">
 

@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_toast"
-    android:backgroundTint="#F2DAD3D3">
+    android:backgroundTint="#828388">
 
 
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/warning_animation"
+        android:id="@+id/need_location_animation"
         android:layout_width="match_parent"
         android:layout_height="150dp"
 
@@ -17,13 +17,13 @@
 
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
-        app:lottie_rawRes="@raw/warning"  />
+        app:lottie_rawRes="@raw/add_kid_confirmation" />
 
     <TextView
         android:id="@+id/toast_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/warning_animation"
+        android:layout_below="@+id/need_location_animation"
         android:layout_gravity="center_vertical"
         android:layout_marginBottom="15dp"
         android:fontFamily="@font/nunito_regular"
@@ -42,9 +42,9 @@
         android:layout_marginHorizontal="20dp"
 
         android:layout_marginBottom="10dp"
-        android:background="@drawable/bg_btn_ok_toast"
+        android:background="@drawable/bg_btn_ok"
         android:fontFamily="@font/nunito_regular"
-        android:text="Okay, I get it !"
+        android:text="Okay, Nice"
         android:textAllCaps="false"
         android:textColor="@color/black"
         android:textSize="18sp" />

@@ -132,7 +132,7 @@ public class Map extends GetSafeBase {
 
                     if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 
-                        showWarningToast(dialog, "Please enable location services", 1);
+                        showToast(dialog, "Please enable location services", 1);
                         Intent settings = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                         startActivity(settings);
 
@@ -190,7 +190,7 @@ public class Map extends GetSafeBase {
             if (addressList.size() == 0) {
 
 
-                showWarningToast(dialog, "Oops.. \nNo Address Found in this Area", 1);
+                showToast(dialog, "Oops.. \nNo Address Found in this Area", 1);
                 mConfirm.setEnabled(false);
 
             } else {
@@ -201,7 +201,7 @@ public class Map extends GetSafeBase {
 
         } catch (IOException e) {
 
-            showWarningToast(dialog, "Oops.. \nan error occurred", 0);
+            showToast(dialog, "Oops.. \nan error occurred", 0);
 
             e.printStackTrace();
         }

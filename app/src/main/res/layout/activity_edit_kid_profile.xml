@@ -30,7 +30,7 @@
                 android:fontFamily="@font/nunito_bold"
                 android:text="Kid details"
                 android:textColor="@color/white"
-                android:textSize="25dp" />
+                android:textSize="22dp" />
 
 
         </RelativeLayout>
@@ -263,7 +263,7 @@
                                 android:layout_height="20dp"
                                 android:fontFamily="@font/nunito_regular"
                                 android:gravity="center_vertical"
-                                android:hint="Birthday"
+                                android:hint="Birthday (YY/MM/DD)"
                                 android:textColor="@color/black"
                                 android:textSize="14sp" />
 
@@ -373,7 +373,7 @@
                                 android:layout_height="30dp"
                                 android:layout_centerInParent="true"
                                 android:gravity="center"
-                                android:src="@drawable/icon_location"
+                                android:src="@drawable/side_menu_icon_location"
 
                                 android:visibility="invisible" />
 
@@ -414,6 +414,26 @@
         android:layout_marginBottom="15dp"
         android:background="@drawable/bg_button_contact_driver"
         android:text="Save"
-        android:textAllCaps="false" />
+        android:textAllCaps="false"
+        android:visibility="gone" />
+
+    <View
+        android:id="@+id/disable_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#92292828"
+        android:visibility="gone" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/loading"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/loading" />
+
 
 </RelativeLayout>

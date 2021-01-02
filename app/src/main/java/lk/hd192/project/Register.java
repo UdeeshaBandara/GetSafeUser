@@ -12,9 +12,6 @@ import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
@@ -22,9 +19,6 @@ import androidx.annotation.NonNull;
 import com.airbnb.lottie.LottieAnimationView;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.github.ybq.android.spinkit.sprite.Sprite;
-import com.github.ybq.android.spinkit.style.DoubleBounce;
-import com.github.ybq.android.spinkit.style.FoldingCube;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -32,8 +26,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 
 import org.json.JSONObject;
 
@@ -209,7 +201,7 @@ public class Register extends GetSafeBase {
                         newUserSendOtp();
 
                     } else
-                        showWarningToast(dialog, "Something went wrong. Please try again", 0);
+                        showToast(dialog, "Something went wrong. Please try again", 0);
 
 
                 } catch (Exception e) {
@@ -249,7 +241,7 @@ public class Register extends GetSafeBase {
 
 
                     } else
-                        showWarningToast(dialog, "Something went wrong. Please try again", 0);
+                        showToast(dialog, "Something went wrong. Please try again", 0);
 
 
                 } catch (Exception e) {
