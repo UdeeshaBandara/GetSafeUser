@@ -2,6 +2,7 @@ package lk.hd192.project;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -31,6 +32,7 @@ import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.Gravity;
@@ -311,11 +313,11 @@ public class EditProfile extends GetSafeBase {
             @Override
             public void onClick(View v) {
                 if (btnEditDone.getText().toString().equals("Done")) {
-                    selectImage(EditProfile.this);
-//                    Intent gallery = new Intent();
-//                    gallery.setType("image/*");
-//                    gallery.setAction(Intent.ACTION_GET_CONTENT);
-//                    startActivityForResult(Intent.createChooser(gallery, "SELECT IMAGE"), 1);
+//                    selectImage(EditProfile.this);
+                    Intent gallery = new Intent();
+                    gallery.setType("image/*");
+                    gallery.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(Intent.createChooser(gallery, "SELECT IMAGE"), 1);
                     View view = EditProfile.this.getCurrentFocus();
 
                     if (view != null) {
@@ -331,53 +333,7 @@ public class EditProfile extends GetSafeBase {
 
     }
 
-    private void selectImage(Context context) {
-        final CharSequence[] options = {"Take Photo", "Choose from Gallery", "Cancel"};
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Choose your profile picture");
-
-        builder.setItems(options, new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-
-                if (options[item].equals("Take Photo")) {
-                    if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                        // Permission is not granted
-                        if (ActivityCompat.shouldShowRequestPermissionRationale(EditProfile.this,
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                            // Show an explanation to the user *asynchronously* -- don't block
-                            // this thread waiting for the user's response! After the user
-                            // sees the explanation, try again to request the permission.
-                        } else {
-                            // No explanation needed; request the permission
-                            ActivityCompat.requestPermissions(EditProfile.this,
-                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 23);
-                        }
-                    } else {
-
-                        Intent m_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        File file = new File(Environment.getExternalStorageDirectory(), "MyPhoto.jpg");
-                        Uri uri = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName() + ".provider", file);
-                        m_intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
-                        startActivityForResult(m_intent, 0);
-                        Log.e("after switch", "ok");
-
-                    }
-
-
-                } else if (options[item].equals("Choose from Gallery")) {
-                    Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(pickPhoto, 1);
-
-                } else if (options[item].equals("Cancel")) {
-                    dialog.dismiss();
-                }
-            }
-        });
-        builder.show();
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -529,11 +485,25 @@ public class EditProfile extends GetSafeBase {
                 imageStream = getContentResolver().openInputStream(resultUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                 imgParent.setImageBitmap(selectedImage);
+
                 progressDialog.dismiss();
+                updateImage(selectedImage);
             } catch (Exception e) {
 
             }
         }
+    }
+
+    private void updateImage(Bitmap selectedImage) {
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        selectedImage.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+        byte[] byteArray = outputStream.toByteArray();
+
+        //Use your Base64 String as you wish
+        String encodedString = Base64.encodeToString(byteArray, Base64.DEFAULT);
+
+
     }
 //    @Override
 //    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -831,7 +801,7 @@ public class EditProfile extends GetSafeBase {
 
 
     class StudentViewHolder extends RecyclerView.ViewHolder {
-        RelativeLayout rltKidEdit;
+        CardView rltKidEdit;
         TextView txtKidName, txtKidSchool;
 
         public StudentViewHolder(@NonNull View itemView) {

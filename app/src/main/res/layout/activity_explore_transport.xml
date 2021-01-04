@@ -273,12 +273,20 @@
                     android:orientation="horizontal">
 
 
-
                     <ImageView
+                        android:id="@+id/img_ac"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="5"
                         android:src="@drawable/icon_ac_non_ac" />
+
+                    <ImageView
+                        android:id="@+id/img_non_ac"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:visibility="gone"
+                        android:src="@drawable/icon_non_ac" />
 
 
                 </LinearLayout>

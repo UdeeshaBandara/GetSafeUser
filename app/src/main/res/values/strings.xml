@@ -16,10 +16,7 @@
     <string name="USER_VALIDATE_OTP">/user/validateotp</string>
 
 
-
     <string name="UPDATE_FCM">/fcmtoken/add</string>
-
-
 
 
     <string name="ADD_PARENT_LOCATION">/location/user/pickup/add</string>
@@ -29,7 +26,6 @@
     <string name="UPDATE_USER_DROP">/location/user/dropoff/edit</string>
 
 
-
     <string name="ADD_NEW_KID">/child/addchild</string>
     <string name="ADD_KID_LOC">/location/child/pickup/add</string>
     <string name="GET_ALL_KID">/child/getchildren</string>
@@ -37,9 +33,6 @@
     <string name="GET_KID_LOCATION_BY_ID">/location/child/get</string>
     <string name="EDIT_KID">/child/editchild</string>
     <string name="UPDATE_KID_LOCATION">/location/child/pickup/edit</string>
-
-
-
 
 
     <string name="VALIDATE_TOKEN">/</string>

@@ -10,12 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 
 import lk.hd192.project.Utils.GetSafeBase;
 
 public class Notification extends GetSafeBase {
 
     RecyclerView recyclerNotification;
+    Button btnNotificationBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,11 +26,19 @@ public class Notification extends GetSafeBase {
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        btnNotificationBack=findViewById(R.id.btn_notification_back);
+
         recyclerNotification=findViewById(R.id.recycler_notification);
         recyclerNotification.setAdapter(new NotificationAdapter());
         recyclerNotification.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
 
 
+        btnNotificationBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
 

@@ -138,7 +138,7 @@
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:fontFamily="@font/nunito_bold"
-                            android:text="My Kid"
+                            android:text="My Kid(s)"
                             android:textColor="@color/dark_blue"
                             android:textSize="12sp" />
 

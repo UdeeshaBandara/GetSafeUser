@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -47,14 +48,14 @@ public class Home extends GetSafeBase {
     RoundedImageView fabAddKid;
     JSONArray homeOptions;
 
-    JSONObject oneOption, twoOption, threeOption, fourOption, fiveOption,kidList;
+    JSONObject oneOption, twoOption, threeOption, fourOption, fiveOption, kidList;
 
     Dialog dialog;
     GetSafeServices getSafeServices;
     ImageView sideMenuListener, selectChildDownArrow, selectChildUpArrow, btnNotification;
     DrawerLayout drawerLayout;
     String imageUrl;
-
+    int currentPosition = 0;
     NavigationView navigationView;
     RelativeLayout drawerSideMenuHeading, drawerSelectChildLyt, drawerAbsenceLyt, drawerTransportLyt, drawerLocationLyt, drawerStatsLyt, drawerExpensesLyt, drawerSwapLyt, drawerHelpLyt;
 
@@ -73,7 +74,7 @@ public class Home extends GetSafeBase {
         threeOption = new JSONObject();
         fourOption = new JSONObject();
         fiveOption = new JSONObject();
-        tinyDB.putString("token","1|q2pWwtm1SMNxGFSk9tzUkvB2cAGWPVK1zZ4e014y");
+        tinyDB.putString("token", "1|q2pWwtm1SMNxGFSk9tzUkvB2cAGWPVK1zZ4e014y");
         try {
 
             oneOption.put("heading", "Current Journey");
@@ -96,7 +97,6 @@ public class Home extends GetSafeBase {
         } catch (Exception e) {
 
         }
-
 
 
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
@@ -165,7 +165,7 @@ public class Home extends GetSafeBase {
         });
 
 
-            getAllChildren();
+        getAllChildren();
 
 //        getDeviceToken();
 
@@ -281,12 +281,13 @@ public class Home extends GetSafeBase {
     }
 
     class StudentViewHolder extends RecyclerView.ViewHolder {
-        RelativeLayout rltItemStudent;
-        TextView studentName,studentSchool;
+        RelativeLayout rltItemStudent, kidSelector;
+        TextView studentName, studentSchool;
 
         public StudentViewHolder(@NonNull View itemView) {
             super(itemView);
             rltItemStudent = itemView.findViewById(R.id.rlt_item_student);
+            kidSelector = itemView.findViewById(R.id.kid_selector);
             studentName = itemView.findViewById(R.id.student_name);
             studentSchool = itemView.findViewById(R.id.student_school);
         }
@@ -303,28 +304,43 @@ public class Home extends GetSafeBase {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull StudentViewHolder holder, final int position) {
+        public void onBindViewHolder(@NonNull final StudentViewHolder holder, final int position) {
             try {
+
+                if (currentPosition == position)
+
+                    holder.kidSelector.setVisibility(View.VISIBLE);
+                else
+                    holder.kidSelector.setVisibility(View.GONE);
 
                 holder.studentName.setText(kidList.getJSONArray("children").getJSONObject(position).getString("name"));
                 holder.studentSchool.setText(kidList.getJSONArray("children").getJSONObject(position).getString("school_name"));
 
-            holder.rltItemStudent.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                holder.rltItemStudent.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 
-                   try {
-                       Intent intent= new Intent(getApplicationContext(),EditKidProfile.class);
+                        try {
 
-                       intent.putExtra("kid_id",kidList.getJSONArray("children").getJSONObject(position).getString("id"));
-                       startActivity(intent);
-                    } catch (Exception e) {
 
+                            if (holder.kidSelector.getVisibility() == View.GONE) {
+
+                                currentPosition = position;
+                                notifyDataSetChanged();
+
+                            }
+
+//                            Intent intent = new Intent(getApplicationContext(), EditKidProfile.class);
+//
+//                            intent.putExtra("kid_id", kidList.getJSONArray("children").getJSONObject(position).getString("id"));
+//                            startActivity(intent);
+                        } catch (Exception e) {
+Log.e("bind error 1",e.getMessage());
+                        }
                     }
-                }
-            });
+                });
             } catch (Exception e) {
-
+                Log.e("bind error 2",e.getMessage());
             }
 
 
@@ -332,12 +348,16 @@ public class Home extends GetSafeBase {
 
         @Override
         public int getItemCount() {
-            return kidList.length();
+            try {
+                return kidList.getJSONArray("children").length();
+            } catch (JSONException e) {
+               return 0;
+            }
         }
     }
 
     class FunctionViewHolder extends RecyclerView.ViewHolder {
-        RelativeLayout homeSelection;
+        CardView homeSelection;
         RoundedImageView itemHomeImage;
         TextView txtOptionName, optionHeadingOne;
         ImageView optionIconOne;
@@ -405,8 +425,17 @@ public class Home extends GetSafeBase {
                             break;
                         case 2:
 
+                            startActivity(new Intent(getApplicationContext(), Messaging.class));
+                            drawerLayout.closeDrawers();
                             break;
                         case 3:
+                            startActivity(new Intent(getApplicationContext(), Payment.class));
+                            drawerLayout.closeDrawers();
+                            break;
+                        case 4:
+                            startActivity(new Intent(getApplicationContext(), Absence.class));
+                            drawerLayout.closeDrawers();
+                            break;
 
                     }
 
@@ -503,23 +532,19 @@ public class Home extends GetSafeBase {
         }
     }
 
-    public void getAllChildren(){
-       HashMap<String, String> tempParam = new HashMap<>();
+    public void getAllChildren() {
+        HashMap<String, String> tempParam = new HashMap<>();
 
 
-
-
-        getSafeServices.networkJsonRequest(getApplicationContext(), tempParam, getString(R.string.BASE_URL) + getString(R.string.GET_ALL_KID), 1,tinyDB.getString("token"), new VolleyJsonCallback() {
+        getSafeServices.networkJsonRequest(getApplicationContext(), tempParam, getString(R.string.BASE_URL) + getString(R.string.GET_ALL_KID), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 
                 try {
 
-                    kidList =result;
-
+                    kidList = result;
+                    Log.e("kid lsit",kidList+"");
                     recyclerSelectChild.getAdapter().notifyDataSetChanged();
-
-
 
 
                 } catch (Exception e) {
@@ -528,7 +553,6 @@ public class Home extends GetSafeBase {
 
             }
         });
-
 
 
     }

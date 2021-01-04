@@ -50,6 +50,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import lk.hd192.project.Utils.GetSafeBase;
 import lk.hd192.project.Utils.GetSafeBaseFragment;
@@ -267,13 +268,15 @@ public class AddKidSecondFragment extends GetSafeBaseFragment {
         tempParam.put("add1", txtAddressOne.getText().toString());
         tempParam.put("add2", txtAddressTwo.getText().toString());
 
-        addNewKid.showLoading();
+
+        ((AddNewKid) Objects.requireNonNull(getActivity())).showLoading();
         getSafeServices.networkJsonRequest(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.ADD_KID_LOC), 2, tinyDB.getString("token"),
                 new VolleyJsonCallback() {
 
                     @Override
                     public void onSuccessResponse(JSONObject result) {
-                        addNewKid.hideLoading();
+
+                        ((AddNewKid) Objects.requireNonNull(getActivity())).hideLoading();
                         try {
                             Log.e("loc response", result + "");
 

@@ -20,19 +20,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Payment"></activity>
         <activity
             android:name=".Messaging"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan">
-
-        </activity>
+            android:windowSoftInputMode="adjustPan"></activity>
         <activity android:name=".Notification" />
         <activity
             android:name=".InitLocation"
-            android:windowSoftInputMode="adjustResize" >
-
-
-        </activity>
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustResize"></activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -44,13 +41,23 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".EditKidProfile"
-            android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".EditProfile"
-            android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".Absence" />
-        <activity android:name=".AddNewKid" />
-        <activity android:name=".Map" />
+        <activity
+            android:name=".EditKidProfile"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".EditProfile"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".Absence"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".AddNewKid"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".Map"
+            android:launchMode="singleTop" />
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -58,14 +65,25 @@
 
         <activity
             android:name=".Login"
-            android:windowSoftInputMode="adjustResize">
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustResize"></activity>
+        <activity
+            android:name=".ExploreTransport"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".DriverProfile"
+            android:launchMode="singleTop">
 
         </activity>
-        <activity android:name=".ExploreTransport" />
-        <activity android:name=".DriverProfile" />
-        <activity android:name=".JourneyDetails" />
-        <activity android:name=".Journey" />
-        <activity android:name=".LiveLocation" />
+        <activity
+            android:name=".JourneyDetails"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".Journey"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".LiveLocation"
+            android:launchMode="singleTop" />
         <activity
             android:name=".OTP"
             android:screenOrientation="portrait"
@@ -73,26 +91,28 @@
         <activity
             android:name=".Register"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"></activity>
-        <activity android:name=".Selection" />
-        <activity android:name=".Welcome" />
-        <activity android:name=".Home">
-
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".Selection"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".Welcome"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".Home"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-
         </activity>
         <activity
             android:name=".Utils.SplashScreen"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/SplashTheme">
-
-
-        </activity>
+            android:theme="@style/SplashTheme"></activity>
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />

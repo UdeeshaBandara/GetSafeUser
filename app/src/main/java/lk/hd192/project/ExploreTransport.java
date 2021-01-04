@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.otaliastudios.autocomplete.Autocomplete;
@@ -46,7 +47,7 @@ public class ExploreTransport extends GetSafeBase {
     String dropText = "";
 
     Button pickupMap, dropMap;
-
+    ImageView imgAc, imgNonAc;
     Double pickLat = 0.0, pickLng = 0.0;
     Double dropLat = 0.0, dropLng = 0.0;
 
@@ -65,6 +66,8 @@ public class ExploreTransport extends GetSafeBase {
         dropDropDown = findViewById(R.id.drop_dropdwn);
         dropMap = findViewById(R.id.drop_map);
         pickupMap = findViewById(R.id.pickup_map);
+        imgAc = findViewById(R.id.img_ac);
+        imgNonAc = findViewById(R.id.img_non_ac);
         pickDropDown.setText(pickAddress);
         getSafeServices = new GetSafeServices();
 
@@ -76,6 +79,22 @@ public class ExploreTransport extends GetSafeBase {
         setupUserAutocompleteDrop();
         setupUserAutocompletePick();
         pickLatLong();
+
+        imgNonAc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imgNonAc.setVisibility(View.GONE);
+                imgAc.setVisibility(View.VISIBLE);
+            }
+        });
+        imgAc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imgAc.setVisibility(View.GONE);
+                imgNonAc.setVisibility(View.VISIBLE);
+
+            }
+        });
 
         recyclerDriver.setAdapter(new DriverAdapter());
         recyclerDriver.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
@@ -127,20 +146,20 @@ public class ExploreTransport extends GetSafeBase {
         pickupMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(), Map.class);
-                intent.putExtra("clicked","pickup");
+                Intent intent = new Intent(getApplicationContext(), Map.class);
+                intent.putExtra("clicked", "pickup");
                 startActivity(intent);
 
-                dropNPickAddressDistinguish=1;
+                dropNPickAddressDistinguish = 1;
             }
         });
         dropMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(), Map.class);
-                intent.putExtra("clicked","drop");
+                Intent intent = new Intent(getApplicationContext(), Map.class);
+                intent.putExtra("clicked", "drop");
                 startActivity(intent);
-                dropNPickAddressDistinguish=2;
+                dropNPickAddressDistinguish = 2;
             }
         });
 
@@ -187,12 +206,11 @@ public class ExploreTransport extends GetSafeBase {
     @Override
     protected void onStart() {
         super.onStart();
-        if (MAP_SELECTED & dropNPickAddressDistinguish==1) {
+        if (MAP_SELECTED & dropNPickAddressDistinguish == 1) {
             pickDropDown.setText(LOC_ADDRESS);
-            dropNPickAddressDistinguish=0;
-        }
-        else if(MAP_SELECTED & dropNPickAddressDistinguish==2){
-            dropNPickAddressDistinguish=0;
+            dropNPickAddressDistinguish = 0;
+        } else if (MAP_SELECTED & dropNPickAddressDistinguish == 2) {
+            dropNPickAddressDistinguish = 0;
             dropDropDown.setText(LOC_ADDRESS);
         }
     }
