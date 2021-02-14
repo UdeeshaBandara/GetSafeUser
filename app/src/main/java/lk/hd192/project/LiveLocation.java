@@ -360,9 +360,9 @@ public class LiveLocation extends GetSafeBase {
 
 
         googleMap.addMarker(new MarkerOptions()
-                .position(origin).icon(BitmapDescriptorFactory.fromBitmap(originMarker)).title(""));
+                .position(origin).icon(BitmapDescriptorFactory.fromBitmap(originMarker)).title("Marker at home"));
 
-        googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(finalMarker)).position(dest).title(""));
+        googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(finalMarker)).position(dest).title("Live location"));
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         builder.include(origin);
@@ -372,7 +372,7 @@ public class LiveLocation extends GetSafeBase {
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 75));
 
-        CameraPosition camPos = new CameraPosition.Builder(googleMap.getCameraPosition()).target(bounds.getCenter()).tilt(55).build();
+        CameraPosition camPos = new CameraPosition.Builder(googleMap.getCameraPosition()).target(bounds.getCenter()).tilt(40).build();
         googleMap.animateCamera(CameraUpdateFactory
                 .newCameraPosition(camPos));
 //
@@ -408,11 +408,11 @@ public class LiveLocation extends GetSafeBase {
         String avoidList = "&avoid=highways";
 
         //drop off locations
-        String wayPoints = "&waypoints=via:6.9361,79.8450";
+        String wayPoints = "&waypoints=via:7.008079020850186,79.96081405184961";
 
 
         // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest + avoidList + "&key=" + getString(R.string.API_KEY);
+        String parameters = str_origin + "&" + str_dest +wayPoints+avoidList + "&key=" + getString(R.string.API_KEY);
 
         // Output format
         String output = "json";
@@ -421,6 +421,7 @@ public class LiveLocation extends GetSafeBase {
         // Building the url to the web service
         String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
 
+        Log.e("direction url",url);
 
         return url;
     }

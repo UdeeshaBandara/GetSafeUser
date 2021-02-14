@@ -2,12 +2,10 @@ package lk.hd192.project;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,21 +18,23 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.tsongkha.spinnerdatepicker.DatePicker;
 import com.tsongkha.spinnerdatepicker.DatePickerDialog;
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -62,7 +62,7 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
     RadioGroup rbnGrpGender;
     TinyDB tinyDB;
     AddNewKid addNewKid;
-
+    JSONObject schools;
     public AddKidFirstFragment() {
         // Required empty public constructor
     }
@@ -81,6 +81,13 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
         rbnGrpGender = view.findViewById(R.id.rbn_grp_gender);
         getSafeServices = new GetSafeServices();
         tinyDB = new TinyDB(getActivity());
+
+        try {
+            schools = new JSONObject(readFile());
+
+        } catch (Exception e) {
+
+        }
 
         if (AddNewKid.isEditing) {
 
@@ -173,6 +180,21 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
 
 
         }
+    }
+    public String readFile() throws IOException
+    {
+        BufferedReader reader = null;
+        reader = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.schools), "UTF-8"));
+
+        String content = "";
+        String line;
+        while ((line = reader.readLine()) != null)
+        {
+            content = content + line;
+        }
+
+        return content;
+
     }
 
     public void addKidBasicDetails() {
@@ -310,10 +332,12 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
     public class SchoolNameViewHolder extends RecyclerView.ViewHolder {
 
         RelativeLayout rltSchool;
+        TextView textSchoolName;
 
         public SchoolNameViewHolder(@NonNull View itemView) {
             super(itemView);
             rltSchool = itemView.findViewById(R.id.rlt_school);
+            textSchoolName = itemView.findViewById(R.id.text_school_name);
         }
     }
 
@@ -331,6 +355,11 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
         @Override
         public void onBindViewHolder(@NonNull SchoolNameViewHolder holder, int position) {
 
+            try {
+                holder.textSchoolName.setText(schools.getJSONArray("Schools").getJSONObject(position).getString("School Name"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             holder.rltSchool.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -343,7 +372,7 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
 
         @Override
         public int getItemCount() {
-            return 20;
+            return schools.length()-1;
         }
 
         @Override

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -19,6 +20,7 @@ public class DriverProfile extends GetSafeBase {
 
     CardView cardDriverDetails;
     RoundedImageView imgDriver;
+    Button btn_driver_route;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +30,7 @@ public class DriverProfile extends GetSafeBase {
 
         cardDriverDetails=findViewById(R.id.card_driver_details);
         imgDriver=findViewById(R.id.driver_photo);
+        btn_driver_route=findViewById(R.id.btn_driver_route);
 
 
         findViewById(R.id.btn_driver_back).setOnClickListener(new View.OnClickListener() {
@@ -35,6 +38,12 @@ public class DriverProfile extends GetSafeBase {
             public void onClick(View v) {
                 onBackPressed();
 
+            }
+        });
+        btn_driver_route.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), DriverRoute.class));
             }
         });
 

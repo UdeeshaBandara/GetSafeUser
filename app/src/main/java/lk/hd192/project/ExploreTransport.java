@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -13,20 +14,22 @@ import android.text.Editable;
 import android.text.Spannable;
 import android.text.TextWatcher;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.otaliastudios.autocomplete.Autocomplete;
 import com.otaliastudios.autocomplete.AutocompleteCallback;
 import com.otaliastudios.autocomplete.AutocompletePolicy;
 import com.otaliastudios.autocomplete.AutocompletePresenter;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -40,16 +43,17 @@ import lk.hd192.project.pojo.NearestTowns;
 public class ExploreTransport extends GetSafeBase {
 
     RecyclerView recyclerDriver;
-    EditText pickDropDown, dropDropDown;
+    TextView pickDropDown, dropDropDown;
     String searchPick = "";
     String searchDrop = "";
     String pickUpText = "";
     String dropText = "";
-
+    Dialog dialog;
     Button pickupMap, dropMap;
-    ImageView imgAc, imgNonAc;
+    //    ImageView imgAc, imgNonAc;
     Double pickLat = 0.0, pickLng = 0.0;
     Double dropLat = 0.0, dropLng = 0.0;
+    JSONArray driverList;
 
     private Autocomplete userAutocomplete;
     GetSafeServices getSafeServices;
@@ -60,16 +64,17 @@ public class ExploreTransport extends GetSafeBase {
         setContentView(R.layout.activity_explore_transport);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
+        dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
         recyclerDriver = findViewById(R.id.recycler_driver);
         pickDropDown = findViewById(R.id.pick_up_dropdwn);
         dropDropDown = findViewById(R.id.drop_dropdwn);
         dropMap = findViewById(R.id.drop_map);
         pickupMap = findViewById(R.id.pickup_map);
-        imgAc = findViewById(R.id.img_ac);
-        imgNonAc = findViewById(R.id.img_non_ac);
+//        imgAc = findViewById(R.id.img_ac);
+//        imgNonAc = findViewById(R.id.img_non_ac);
         pickDropDown.setText(pickAddress);
         getSafeServices = new GetSafeServices();
+        driverList= new JSONArray();
 
         pickUpText = pickAddress;
         pickLat = GetSafeBase.pickLat;
@@ -79,20 +84,29 @@ public class ExploreTransport extends GetSafeBase {
         setupUserAutocompleteDrop();
         setupUserAutocompletePick();
         pickLatLong();
-
-        imgNonAc.setOnClickListener(new View.OnClickListener() {
+//
+//        imgNonAc.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                imgNonAc.setVisibility(View.GONE);
+//                imgAc.setVisibility(View.VISIBLE);
+//            }
+//        });
+//        imgAc.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                imgAc.setVisibility(View.GONE);
+//                imgNonAc.setVisibility(View.VISIBLE);
+//
+//            }
+//        });
+        findViewById(R.id.btn_search).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imgNonAc.setVisibility(View.GONE);
-                imgAc.setVisibility(View.VISIBLE);
-            }
-        });
-        imgAc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imgAc.setVisibility(View.GONE);
-                imgNonAc.setVisibility(View.VISIBLE);
-
+                if (tinyDB.getBoolean("isStaffAccount"))
+          searchDriverForStaff();
+                else
+                    searchDriverForChild();
             }
         });
 
@@ -146,27 +160,167 @@ public class ExploreTransport extends GetSafeBase {
         pickupMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Map.class);
-                intent.putExtra("clicked", "pickup");
-                startActivity(intent);
+//                Intent intent = new Intent(getApplicationContext(), Map.class);
+//                intent.putExtra("clicked", "pickup");
+//                startActivity(intent);
+//
+//                dropNPickAddressDistinguish = 1;
+                EditProfile.needToEnableEditMode = true;
+                if (tinyDB.getBoolean("isStaffAccount")) {
 
-                dropNPickAddressDistinguish = 1;
+                    Intent intent = new Intent(getApplicationContext(), EditProfile.class);
+//                intent.putExtra("kid_id", tinyDB.getString("selectedChildId"));
+                    startActivity(intent);
+
+                } else {
+                    Intent intent = new Intent(getApplicationContext(), EditKidProfile.class);
+                    intent.putExtra("kid_id", tinyDB.getString("selectedChildId"));
+                    startActivity(intent);
+                }
+
             }
         });
         dropMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Map.class);
-                intent.putExtra("clicked", "drop");
-                startActivity(intent);
-                dropNPickAddressDistinguish = 2;
+//                Intent intent = new Intent(getApplicationContext(), Map.class);
+//                intent.putExtra("clicked", "drop");
+//                startActivity(intent);
+//                dropNPickAddressDistinguish = 2;
+                EditProfile.needToEnableEditMode = true;
+                if (tinyDB.getBoolean("isStaffAccount")) {
+
+                    Intent intent = new Intent(getApplicationContext(), EditProfile.class);
+//                intent.putExtra("kid_id", tinyDB.getString("selectedChildId"));
+                    startActivity(intent);
+
+                } else {
+                    Intent intent = new Intent(getApplicationContext(), EditKidProfile.class);
+                    intent.putExtra("kid_id", tinyDB.getString("selectedChildId"));
+                    startActivity(intent);
+                }
+            }
+        });
+        if (tinyDB.getBoolean("isStaffAccount"))
+            getStaffUserLocationDetails();
+        else
+            getChildLocationDetails();
+    }
+
+    private void getChildLocationDetails() {
+        HashMap<String, String> param = new HashMap<>();
+        param.put("id", tinyDB.getString("selectedChildId"));
+
+
+        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_KID_LOCATION_BY_ID), 2, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+
+
+                    if (result.getBoolean("status")) {
+
+                        pickDropDown.setText(result.getJSONObject("location").getString("pick_up_add1") + " " + result.getJSONObject("location").getString("pick_up_add2"));
+                        dropDropDown.setText(result.getJSONObject("location").getString("drop_off_add1") + " " + result.getJSONObject("location").getString("drop_off_add2"));
+
+                    }
+
+                } catch (Exception e) {
+                    Log.e("ex from loc", e.getMessage());
+
+                }
+
+            }
+        });
+    }
+
+    private void getStaffUserLocationDetails() {
+        HashMap<String, String> tempParam = new HashMap<>();
+
+
+        getSafeServices.networkJsonRequest(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.USER_LOCATION), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+
+                    if (result.getBoolean("status")) {
+
+                        pickDropDown.setText(result.getJSONObject("location").getString("pick_up_add1") + " " + result.getJSONObject("location").getString("pick_up_add2"));
+                        dropDropDown.setText(result.getJSONObject("location").getString("drop_off_add1") + " " + result.getJSONObject("location").getString("drop_off_add2"));
+
+                    }
+
+                } catch (Exception e) {
+
+
+                }
+
             }
         });
 
+    }
+    private void searchDriverForStaff(){
+        HashMap<String, String> param = new HashMap<>();
+//        param.put("id", tinyDB.getString("selectedChildId"));
+
+
+        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.SEARCH_DRIVER_FOR_STAFF), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+
+                    Log.e("result",result+"");
+                    driverList=result.getJSONArray("list_of_drivers");
+
+                    if (driverList.length()==0) {
+
+                        showToast(dialog, "No drivers found. Try again", 1);
+                    }
+                    else
+                        recyclerDriver.getAdapter().notifyDataSetChanged();
+
+                } catch (Exception e) {
+                    Log.e("ex from loc", e.getMessage());
+
+                }
+
+            }
+        });
 
     }
+    private void searchDriverForChild() {
+Log.e("",tinyDB.getString("selectedChildId"));
+        HashMap<String, String> param = new HashMap<>();
+        param.put("id", tinyDB.getString("selectedChildId"));
 
-    //    ------------------ Auto Complete Pick-------------------------------------------------
+
+        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.SEARCH_DRIVER_FOR_KID), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+
+                    Log.e("result",result+"");
+                    driverList=result.getJSONArray("list_of_drivers");
+
+                    if (driverList.length()==0) {
+
+                        showToast(dialog, "No drivers found. Try again", 1);
+                    }
+                    else
+                        recyclerDriver.getAdapter().notifyDataSetChanged();
+
+                } catch (Exception e) {
+                    Log.e("ex from loc", e.getMessage());
+
+                }
+
+            }
+        });
+    }
 
     // set up nearest town auto complete
     private void setupUserAutocompletePick() {
@@ -192,13 +346,13 @@ public class ExploreTransport extends GetSafeBase {
             }
         };
 
-        userAutocomplete = Autocomplete.<NearestTowns>on(pickDropDown)
-                .with(elevation)
-                .with(new SimplePolicy())
-                .with(backgroundDrawable)
-                .with(presenter)
-                .with(callback)
-                .build();
+//        userAutocomplete = Autocomplete.<NearestTowns>on(pickDropDown)
+//                .with(elevation)
+//                .with(new SimplePolicy())
+//                .with(backgroundDrawable)
+//                .with(presenter)
+//                .with(callback)
+//                .build();
 
 
     }
@@ -301,13 +455,13 @@ public class ExploreTransport extends GetSafeBase {
             }
         };
 
-        userAutocomplete = Autocomplete.<NearestTowns>on(dropDropDown)
-                .with(elevation)
-                .with(new SimplePolicyDrop())
-                .with(backgroundDrawable)
-                .with(presenter)
-                .with(callback)
-                .build();
+//        userAutocomplete = Autocomplete.<NearestTowns>on(dropDropDown)
+//                .with(elevation)
+//                .with(new SimplePolicyDrop())
+//                .with(backgroundDrawable)
+//                .with(presenter)
+//                .with(callback)
+//                .build();
 
 
     }
@@ -373,9 +527,6 @@ public class ExploreTransport extends GetSafeBase {
     }
 
 
-    // ----------------------------------- GET PICk LAT & LNG -----------------------------------------------------------------------//
-
-
     public void pickLatLong() {
 
         HashMap<String, String> tempParam = new HashMap<>();
@@ -430,13 +581,19 @@ public class ExploreTransport extends GetSafeBase {
 
     }
 
+
     class DriverViewHolder extends RecyclerView.ViewHolder {
 
         RelativeLayout oneDriver;
+        TextView txt_driver_name,txt_start,txt_end,txt_rate;
 
         public DriverViewHolder(@NonNull View itemView) {
             super(itemView);
             oneDriver = itemView.findViewById(R.id.one_driver);
+            txt_driver_name = itemView.findViewById(R.id.txt_driver_name);
+            txt_start = itemView.findViewById(R.id.txt_start);
+            txt_end = itemView.findViewById(R.id.txt_end);
+            txt_rate = itemView.findViewById(R.id.txt_rate);
         }
     }
 
@@ -451,19 +608,29 @@ public class ExploreTransport extends GetSafeBase {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull DriverViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull DriverViewHolder holder, final int position) {
 
-            holder.oneDriver.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(getApplicationContext(), DriverProfile.class));
-                }
-            });
+            try {
+                holder.txt_driver_name.setText(" : "+driverList.getJSONObject(position).getString("name"));
+                holder.txt_start.setText(" : "+driverList.getJSONObject(position).getString("phone_no"));
+                holder.txt_end.setText(" : "+driverList.getJSONObject(position).getString("email"));
+
+                holder.oneDriver.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(getApplicationContext(), DriverProfile.class));
+                    }
+                });
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
         }
 
         @Override
         public int getItemCount() {
-            return 20;
+            return driverList.length();
         }
     }
 }

@@ -13,7 +13,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,7 +36,7 @@ public class GetSafeBase extends AppCompatActivity {
     public static boolean isEnable;
     public LocationManager locationManager;
     public static boolean MAP_SELECTED = false;
-    public static String userType = "staff";
+
     public static String pickAddress;
 
     @Override
@@ -128,7 +127,7 @@ public class GetSafeBase extends AppCompatActivity {
         window.setGravity(Gravity.BOTTOM);
 
 
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, 550);
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, device_height/3);
         dialog.setTitle(null);
         switch (type) {
             case 0:

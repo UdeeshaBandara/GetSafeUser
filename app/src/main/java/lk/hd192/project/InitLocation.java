@@ -94,9 +94,9 @@ public class InitLocation extends GetSafeBase {
         getSafeServices = new GetSafeServices();
 
 
-        if (userType.equals("staff"))
+        if ( tinyDB.getBoolean("isStaffAccount"))
             lnrDropLocation.setVisibility(View.VISIBLE);
-        else if (userType.equals("kid"))
+        else
             lnrDropLocation.setVisibility(View.GONE);
 
 
@@ -147,7 +147,7 @@ public class InitLocation extends GetSafeBase {
                     saveInitLocation();
 
                 }
-                if (userType.equals("staff")) {
+                if ( tinyDB.getBoolean("isStaffAccount")) {
                     if (txtAddressDropOne.getText().toString().isEmpty()) {
 
 
@@ -243,7 +243,7 @@ public class InitLocation extends GetSafeBase {
                             Log.e("loc response", result + "");
 
                             if (result.getBoolean("location_saved_status")) {
-                                if (userType.equals("kid")) {
+                                if (! tinyDB.getBoolean("isStaffAccount")) {
                                     startActivity(new Intent(getApplicationContext(), Home.class));
                                     finishAffinity();
                                 }

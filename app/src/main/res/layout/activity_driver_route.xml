@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DriverRoute">
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/map_pickupLocation"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <Button
+        android:id="@+id/btn_driver_route_back"
+        android:layout_width="80dp"
+        android:layout_height="35dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/bg_btn_next_forward"
+        android:drawableLeft="@drawable/icon_back"
+        android:paddingLeft="10dp"
+        android:text="Back"
+        android:textAllCaps="false"
+        android:textColor="@color/white" />
+
+
+
+
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/van_map_marker"
+        android:src="@drawable/van_map_marker"
+        android:layout_marginBottom="40dp"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+
+
+        />
+
+
+</RelativeLayout>

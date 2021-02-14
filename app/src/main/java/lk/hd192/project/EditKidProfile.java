@@ -267,6 +267,7 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
                 }
             }
         });
+
         btnEditDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -314,6 +315,12 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
                 }
             }
         });
+        if(EditProfile.needToEnableEditMode){
+//            btnEditDone.setText("Done");
+            btnEditDone.performClick();
+            EditProfile.needToEnableEditMode=false;
+        }
+
 
     }
 

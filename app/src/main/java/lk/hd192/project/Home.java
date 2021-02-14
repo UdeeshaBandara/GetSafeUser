@@ -74,7 +74,8 @@ public class Home extends GetSafeBase {
         threeOption = new JSONObject();
         fourOption = new JSONObject();
         fiveOption = new JSONObject();
-        tinyDB.putString("token", "1|q2pWwtm1SMNxGFSk9tzUkvB2cAGWPVK1zZ4e014y");
+        tinyDB.putString("token", "1|bztnl9uf0T9fri84wwCrgTlXQKnyJTRczKHQ6Fiu");
+        tinyDB.putBoolean("isStaffAccount", true);
         try {
 
             oneOption.put("heading", "Current Journey");
@@ -165,12 +166,26 @@ public class Home extends GetSafeBase {
         });
 
 
-        getAllChildren();
+        if (tinyDB.getBoolean("isStaffAccount"))
+            setupStaffAccount();
+        else
+            setupChildAccount();
+
 
 //        getDeviceToken();
 
     }
 
+    private void setupStaffAccount() {
+
+        drawerSelectChildLyt.setVisibility(View.GONE);
+        fabAddKid.setVisibility(View.GONE);
+    }
+
+    private void setupChildAccount() {
+        getAllChildren();
+
+    }
 
     private void drawerMenu() {
 
@@ -307,6 +322,7 @@ public class Home extends GetSafeBase {
         public void onBindViewHolder(@NonNull final StudentViewHolder holder, final int position) {
             try {
 
+
                 if (currentPosition == position)
 
                     holder.kidSelector.setVisibility(View.VISIBLE);
@@ -326,6 +342,7 @@ public class Home extends GetSafeBase {
                             if (holder.kidSelector.getVisibility() == View.GONE) {
 
                                 currentPosition = position;
+                                tinyDB.putString("selectedChildId", kidList.getJSONArray("children").getJSONObject(position).getString("id"));
                                 notifyDataSetChanged();
 
                             }
@@ -335,12 +352,12 @@ public class Home extends GetSafeBase {
 //                            intent.putExtra("kid_id", kidList.getJSONArray("children").getJSONObject(position).getString("id"));
 //                            startActivity(intent);
                         } catch (Exception e) {
-Log.e("bind error 1",e.getMessage());
+                            Log.e("bind error 1", e.getMessage());
                         }
                     }
                 });
             } catch (Exception e) {
-                Log.e("bind error 2",e.getMessage());
+                Log.e("bind error 2", e.getMessage());
             }
 
 
@@ -351,7 +368,7 @@ Log.e("bind error 1",e.getMessage());
             try {
                 return kidList.getJSONArray("children").length();
             } catch (JSONException e) {
-               return 0;
+                return 0;
             }
         }
     }
@@ -543,7 +560,10 @@ Log.e("bind error 1",e.getMessage());
                 try {
 
                     kidList = result;
-                    Log.e("kid lsit",kidList+"");
+                    if (kidList != null)
+                        tinyDB.putString("selectedChildId", kidList.getJSONArray("children").getJSONObject(0).getString("id"));
+
+                    Log.e("kid lsit", kidList + "");
                     recyclerSelectChild.getAdapter().notifyDataSetChanged();
 
 

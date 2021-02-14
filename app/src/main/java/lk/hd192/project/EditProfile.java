@@ -105,7 +105,7 @@ public class EditProfile extends GetSafeBase {
     Button btnEditDone;
     Boolean isDropLocation;
     Double latitude, dropLatitude, longitude, dropLongitude;
-
+public static boolean needToEnableEditMode;
     String imgDecodableString = "", originalName, originalNumber, originalEmail, originalAddressOne, originalAddressTwo, originalDropAddressOne, originalDropAddressTwo;
 
 
@@ -141,10 +141,12 @@ public class EditProfile extends GetSafeBase {
         view = findViewById(R.id.disable_layout);
 
 
-        if (userType.equals("staff"))
+        if (    tinyDB.getBoolean("isStaffAccount"))
             locationDropMain.setVisibility(View.VISIBLE);
-        else if (userType.equals("kid"))
+        else
             locationDropMain.setVisibility(View.GONE);
+
+
 
         //init network call to get already exist details
         loadUserDetails();
@@ -156,6 +158,7 @@ public class EditProfile extends GetSafeBase {
         btnEditDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.e("performClick","performClick");
                 if (btnEditDone.getText().equals("Edit")) {
 
                     btnEditDone.setText("Done");
@@ -196,6 +199,12 @@ public class EditProfile extends GetSafeBase {
                 }
             }
         });
+        if(needToEnableEditMode){
+//            btnEditDone.setText("Done");
+            Log.e("needToEnableEditMode",needToEnableEditMode+"");
+            btnEditDone.performClick();
+            needToEnableEditMode=false;
+        }
         editTxtParentName.setFilters(new InputFilter[]{
                 new InputFilter() {
                     @Override
@@ -786,7 +795,7 @@ public class EditProfile extends GetSafeBase {
 
         if (isValidated) {
             updateUserPickupLocation();
-            if (userType.equals("staff"))
+            if ( tinyDB.getBoolean("isStaffAccount"))
                 updateUserDropLocation();
         }
 
@@ -900,7 +909,7 @@ public class EditProfile extends GetSafeBase {
                 try {
 
                     if (result.getBoolean("location_saved_status"))
-                        if (userType.equals("kid")) {
+                        if ( !tinyDB.getBoolean("isStaffAccount")) {
                             showToast(dialog, "Updated Successfully", 2);
                             hideLoading();
                         }

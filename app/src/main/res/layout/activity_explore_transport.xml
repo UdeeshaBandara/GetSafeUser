@@ -136,17 +136,22 @@
                     android:layout_marginTop="20dp"
                     android:background="@drawable/bg_pick_drop">
 
-                    <EditText
+                    <TextView
                         android:id="@+id/pick_up_dropdwn"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
                         android:layout_marginLeft="110dp"
                         android:layout_marginTop="5dp"
+                        android:clickable="true"
+                        android:cursorVisible="false"
+                        android:focusable="false"
                         android:layout_marginRight="10dp"
                         android:layout_toStartOf="@id/pickup_map"
                         android:layout_toLeftOf="@id/pickup_map"
                         android:background="@color/white"
                         android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:inputType="none"
                         android:fontFamily="@font/nunito_regular"
                         android:lines="1"
                         android:scrollHorizontally="true"
@@ -171,7 +176,7 @@
                         android:background="@drawable/bg_pick_drop"
                         android:fontFamily="@font/nunito_bold"
                         android:gravity="center"
-                        android:text="Set on \nmap"
+                        android:text="Change \nLocation"
                         android:textAllCaps="false"
                         android:textColor="@color/dark_blue"
                         android:textSize="12sp" />
@@ -208,7 +213,7 @@
                     android:layout_marginTop="5dp"
                     android:background="@drawable/bg_pick_drop">
 
-                    <EditText
+                    <TextView
                         android:id="@+id/drop_dropdwn"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
@@ -219,6 +224,11 @@
                         android:layout_toLeftOf="@id/drop_map"
                         android:background="@color/white"
                         android:ellipsize="end"
+                        android:inputType="none"
+                        android:clickable="true"
+                        android:gravity="center_vertical"
+                        android:cursorVisible="false"
+                        android:focusable="false"
                         android:fontFamily="@font/nunito_regular"
                         android:lines="1"
                         android:scrollHorizontally="true"
@@ -245,7 +255,7 @@
                         android:fontFamily="@font/nunito_bold"
                         android:gravity="center"
 
-                        android:text="Set on \nmap"
+                        android:text="Change \nLocation"
                         android:textAllCaps="false"
                         android:textColor="#EA3333"
                         android:textSize="12sp" />
@@ -267,26 +277,42 @@
                 <LinearLayout
                     android:id="@+id/lnr_options"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50dp"
                     android:layout_below="@+id/drop_lyt"
                     android:layout_marginTop="15dp"
+
+                    android:gravity="center"
                     android:orientation="horizontal">
 
 
-                    <ImageView
-                        android:id="@+id/img_ac"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="5"
-                        android:src="@drawable/icon_ac_non_ac" />
+                    <Button
+                        android:id="@+id/btn_search"
+                        android:layout_width="100dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentRight="true"
+                        android:background="@drawable/bg_pick_drop"
+                        android:fontFamily="@font/nunito_bold"
+                        android:gravity="center"
+                        android:layout_gravity="center"
 
-                    <ImageView
-                        android:id="@+id/img_non_ac"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="5"
-                        android:visibility="gone"
-                        android:src="@drawable/icon_non_ac" />
+                        android:text="Search"
+                        android:textAllCaps="false"
+                        android:textColor="@color/dark_blue"
+                        android:textSize="12sp" />
+<!--                    <ImageView-->
+<!--                        android:id="@+id/img_ac"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_weight="5"-->
+<!--                        android:src="@drawable/icon_ac_non_ac" />-->
+
+<!--                    <ImageView-->
+<!--                        android:id="@+id/img_non_ac"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_weight="5"-->
+<!--                        android:visibility="gone"-->
+<!--                        android:src="@drawable/icon_non_ac" />-->
 
 
                 </LinearLayout>

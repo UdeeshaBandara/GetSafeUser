@@ -146,6 +146,12 @@ public class Absence extends GetSafeBase {
 
             }
         });
+        findViewById(R.id.btn_absence_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         btnAddToList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
