@@ -73,7 +73,13 @@
             android:launchMode="singleTop" />
         <activity
             android:name=".DriverProfile"
-            android:launchMode="singleTop"></activity>
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".JourneyDetails"
             android:launchMode="singleTop" />
@@ -100,11 +106,7 @@
         <activity
             android:name=".Home"
             android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".Utils.SplashScreen"

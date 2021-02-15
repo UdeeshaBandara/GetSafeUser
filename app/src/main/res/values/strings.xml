@@ -7,7 +7,7 @@
     <string name="REVERSE_GEO">https://maps.googleapis.com/maps/api/geocode/json</string>
 
 
-    <string name="BASE_URL">http://192.168.43.27:8000/v1/getsafe/api</string>
+    <string name="BASE_URL">http://192.168.1.3:8000/v1/getsafe/api</string>
     <string name="SAVE_USER">/register/saveuser</string>
     <string name="REGISTER_SEND_OTP">/register/sendotp</string>
     <string name="REGISTER_VALIDATE_OTP">/register/validateotp</string>
@@ -36,6 +36,7 @@
     <string name="SEARCH_DRIVER_FOR_KID">/search/child</string>
     <string name="SEARCH_DRIVER_FOR_STAFF">/search/user</string>
     <string name="GET_DRIVER_ROUTE">/search/details/route</string>
+    <string name="GET_DRIVER_DETAILS">/search/details/all</string>
 
 
     <string name="VALIDATE_TOKEN">/</string>

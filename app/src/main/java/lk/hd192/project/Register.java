@@ -47,7 +47,7 @@ public class Register extends GetSafeBase {
     LottieAnimationView loading;
     private FirebaseAuth mAuth;
     View view;
-    private DatabaseReference firebaseDatabase;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -234,7 +234,7 @@ public class Register extends GetSafeBase {
                         Log.e("otp token from origin", result.getString("otp_token"));
 
                         OTP.otpToken = result.getString("otp_token");
-                        registerFirebaseUser();
+
 
                         startActivity(new Intent(getApplicationContext(), OTP.class));
                                         finishAffinity();
@@ -251,39 +251,6 @@ public class Register extends GetSafeBase {
             }
         });
 
-    }
-    private void registerFirebaseUser() {
-        mAuth.createUserWithEmailAndPassword(txt_email.getText().toString(), txt_mobile.getText().toString())
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-                            String Uid = currentUser.getUid();
-                            firebaseDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(Uid);
-                            HashMap<String, String> userMap = new HashMap<>();
-                            userMap.put("Image", "Default");
-                            firebaseDatabase.setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-
-//                                        startActivity(new Intent(getApplicationContext(), Messaging.class));
-//                                        finishAffinity();
-
-                                    }
-                                }
-                            });
-
-                        } else {
-                            // If sign in fails, display a message to the user.
-
-
-                        }
-
-                        // ...
-                    }
-                });
     }
 
 

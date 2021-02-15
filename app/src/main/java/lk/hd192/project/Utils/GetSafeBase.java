@@ -127,7 +127,7 @@ public class GetSafeBase extends AppCompatActivity {
         window.setGravity(Gravity.BOTTOM);
 
 
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, device_height/3);
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, device_height/2);
         dialog.setTitle(null);
         switch (type) {
             case 0:

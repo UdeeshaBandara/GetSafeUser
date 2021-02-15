@@ -618,7 +618,13 @@ Log.e("",tinyDB.getString("selectedChildId"));
                 holder.oneDriver.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivity(new Intent(getApplicationContext(), DriverProfile.class));
+                        Intent intent= new Intent(getApplicationContext(), DriverProfile.class);
+                        try {
+                            intent.putExtra("driver_id",driverList.getJSONObject(position).getString("id"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        startActivity(intent);
                     }
                 });
             } catch (JSONException e) {

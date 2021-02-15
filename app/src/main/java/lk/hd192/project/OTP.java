@@ -18,6 +18,11 @@ import androidx.annotation.NonNull;
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
@@ -39,10 +44,12 @@ public class OTP extends GetSafeBase {
     TextView otpHeading, resendCountdown, resendCountdownTitle;
     TinyDB tinyDB;
     Dialog dialog;
+    private FirebaseAuth mAuth;
     GetSafeServices getSafeServices;
     public static int optType = -1;//0 for existing,1 for new
     public static String otpToken = "";
     LottieAnimationView loading;
+    private DatabaseReference firebaseDatabase;
 
     View view;
 
@@ -60,7 +67,7 @@ public class OTP extends GetSafeBase {
         resendCountdown = findViewById(R.id.resend_countdown);
         resendCountdownTitle = findViewById(R.id.resend_countdown_title);
 
-
+        mAuth = FirebaseAuth.getInstance();
         loading = findViewById(R.id.loading);
         view = findViewById(R.id.disable_layout);
 
@@ -204,7 +211,7 @@ public class OTP extends GetSafeBase {
 
             }
         });
-        getDeviceToken();
+//        getDeviceToken();
 
     }
 
@@ -229,7 +236,9 @@ public class OTP extends GetSafeBase {
                     if (result.getBoolean("otp_token_validity")) {
                         tinyDB.putBoolean("isLogged", true);
                         tinyDB.putString("token", result.getString("access_token"));
+                        registerFirebaseUser();
                         getDeviceToken();
+                        firebaseLogin();
                         startActivity(new Intent(getApplicationContext(), InitLocation.class));
                         finishAffinity();
 
@@ -247,6 +256,62 @@ public class OTP extends GetSafeBase {
 
 
     }
+    private void registerFirebaseUser() {
+        mAuth.createUserWithEmailAndPassword( tinyDB.getString("email"),tinyDB.getString("phone_no"))
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                            String Uid = currentUser.getUid();
+                            firebaseDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(Uid);
+                            HashMap<String, String> userMap = new HashMap<>();
+                            userMap.put("Image", "Default");
+                            firebaseDatabase.setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+
+//                                        startActivity(new Intent(getApplicationContext(), Messaging.class));
+//                                        finishAffinity();
+
+                                    }
+                                }
+                            });
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+
+
+                        }
+
+                        // ...
+                    }
+                });
+    }
+
+    private void firebaseLogin(){
+
+        mAuth.signInWithEmailAndPassword( tinyDB.getString("email"),tinyDB.getString("phone_no") ).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+
+                    Log.e("firebase login","success");
+//                    startActivity(new Intent(getApplicationContext(),Messaging.class));
+//                    finishAffinity();
+
+                } else {
+
+                }
+            }
+        });
+
+
+
+
+    }
+
 
 
     private void existingUserValidateOTP() {
@@ -271,6 +336,7 @@ public class OTP extends GetSafeBase {
                         tinyDB.putString("token", result.getString("access_token"));
                         SplashScreen.token = result.getString("access_token");
                         getDeviceToken();
+                        firebaseLogin();
                         startActivity(new Intent(getApplicationContext(), Home.class));
                         finishAffinity();
 

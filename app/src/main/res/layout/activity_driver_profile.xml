@@ -16,6 +16,7 @@
         android:background="@drawable/action_bar_gradient">
 
         <ImageView
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
@@ -70,7 +71,7 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_driver_details"
-        android:layout_width="200dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/driver_photo"
         android:layout_alignParentEnd="true"
@@ -86,8 +87,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingTop="5dp"
-            android:paddingLeft="5dp">
+            android:paddingLeft="5dp"
+            android:paddingTop="5dp">
 
 
             <LinearLayout
@@ -106,15 +107,16 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/txt_driver_name"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="8"
+                    android:ellipsize="end"
+
                     android:fontFamily="@font/nunito_bold"
                     android:maxLines="2"
-                    android:layout_marginLeft="5dp"
-                    android:ellipsize="end"
-                    android:text="Danuka Thaveesha gjhgjhgjgjhgjhgjhgjhgjhghghgjhgjgjgjgjhg"
-                    android:textColor="@color/white"
+                   android:textColor="@color/white"
                     android:textSize="14sp" />
 
 
@@ -136,11 +138,13 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/txt_transport_category"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="8"
+                    android:layout_marginLeft="5dp"
                     android:fontFamily="@font/nunito_bold"
-                    android:text="School Transport"
+
                     android:textColor="@color/white"
                     android:textSize="14sp" />
 
@@ -167,7 +171,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="8"
                     android:fontFamily="@font/nunito_bold"
-                    android:text="Rating"
+
                     android:textColor="@color/white"
                     android:textSize="14sp" />
 
@@ -266,11 +270,12 @@
                             android:textSize="16sp" />
 
                         <TextView
+                            android:id="@+id/txt_vehicle_type"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="8"
                             android:fontFamily="@font/nunito_bold"
-                            android:text="Van"
+
                             android:textColor="@color/white"
                             android:textSize="16sp" />
 
@@ -293,11 +298,12 @@
                             android:textSize="16sp" />
 
                         <TextView
+                            android:id="@+id/txt_vehicle_model"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="8"
                             android:fontFamily="@font/nunito_bold"
-                            android:text="Toyota KDH 2019"
+
                             android:textColor="@color/white"
                             android:textSize="16sp" />
 
@@ -320,11 +326,12 @@
                             android:textSize="16sp" />
 
                         <TextView
+                            android:id="@+id/txt_vehicle_reg_no"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="8"
                             android:fontFamily="@font/nunito_bold"
-                            android:text="PI 5075"
+
                             android:textColor="@color/white"
                             android:textSize="16sp" />
 
@@ -347,11 +354,11 @@
                             android:textSize="16sp" />
 
                         <TextView
+                            android:id="@+id/txt_facilities"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="8"
                             android:fontFamily="@font/nunito_bold"
-                            android:text="A/C , WIFI , Window Curtains   "
                             android:textColor="@color/white"
                             android:textSize="16sp" />
 
@@ -362,6 +369,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
                         android:orientation="horizontal">
 
                         <TextView
@@ -370,34 +378,43 @@
                             android:layout_weight="2"
                             android:fontFamily="@font/nunito_bold"
                             android:text="Photos"
+
                             android:textColor="@color/white"
                             android:textSize="16sp" />
 
                         <ImageView
+                            android:id="@+id/img_vehicle_one"
                             android:layout_width="0dp"
                             android:layout_height="100dp"
+                            android:layout_weight="2"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/sample_van_image" />
+
+                        <ImageView
+                            android:id="@+id/img_vehicle_two"
+                            android:layout_width="0dp"
+                            android:layout_height="100dp"
+                            android:layout_marginLeft="5dp"
+                            android:scaleType="centerCrop"
                             android:layout_weight="2"
                             android:src="@drawable/sample_van_image" />
 
                         <ImageView
+                            android:id="@+id/img_vehicle_three"
                             android:layout_width="0dp"
                             android:layout_height="100dp"
                             android:layout_marginLeft="5dp"
+                            android:scaleType="centerCrop"
                             android:layout_weight="2"
                             android:src="@drawable/sample_van_image" />
 
                         <ImageView
+                            android:id="@+id/img_vehicle_four"
                             android:layout_width="0dp"
                             android:layout_height="100dp"
                             android:layout_marginLeft="5dp"
                             android:layout_weight="2"
-                            android:src="@drawable/sample_van_image" />
-
-                        <ImageView
-                            android:layout_width="0dp"
-                            android:layout_height="100dp"
-                            android:layout_marginLeft="5dp"
-                            android:layout_weight="2"
+                            android:scaleType="centerCrop"
                             android:src="@drawable/sample_van_image" />
 
 
@@ -476,7 +493,6 @@
                             android:layout_height="match_parent"
                             android:layout_weight="6"
                             android:fontFamily="@font/nunito_bold"
-                            android:text="Ananda College, Colombo 07,Lyceum International school,Wattala,Dharmapala Vidyala, Kottawa"
                             android:textColor="@color/white"
                             android:textSize="16sp" />
 
@@ -503,8 +519,7 @@
                             android:layout_height="match_parent"
                             android:layout_weight="6"
                             android:fontFamily="@font/nunito_bold"
-                            android:text="Wattala, Kiribathgoda,Kottawa, Kiribathgoda,Kandy"
-                            android:textColor="@color/white"
+                          android:textColor="@color/white"
                             android:textSize="16sp" />
 
 
@@ -518,13 +533,14 @@
 
 
                         <TextView
+                            android:id="@+id/txt_seating"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="5"
                             android:drawableLeft="@drawable/icon_max_ppl"
                             android:drawablePadding="10dp"
                             android:fontFamily="@font/nunito_bold"
-                            android:text="Max Capacity  25"
+                            android:text="Max Capacity "
                             android:textColor="@color/white"
                             android:textSize="16sp" />
 
@@ -606,29 +622,29 @@
 
                 </LinearLayout>
 
-                <Button
-                    android:id="@+id/btn_request_vacant_seat"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_below="@id/lnr_heading_contact_driver"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="15dp"
-                    android:layout_marginTop="15dp"
-                    android:background="@drawable/bg_button_contact_driver"
-                    android:drawableLeft="@drawable/icon_request_vancant_seat"
-                    android:drawableRight="@drawable/icon_forward"
-                    android:gravity="center"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="25dp"
-                    android:text="View Route Taken By Driver"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white" />
+<!--                <Button-->
+<!--                    android:id="@+id/btn_request_vacant_seat"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="50dp"-->
+<!--                    android:layout_below="@id/lnr_heading_contact_driver"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginHorizontal="15dp"-->
+<!--                    android:layout_marginTop="15dp"-->
+<!--                    android:background="@drawable/bg_button_contact_driver"-->
+<!--                    android:drawableLeft="@drawable/icon_request_vancant_seat"-->
+<!--                    android:drawableRight="@drawable/icon_forward"-->
+<!--                    android:gravity="center"-->
+<!--                    android:paddingLeft="15dp"-->
+<!--                    android:paddingRight="25dp"-->
+<!--                    android:text="View Route Taken By Driver"-->
+<!--                    android:textAllCaps="false"-->
+<!--                    android:textColor="@color/white" />-->
 
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/btn_request_vacant_seat"
+                    android:layout_below="@id/lnr_heading_contact_driver"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="10dp"
                     android:orientation="horizontal">

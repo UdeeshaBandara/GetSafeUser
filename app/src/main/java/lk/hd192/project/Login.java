@@ -36,7 +36,7 @@ public class Login extends GetSafeBase {
     Dialog dialog;
     GetSafeServices getSafeServices;
     TinyDB tinyDB;
-    private FirebaseAuth mAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,7 @@ public class Login extends GetSafeBase {
         four = findViewById(R.id.txt_number_four);
         five = findViewById(R.id.txt_number_five);
         six = findViewById(R.id.txt_number_six);
-        mAuth = FirebaseAuth.getInstance();
+
         seven = findViewById(R.id.txt_number_seven);
         eight = findViewById(R.id.txt_number_eight);
         nine = findViewById(R.id.txt_number_nine);
@@ -117,7 +117,7 @@ public class Login extends GetSafeBase {
                     if (result.getBoolean("otp_sent_status")) {
 
                         OTP.otpToken = result.getString("otp_token");
-                        firebaseLogin();
+
                         startActivity(new Intent(getApplicationContext(), OTP.class));
 
                     } else
@@ -130,35 +130,6 @@ public class Login extends GetSafeBase {
 
             }
         });
-
-    }
-    private void firebaseLogin(){
-
-        mAuth.signInWithEmailAndPassword( tinyDB.getString("email"), one.getText().toString() +
-                two.getText().toString() +
-                three.getText().toString() +
-                four.getText().toString() +
-                five.getText().toString() +
-                six.getText().toString() +
-                seven.getText().toString() +
-                eight.getText().toString() +
-                nine.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-
-                    Log.e("firebase login","success");
-//                    startActivity(new Intent(getApplicationContext(),Messaging.class));
-//                    finishAffinity();
-
-                } else {
-
-                }
-            }
-        });
-
-
-
 
     }
 

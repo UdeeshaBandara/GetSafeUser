@@ -45,6 +45,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -164,10 +165,10 @@ public class DriverRoute extends GetSafeBase {
     private void getDriverRoute() {
 
         HashMap<String, String> param = new HashMap<>();
-        param.put("id", "7");
 
 
-        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_DRIVER_ROUTE), 2, tinyDB.getString("token"), new VolleyJsonCallback() {
+
+        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_DRIVER_ROUTE)+"?id=7 ", 1, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 
