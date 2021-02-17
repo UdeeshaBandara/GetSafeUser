@@ -420,10 +420,10 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
     public void getChildById() {
 
         HashMap<String, String> param = new HashMap<>();
-        param.put("id", kid_id);
+//        param.put("id", kid_id);
 
         showLoading();
-        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_KID_BY_ID), 2, tinyDB.getString("token"), new VolleyJsonCallback() {
+        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_KID_BY_ID)+"?id="+kid_id, 1, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 
@@ -461,10 +461,8 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
 
     private void getLocationDetails() {
         HashMap<String, String> param = new HashMap<>();
-        param.put("id", kid_id);
 
-        Log.e("kid id", kid_id);
-        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_KID_LOCATION_BY_ID), 2, tinyDB.getString("token"), new VolleyJsonCallback() {
+        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_KID_LOCATION_BY_ID)+"?id="+kid_id, 1, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 

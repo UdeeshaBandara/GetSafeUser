@@ -209,10 +209,10 @@ public class ExploreTransport extends GetSafeBase {
 
     private void getChildLocationDetails() {
         HashMap<String, String> param = new HashMap<>();
-        param.put("id", tinyDB.getString("selectedChildId"));
 
 
-        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_KID_LOCATION_BY_ID), 2, tinyDB.getString("token"), new VolleyJsonCallback() {
+
+        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_KID_LOCATION_BY_ID)+"?id="+tinyDB.getString("selectedChildId"), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 
@@ -292,12 +292,12 @@ public class ExploreTransport extends GetSafeBase {
 
     }
     private void searchDriverForChild() {
-Log.e("",tinyDB.getString("selectedChildId"));
+
         HashMap<String, String> param = new HashMap<>();
-        param.put("id", tinyDB.getString("selectedChildId"));
 
 
-        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.SEARCH_DRIVER_FOR_KID), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
+
+        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.SEARCH_DRIVER_FOR_KID)+"?id="+tinyDB.getString("selectedChildId"), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 

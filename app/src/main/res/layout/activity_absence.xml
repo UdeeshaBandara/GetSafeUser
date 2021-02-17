@@ -291,7 +291,7 @@ android:visibility="invisible"
 
             android:layout_marginTop="10dp"
             android:fontFamily="@font/nunito_regular"
-            android:text="Kid Name : Yuthmika Sehas"
+            android:text="Kid Name : "
             android:textColor="@color/sec_color"
             android:textSize="20sp" />
 

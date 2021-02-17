@@ -31,10 +31,11 @@ public class DriverProfile extends GetSafeBase {
     CardView cardDriverDetails;
     RoundedImageView imgDriver;
     Button btn_driver_route;
-   public static String driverId, phone;
+    public static String driverId, phone;
     GetSafeServices getSafeServices;
     JSONObject driverDetails;
     Dialog dialog;
+    Button btn_send_request;
     ImageView driver_photo, img_vehicle_one, img_vehicle_two, img_vehicle_three, img_vehicle_four;
     TextView txt_facilities, txt_driver_name, txt_transport_category, txt_vehicle_type, txt_vehicle_model, txt_vehicle_reg_no, txt_seating;
 
@@ -54,6 +55,7 @@ public class DriverProfile extends GetSafeBase {
         txt_vehicle_type = findViewById(R.id.txt_vehicle_type);
         txt_vehicle_model = findViewById(R.id.txt_vehicle_model);
         txt_vehicle_reg_no = findViewById(R.id.txt_vehicle_reg_no);
+        btn_send_request = findViewById(R.id.btn_send_request);
         txt_seating = findViewById(R.id.txt_seating);
         img_vehicle_one = findViewById(R.id.img_vehicle_one);
         driver_photo = findViewById(R.id.driver_photo);
@@ -92,17 +94,84 @@ public class DriverProfile extends GetSafeBase {
                 startActivity(new Intent(getApplicationContext(), DriverRoute.class));
             }
         });
+        btn_send_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (tinyDB.getBoolean("isStaffAccount"))
+                    sendStaffDriverRequest();
+                else
+                    sendStudentDriverRequest();
+            }
+        });
 
         getDriverDetails();
 
+    }
+
+    private void sendStaffDriverRequest() {
+        HashMap<String, String> param = new HashMap<>();
+        param.put("driver_id",driverId);
+
+
+        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.USER_REQUEST_DRIVER), 2, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+Log.e("res",result+"");
+
+                    if (result.getBoolean("saved_status")) {
+                        showToast(dialog, "Request sent to driver", 2);
+                    }
+
+
+                } catch (
+                        Exception e) {
+                    e.printStackTrace();
+                    showToast(dialog, "Request failed", 0);
+                    Log.e("ex from loc", e.getMessage());
+
+                }
+
+            }
+        });
+    }
+
+    private void sendStudentDriverRequest() {
+        HashMap<String, String> param = new HashMap<>();
+        param.put("driver_id",driverId);
+        param.put("child_id", tinyDB.getString("selectedChildId"));
+
+        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.STUDENT_REQUEST_DRIVER), 2, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+                    Log.e("res",result+"");
+
+                    if (result.getBoolean("saved_status")) {
+                        showToast(dialog, "Request sent to driver", 2);
+
+                    }
+
+
+                } catch (
+                        Exception e) {
+                    e.printStackTrace();
+                    showToast(dialog, "Request failed", 0);
+                    Log.e("ex from loc", e.getMessage());
+
+                }
+
+            }
+        });
     }
 
     private void getDriverDetails() {
         HashMap<String, String> param = new HashMap<>();
 
 
-
-        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_DRIVER_DETAILS)+"?id=1", 1, tinyDB.getString("token"), new VolleyJsonCallback() {
+        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_DRIVER_DETAILS) + "?id="+driverId, 1, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 
@@ -122,7 +191,7 @@ public class DriverProfile extends GetSafeBase {
                         if (driverDetails.getJSONArray("vehicle").getJSONObject(0).getInt("camera") == 1)
                             txt_facilities.setText(" Camera");
                         txt_vehicle_reg_no.setText(driverDetails.getJSONArray("vehicle").getJSONObject(0).getString("registration_no"));
-                        txt_seating.setText("Max Capacity "+driverDetails.getJSONArray("vehicle").getJSONObject(0).getString("seating_capacity"));
+                        txt_seating.setText("Max Capacity " + driverDetails.getJSONArray("vehicle").getJSONObject(0).getString("seating_capacity"));
                         driver_photo.setImageBitmap(populateImage(driverDetails.getJSONObject("driver_image").getString("image").substring(21)));
 
                         if (driverDetails.getJSONArray("vehicle_images").length() == 1) {

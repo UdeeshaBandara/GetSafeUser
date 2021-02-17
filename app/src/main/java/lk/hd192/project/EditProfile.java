@@ -66,6 +66,7 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.theartofdev.edmodo.cropper.CropImage;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -97,7 +98,7 @@ public class EditProfile extends GetSafeBase {
     String locationProvider = LocationManager.GPS_PROVIDER;
     CameraPosition cameraPosition;
     MapView mPickupLocation;
-    JSONObject kidList;
+    JSONArray kidList;
     GetSafeServices getSafeServices;
     private ProgressDialog progressDialog;
     ImageView imgUpdateImage, imgLocEditIndicator, imgDropLocEditIndicator, imgParent;
@@ -118,7 +119,7 @@ public static boolean needToEnableEditMode;
         tinyDB = new TinyDB(getApplicationContext());
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
 //        tinyDB.putString("token","1|q2pWwtm1SMNxGFSk9tzUkvB2cAGWPVK1zZ4e014y");
-        kidList = new JSONObject();
+        kidList = new JSONArray();
         getSafeServices = new GetSafeServices();
         recyclerKidList = findViewById(R.id.recycler_kid_list);
         txtPhoneNumber = findViewById(R.id.txt_phone_number);
@@ -836,9 +837,9 @@ public static boolean needToEnableEditMode;
         public void onBindViewHolder(@NonNull StudentViewHolder holder, final int position) {
 
             try {
-                holder.txtKidName.setText(kidList.getJSONArray("children").getJSONObject(position).getString("name"));
+                holder.txtKidName.setText(kidList.getJSONObject(position).getString("name"));
 
-                holder.txtKidSchool.setText(kidList.getJSONArray("children").getJSONObject(position).getString("school_name"));
+                holder.txtKidSchool.setText(kidList.getJSONObject(position).getString("school_name"));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -849,7 +850,7 @@ public static boolean needToEnableEditMode;
                     try {
                         Intent intent = new Intent(getApplicationContext(), EditKidProfile.class);
 
-                        intent.putExtra("kid_id", kidList.getJSONArray("children").getJSONObject(position).getString("id"));
+                        intent.putExtra("kid_id", kidList.getJSONObject(position).getString("id"));
                         startActivity(intent);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -876,7 +877,8 @@ public static boolean needToEnableEditMode;
                 try {
 
 
-                    kidList = result;
+                    kidList = result.getJSONArray("children");
+                    Log.e("kids from edit",kidList+"");
 
                     recyclerKidList.getAdapter().notifyDataSetChanged();
 

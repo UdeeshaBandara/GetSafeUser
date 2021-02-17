@@ -63,7 +63,7 @@ public class Absence extends GetSafeBase {
     String selectedDay = "";
     String[] dayNames = new String[7];
     GetSafeServices getSafeServices;
-    TextView txt_current_name;
+    TextView txt_current_name, sub_heading_absence;
     Dialog dialog;
     int selectedItem = -1;
     int absenceDatesIndex = 0;
@@ -123,6 +123,7 @@ public class Absence extends GetSafeBase {
         btnEveningSelect = findViewById(R.id.btn_evening_select);
         btnMorningSelect = findViewById(R.id.btn_morning_select);
         monthPicker = findViewById(R.id.month_picker);
+        sub_heading_absence = findViewById(R.id.sub_heading_absence);
 
         btnSaveAbsence = findViewById(R.id.btn_save_absence);
         mainSaveAnimation = findViewById(R.id.main_save_animation);
@@ -135,6 +136,13 @@ public class Absence extends GetSafeBase {
 
         btnSaveAbsence.setVisibility(View.INVISIBLE);
         subHeadingAbsence.setVisibility(View.INVISIBLE);
+        if (tinyDB.getBoolean("isStaffAccount")) {
+            txt_current_name.setVisibility(View.INVISIBLE);
+            sub_heading_absence.setVisibility(View.INVISIBLE);
+        } else {
+            txt_current_name.setText("Kid Name :" + tinyDB.getString("selectedChildName"));
+            sub_heading_absence.setText(tinyDB.getString("selectedChildName") + " Absence on");
+        }
 //        btnSaveAbsence.setBackgroundColor(getResources().getColor(R.color.sec_color));
 
 
@@ -206,6 +214,9 @@ public class Absence extends GetSafeBase {
                 boolean isAdded = false;
                 absenceDate = new JSONObject();
 
+                if (tinyDB.getBoolean("isStaffAccount")) {
+                    txt_current_name.setVisibility(View.INVISIBLE);
+                    sub_heading_absence.setVisibility(View.INVISIBLE);}
                 try {
                     absenceDate.put("month", monthArray.get(selectedMonthNumber));
                     absenceDate.put("year", currentYear);
@@ -480,7 +491,7 @@ public class Absence extends GetSafeBase {
         HashMap<String, String> tempParam = new HashMap<>();
         tempParam.put("date", date);
         tempParam.put("type", type);
-        tempParam.put("repeat", "true");
+        tempParam.put("repeat", "0");
 
 
         getSafeServices.networkJsonRequest(getApplicationContext(), tempParam, getString(R.string.BASE_URL) + getString(R.string.USER_ABSENCE), 2, tinyDB.getString("token"), new VolleyJsonCallback() {
@@ -488,7 +499,7 @@ public class Absence extends GetSafeBase {
             public void onSuccessResponse(JSONObject result) {
 
                 try {
-
+                    Log.e("absence result", result + "");
 //                    kidList = result;
 //                    if (kidList != null)
 //                        tinyDB.putString("selectedChildId", kidList.getJSONArray("children").getJSONObject(0).getString("id"));
@@ -509,7 +520,7 @@ public class Absence extends GetSafeBase {
         tempParam.put("id", tinyDB.getString("selectedChildId"));
         tempParam.put("date", date);
         tempParam.put("type", type);
-        tempParam.put("repeat", "true");
+        tempParam.put("repeat", "0");
 
 
         getSafeServices.networkJsonRequest(getApplicationContext(), tempParam, getString(R.string.BASE_URL) + getString(R.string.CHILD_ABSENCE), 2, tinyDB.getString("token"), new VolleyJsonCallback() {

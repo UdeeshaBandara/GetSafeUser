@@ -74,7 +74,7 @@ TextView account_type;
         threeOption = new JSONObject();
         fourOption = new JSONObject();
         fiveOption = new JSONObject();
-        tinyDB.putString("token", "11|dEtbVNSROd06fbWmnw7I7gEO0QW8tED1cEdOKo0r");
+        tinyDB.putString("token", "12|ufdzInYwTrUH6ND5WtO3S1oyhug7eMyDN5w600E6");
 //        tinyDB.putBoolean("isStaffAccount", true);
         try {
 
@@ -181,6 +181,8 @@ TextView account_type;
 
         drawerSelectChildLyt.setVisibility(View.GONE);
         fabAddKid.setVisibility(View.GONE);
+       if (recyclerSelectChild.getVisibility() != View.GONE)
+        drawerSelectChildLyt.performClick();
         account_type.setText("Switch to your student \ntransport account");
     }
 
@@ -362,6 +364,7 @@ TextView account_type;
 
                                 currentPosition = position;
                                 tinyDB.putString("selectedChildId", kidList.getJSONArray("children").getJSONObject(position).getString("id"));
+                                tinyDB.putString("selectedChildName", kidList.getJSONArray("children").getJSONObject(position).getString("name"));
                                 notifyDataSetChanged();
 
                             }
@@ -581,6 +584,7 @@ TextView account_type;
                     kidList = result;
                     if (kidList != null)
                         tinyDB.putString("selectedChildId", kidList.getJSONArray("children").getJSONObject(0).getString("id"));
+                    tinyDB.putString("selectedChildName", kidList.getJSONArray("children").getJSONObject(0).getString("name"));
 
                     Log.e("kid lsit", kidList + "");
                     recyclerSelectChild.getAdapter().notifyDataSetChanged();
