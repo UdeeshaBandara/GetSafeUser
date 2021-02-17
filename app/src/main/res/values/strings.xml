@@ -24,6 +24,7 @@
     <string name="USER_LOCATION">/location/user/get</string>
     <string name="UPDATE_USER_PICKUP">/location/user/pickup/edit</string>
     <string name="UPDATE_USER_DROP">/location/user/dropoff/edit</string>
+    <string name="USER_ABSENCE">/absent/user/new</string>
 
 
     <string name="ADD_NEW_KID">/child/addchild</string>
@@ -37,6 +38,7 @@
     <string name="SEARCH_DRIVER_FOR_STAFF">/search/user</string>
     <string name="GET_DRIVER_ROUTE">/search/details/route</string>
     <string name="GET_DRIVER_DETAILS">/search/details/all</string>
+    <string name="CHILD_ABSENCE">/absent/child/new</string>
 
 
     <string name="VALIDATE_TOKEN">/</string>

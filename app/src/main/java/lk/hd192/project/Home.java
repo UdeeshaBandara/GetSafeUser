@@ -74,7 +74,7 @@ public class Home extends GetSafeBase {
         threeOption = new JSONObject();
         fourOption = new JSONObject();
         fiveOption = new JSONObject();
-        tinyDB.putString("token", "1|VZrX3vyfYubbjTXa9jeQEreE8lnAKrhrhhRxgsRA");
+        tinyDB.putString("token", "11|dEtbVNSROd06fbWmnw7I7gEO0QW8tED1cEdOKo0r");
         tinyDB.putBoolean("isStaffAccount", true);
         try {
 
@@ -577,34 +577,5 @@ public class Home extends GetSafeBase {
 
     }
 
-
-//    public void getDeviceToken() {
-//
-//
-//        FirebaseInstanceId.getInstance().getInstanceId()
-//                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-//                        if (!task.isSuccessful()) {
-//                            showWarningToast(dialog, "Please try again", 0);
-//
-//
-//                            return;
-//
-//
-//                        } else {
-//
-//                            Log.e("fcm_token",task.getResult().getToken());
-////                            if (optType == 0)
-////                                existingUserValidateOTP(task.getResult().getToken());
-////                            else if (optType == 1)
-////                                newUserValidateOTP(task.getResult().getToken());
-////
-//
-//                        }
-//
-//                    }
-//                });
-//    }
 
 }

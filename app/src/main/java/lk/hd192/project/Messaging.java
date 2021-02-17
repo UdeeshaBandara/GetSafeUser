@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 
 import lk.hd192.project.Utils.GetTimeAgo;
+import lk.hd192.project.Utils.TinyDB;
 import lk.hd192.project.pojo.Messages;
 
 public class Messaging extends AppCompatActivity {
@@ -53,8 +54,9 @@ public class Messaging extends AppCompatActivity {
     private MessageAdapter mAdapter;
     private static final int TOTAL_ITEMS_TO_LOAD = 10;
     private int mCurrentPage = 1;
-    private DatabaseReference mRootRef, mUserRef;
+    private DatabaseReference mRootRef, messageRef;
     private RecyclerView mMessageList;
+    TinyDB tinyDB;
     private final List<Messages> messagesList = new ArrayList<>();
 
     @Override
@@ -62,14 +64,20 @@ public class Messaging extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messaging);
 
+        tinyDB = new TinyDB(getApplicationContext());
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         mAuth = FirebaseAuth.getInstance();
-        mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
 
-        mChatUser="a0tW1ZdZySMuDb28Za0RyoSDrlz1";
-        mCurrentUserId = mAuth.getCurrentUser().getUid();
+        if (tinyDB.getBoolean("isStaffAccount"))
+            messageRef = FirebaseDatabase.getInstance().getReference().child("Staff_Drivers").child("add_driver_id_here").child("Passengers").child("Add_user_id_here").child("messages");
+        else
+            messageRef = FirebaseDatabase.getInstance().getReference().child("School_Drivers").child("add_driver_id_here").child("Passengers").child("Add_user_id_here").child("Add_child_id_here").child("messages");
 
-        mRootRef = FirebaseDatabase.getInstance().getReference();
+
+//        mChatUser = "a0tW1ZdZySMuDb28Za0RyoSDrlz1";
+//        mCurrentUserId = mAuth.getCurrentUser().getUid();
+//
+//        mRootRef = FirebaseDatabase.getInstance().getReference();
 
         chatMessageView = findViewById(R.id.chat_message_view);
         mAdapter = new MessageAdapter(this, messagesList);
@@ -104,30 +112,31 @@ public class Messaging extends AppCompatActivity {
         });
 
     }
+
     private void sendMessage() {
         String message = txtMsgContent.getText().toString();
         if (!TextUtils.isEmpty(message)) {
-            String current_user_ref = "messages/" + mCurrentUserId + "/" + mChatUser;
-            String chat_user_ref = "messages/" + mChatUser + "/" + mCurrentUserId;
+//            String current_user_ref = "messages/" + mCurrentUserId + "/" + mChatUser;
+//            String chat_user_ref = "messages/" + mChatUser + "/" + mCurrentUserId;
             //
-            DatabaseReference user_message_push = mRootRef.child("messages").child(mCurrentUserId).child(mChatUser).push();
+            DatabaseReference user_message_push =messageRef.push();
             String push_id = user_message_push.getKey();
             java.util.Map messageMap = new HashMap();
             messageMap.put("message", message);
             messageMap.put("seen", false);
             messageMap.put("type", "text");
             messageMap.put("time", ServerValue.TIMESTAMP);
-            messageMap.put("from", mCurrentUserId);
+//            messageMap.put("from", mCurrentUserId);
 
             Map messageUserMap = new HashMap();
-            messageUserMap.put(current_user_ref + "/" + push_id, messageMap);
-            messageUserMap.put(chat_user_ref + "/" + push_id, messageMap);
+            messageUserMap.put(messageRef.child(push_id), messageMap);
+//            messageUserMap.put(chat_user_ref + "/" + push_id, messageMap);
             txtMsgContent.setText("");
-            mRootRef.updateChildren(messageUserMap, new DatabaseReference.CompletionListener() {
+            messageRef.updateChildren(messageUserMap, new DatabaseReference.CompletionListener() {
                 @Override
                 public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                     if (databaseError != null) {
-                        Log.e("Error", "Db");
+                        Log.e("Error", databaseError.getMessage());
                     }
                 }
             });
@@ -135,6 +144,7 @@ public class Messaging extends AppCompatActivity {
 
         }
     }
+
     private void loadMessages() {
 
         //Reference location to user msgs
@@ -178,7 +188,7 @@ public class Messaging extends AppCompatActivity {
         private List<Messages> mMessageList;
         Context mContext;
 
-    public MessageAdapter(Context context, List<Messages> mMessageList) {
+        public MessageAdapter(Context context, List<Messages> mMessageList) {
             this.mMessageList = mMessageList;
             mContext = context;
 
@@ -192,8 +202,8 @@ public class Messaging extends AppCompatActivity {
         }
 
         public class MessageViewHolder extends RecyclerView.ViewHolder {
-            public TextView txtMsgFrom, txtMsgTo,txtMsgFromTime,txtMsgToTime;
-            public LinearLayout lnrTo,lnrFrom;
+            public TextView txtMsgFrom, txtMsgTo, txtMsgFromTime, txtMsgToTime;
+            public LinearLayout lnrTo, lnrFrom;
 
 
             public MessageViewHolder(View view) {
@@ -234,7 +244,6 @@ public class Messaging extends AppCompatActivity {
                 holder.txtMsgFrom.setText(c.getMessage());
                 holder.txtMsgFromTime.setText(timeAgo);
             }
-
 
 
         }

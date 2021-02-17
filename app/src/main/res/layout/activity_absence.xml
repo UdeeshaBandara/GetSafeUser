@@ -138,40 +138,15 @@
 
                     <com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker
                         android:id="@+id/month_picker"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/date_year"
-                        android:layout_weight="4"
-                        app:fontFamily="@font/nunito_bold"
-                        app:picker_curved="true"
 
-                        app:picker_curvedMaxAngle="70"
-                        app:picker_cyclic="true"
-                        app:picker_dayCount="31"
-                        app:picker_displayDays="false"
-
-                        app:picker_displayDaysOfMonth="false"
-                        app:picker_displayHours="false"
-                        app:picker_displayMinutes="false"
-                        app:picker_displayMonth="true"
-                        app:picker_displayMonthNumbers="false"
-                        app:picker_displayYears="false"
-                        app:picker_itemSpacing="20dp"
-                        app:picker_selectedTextColor="#3D5AF1"
-                        app:picker_selectorColor="@android:color/transparent"
-                        app:picker_visibleItemCount="5" />
-
-                    <com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker
-                        android:id="@+id/day_picker"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/date_year"
-                        android:layout_weight="4"
                         app:fontFamily="@font/nunito_bold"
                         app:picker_curved="true"
                         app:picker_curvedMaxAngle="70"
                         app:picker_cyclic="true"
-                        app:picker_dayCount="31"
+
                         app:picker_displayDays="true"
                         app:picker_displayDaysOfMonth="false"
                         app:picker_displayHours="false"
@@ -180,26 +155,39 @@
                         app:picker_displayMonthNumbers="false"
                         app:picker_displayYears="false"
                         app:picker_itemSpacing="20dp"
-                        app:picker_selectedTextColor="#3D5AF1"
 
+                        app:picker_selectedTextColor="#3D5AF1"
                         app:picker_selectorColor="@android:color/transparent"
+
+                        app:picker_todayText=""
                         app:picker_visibleItemCount="5" />
 
-                </LinearLayout>
 
+
+                </LinearLayout>
+                <CheckBox
+                    android:id="@+id/chk_repeat"
+                    android:layout_width="wrap_content"
+android:visibility="invisible"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@id/date_year"
+                    android:layout_height="wrap_content"
+                    android:text="Absence on every " />
                 <Button
                     android:id="@+id/btn_add_to_list"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
-                    android:layout_marginRight="10dp"
-                    android:fontFamily="@font/nunito_regular"
-                    android:textAllCaps="false"
-                    android:textColor="@color/black"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/custom_edittext"
                     android:layout_below="@id/date_year"
                     android:layout_alignParentRight="true"
-                    android:text="Add to list" />
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/custom_edittext"
+                    android:fontFamily="@font/nunito_regular"
+                    android:text="Add to list"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"

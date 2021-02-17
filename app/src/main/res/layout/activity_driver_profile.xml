@@ -670,7 +670,7 @@
                         android:textColor="@color/white" />
 
                     <Button
-                        android:id="@+id/btn_msg_driver"
+                        android:id="@+id/btn_send_request"
                         android:layout_width="0dp"
                         android:layout_height="50dp"
                         android:layout_below="@id/lnr_heading_contact_driver"
@@ -684,7 +684,7 @@
                         android:gravity="center"
                         android:paddingLeft="15dp"
                         android:paddingRight="25dp"
-                        android:text="Chat With Driver"
+                        android:text="Send trip request"
                         android:textAllCaps="false"
                         android:textColor="@color/white" />
 

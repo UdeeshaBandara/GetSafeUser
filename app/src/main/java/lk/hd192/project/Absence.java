@@ -17,32 +17,40 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
 import lk.hd192.project.Utils.GetSafeBase;
+import lk.hd192.project.Utils.GetSafeServices;
+import lk.hd192.project.Utils.VolleyJsonCallback;
 
 public class Absence extends GetSafeBase {
 
     Button btnMorning, btnEvening, btnBoth, btnBothSelect, btnMorningSelect, btnEveningSelect, btnSaveAbsence, btnAddToList;
     LottieAnimationView mainSaveAnimation;
-    RecyclerView recyclerMonth, recyclerMonthDate, recyclerAbsence;
+    RecyclerView recyclerAbsence;
+    CheckBox chk_repeat;
     Context context;
     int currentYear, currentMonth, currentDate;
 
-    SingleDateAndTimePicker monthPicker, dayPicker;
+    SingleDateAndTimePicker monthPicker;
     TextView subHeadingAbsence;
     ArrayList<String> monthArray;
     ArrayList<String> dayArray;
@@ -54,7 +62,8 @@ public class Absence extends GetSafeBase {
     int selectedMonthNumber = 0, selectedDateNumber = 0;
     String selectedDay = "";
     String[] dayNames = new String[7];
-
+    GetSafeServices getSafeServices;
+    TextView txt_current_name;
     Dialog dialog;
     int selectedItem = -1;
     int absenceDatesIndex = 0;
@@ -72,6 +81,7 @@ public class Absence extends GetSafeBase {
         dayArray = new ArrayList<>();
         absenceDateList = new JSONArray();
         absenceDate = new JSONObject();
+        getSafeServices = new GetSafeServices();
 
 
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
@@ -100,6 +110,9 @@ public class Absence extends GetSafeBase {
         currentYear = Calendar.getInstance().get(Calendar.YEAR);
         currentMonth = Calendar.getInstance().get(Calendar.MONTH);
         currentDate = Calendar.getInstance().get(Calendar.DATE);
+        selectedMonthNumber = currentMonth;
+        selectedDateNumber = currentDate;
+        selectedDay = dayNames[Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1];
         dateInFormat = new SimpleDateFormat("dd-MM-yyyy");
 
 
@@ -110,14 +123,16 @@ public class Absence extends GetSafeBase {
         btnEveningSelect = findViewById(R.id.btn_evening_select);
         btnMorningSelect = findViewById(R.id.btn_morning_select);
         monthPicker = findViewById(R.id.month_picker);
-        dayPicker = findViewById(R.id.day_picker);
+
         btnSaveAbsence = findViewById(R.id.btn_save_absence);
         mainSaveAnimation = findViewById(R.id.main_save_animation);
         subHeadingAbsence = findViewById(R.id.sub_heading_absence);
         btnAddToList = findViewById(R.id.btn_add_to_list);
+        chk_repeat = findViewById(R.id.chk_repeat);
+        txt_current_name = findViewById(R.id.txt_current_name);
+        chk_repeat.setText("Repeat on every " + selectedDay);
 
 
-        dayPicker.setEnabled(false);
         btnSaveAbsence.setVisibility(View.INVISIBLE);
         subHeadingAbsence.setVisibility(View.INVISIBLE);
 //        btnSaveAbsence.setBackgroundColor(getResources().getColor(R.color.sec_color));
@@ -131,17 +146,49 @@ public class Absence extends GetSafeBase {
             public void onClick(View v) {
                 mainSaveAnimation.setVisibility(View.VISIBLE);
                 mainSaveAnimation.playAnimation();
+                if (tinyDB.getBoolean("isStaffAccount")) {
+                    for (int j = 0; j < absenceDateList.length(); j++) {
+                        try {
+                            String type = "";
+                            if (absenceDateList.getJSONObject(j).getString("session").equals("Both"))
+                                type = "3";
+                            else if (absenceDateList.getJSONObject(j).getString("session").equals("Evening"))
+                                type = "2";
+                            else if (absenceDateList.getJSONObject(j).getString("session").equals("Morning"))
+                                type = "1";
+                            String date = absenceDateList.getJSONObject(j).getString("date").substring(0, 2) + "-" + (String.valueOf(monthArray.indexOf(absenceDateList.getJSONObject(j).getString("month")) + 1)) + "-" + absenceDateList.getJSONObject(j).getString("year");
+                            Log.e("gen date", date);
+                            addUserAbsent(date, type);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+
+                } else {
+//                    addChildAbsent();
+                }
+
+
             }
         });
 
         monthPicker.addOnDateChangedListener(new SingleDateAndTimePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(String displayed, Date date) {
-                Log.e("date", date.getMonth() + "");
-                dayPicker.setEnabled(true);
+
+
+                if (date.getMonth() == currentMonth & date.getDate() < currentDate)
+                    currentYear = Integer.parseInt(String.valueOf(date.getYear()).substring(1)) + 2001;
+                else if (date.getMonth() < currentMonth)
+                    currentYear = Integer.parseInt(String.valueOf(date.getYear()).substring(1)) + 2001;
+                else
+                    currentYear = Integer.parseInt(String.valueOf(date.getYear()).substring(1)) + 2000;
                 selectedMonthNumber = date.getMonth();
-                if (currentDate > date.getMonth()) {
-                }
+                selectedDateNumber = date.getDate();
+                selectedDay = dayNames[date.getDay()];
+                chk_repeat.setText("Repeat on every " + selectedDay);
 
 
             }
@@ -156,6 +203,7 @@ public class Absence extends GetSafeBase {
             @Override
             public void onClick(View v) {
                 Log.e("ontap", "btnAddToList");
+                boolean isAdded = false;
                 absenceDate = new JSONObject();
 
                 try {
@@ -174,15 +222,29 @@ public class Absence extends GetSafeBase {
                             absenceDate.put("session", "Evening");
                         else if (btnMorningSelect.getVisibility() == View.VISIBLE)
                             absenceDate.put("session", "Morning");
+//
+                        if (absenceDateList.length() == 0)
+                            absenceDateList.put(absenceDate);
+                        else {
+                            for (int i = 0; i < absenceDateList.length(); i++) {
+                                if (absenceDateList.getJSONObject(i).getString("month").equals(absenceDate.getString("month")) & absenceDateList.getJSONObject(i).getString("year").equals(absenceDate.getString("year")) & absenceDateList.getJSONObject(i).getString("date").equals(absenceDate.getString("date")) & absenceDateList.getJSONObject(i).getString("session").equals(absenceDate.getString("session"))) {
+
+                                    showToast(dialog, "Date already added", 0);
+                                    isAdded = true;
+                                }
 
 
-                         absenceDateList.put(absenceDate);
+                            }
+                            if (!isAdded)
+                                absenceDateList.put(absenceDate);
+                        }
 
-                        if(absenceDateList.length()>1)
-                            Log.e("hash", String.valueOf(String.valueOf( absenceDateList.get(1)).hashCode()));
-                        else
 
-                            Log.e("hash", String.valueOf(String.valueOf( absenceDateList.get(0)).hashCode()));
+//
+//                            Log.e("hash", String.valueOf(String.valueOf( absenceDateList.get(1)).hashCode()));
+//                        else
+//
+//                            Log.e("hash", String.valueOf(String.valueOf( absenceDateList.get(0)).hashCode()));
 
                         btnSaveAbsence.setVisibility(View.VISIBLE);
                         subHeadingAbsence.setVisibility(View.VISIBLE);
@@ -192,9 +254,6 @@ public class Absence extends GetSafeBase {
                     }
 
 
-                    if (currentDate > date.getMonth()) {
-                    }
-
                 } catch (Exception e) {
 
                     Log.e("exception", e.getMessage());
@@ -202,13 +261,8 @@ public class Absence extends GetSafeBase {
 
             }
         });
-        dayPicker.addOnDateChangedListener(new SingleDateAndTimePicker.OnDateChangedListener() {
-            @Override
-            public void onDateChanged(String displayed, Date date) {
-                selectedDateNumber = date.getDate();
-                selectedDay = dayNames[date.getDay()];
-            }
-        });
+
+
         mainSaveAnimation.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -238,14 +292,10 @@ public class Absence extends GetSafeBase {
             }
         });
 
-//        recyclerMonth = findViewById(R.id.recycler_month);
-//        recyclerMonthDate = findViewById(R.id.recycler_month_date);
+
         recyclerAbsence = findViewById(R.id.recycler_absence);
 
 
-//        recyclerMonth.setAdapter(new MonthItemAdapter());
-//        recyclerMonth.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
-//        recyclerMonthDate.setAdapter(new DateItemAdapter());
         recyclerAbsence.setAdapter(new MonthItemAdapter());
         recyclerAbsence.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
 
@@ -259,30 +309,9 @@ public class Absence extends GetSafeBase {
                 btnMorning.setVisibility(View.VISIBLE);
                 btnEveningSelect.setVisibility(View.GONE);
                 btnEvening.setVisibility(View.VISIBLE);
-//                showToast(dialog,"Please enable location servicePlease enable location service",1);
-//                showWarningToast(dialog, "Please enable location service", 0);
-
 
             }
         });
-//        btnBothSelect.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                btnEveningSelect.setVisibility(View.GONE);
-//                btnMorningSelect.setVisibility(View.GONE);
-//
-//            }
-//        });
-//        btnMorningSelect.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                btnEveningSelect.setVisibility(View.GONE);
-//                btnBothSelect.setVisibility(View.GONE);
-//
-//
-//            }
-//        });
         btnMorning.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -294,15 +323,6 @@ public class Absence extends GetSafeBase {
                 btnBoth.setVisibility(View.VISIBLE);
             }
         });
-//        btnEveningSelect.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                btnBothSelect.setVisibility(View.GONE);
-//
-//                btnMorningSelect.setVisibility(View.GONE);
-//
-//            }
-//        });
         btnEvening.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -317,32 +337,6 @@ public class Absence extends GetSafeBase {
 
 
     }
-
-//    @RequiresApi(api = Build.VERSION_CODES.O)
-//    public void getDaysForMonth(int month, int year) {
-//
-//        try {
-//            dayArray = new ArrayList<>();
-//            String day = "";
-//            int monthLength = YearMonth.of(year, month).lengthOfMonth();
-//
-//            for (int i = 0; i < monthLength; i++) {
-//
-//                date = dateInFormat.parse((i + 1) + "-" + month + "-" + year);
-//
-//                day = android.text.format.DateFormat.format("EEEE", date).toString();
-//                dayArray.add(i, day);
-//
-//            }
-//
-//
-//        } catch (Exception e) {
-//
-//        }
-//
-//
-//    }
-
 
     class MonthViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout rltMonth, rltMonthFocus;
@@ -379,8 +373,7 @@ public class Absence extends GetSafeBase {
                     absenceDateList.remove(position);
                     notifyDataSetChanged();
                     if (recyclerAbsence.getAdapter() != null) {
-                        if( recyclerAbsence.getAdapter().getItemCount()==0)
-                        {
+                        if (recyclerAbsence.getAdapter().getItemCount() == 0) {
                             btnSaveAbsence.setVisibility(View.INVISIBLE);
                             subHeadingAbsence.setVisibility(View.INVISIBLE);
                         }
@@ -425,25 +418,6 @@ public class Absence extends GetSafeBase {
             }
         }
 
-//            if (selectedItem == position)
-//                holder.rltMonthFocus.setSelected(true);
-//            else
-//                holder.rltMonthFocus.setSelected(false);
-//
-//
-//            holder.txtMonth.setText(monthArray.get(position));
-//            holder.rltMonth.setOnClickListener(new View.OnClickListener() {
-//                @RequiresApi(api = Build.VERSION_CODES.O)
-//                @Override
-//                public void onClick(View v) {
-//
-//                    getDaysForMonth(position + 1, year);
-//                    selectedItem = position;
-//                    notifyDataSetChanged();
-//                    recyclerMonthDate.getAdapter().notifyDataSetChanged();
-//                }
-//            });
-//    }
 
         @Override
         public int getItemCount() {
@@ -451,61 +425,33 @@ public class Absence extends GetSafeBase {
         }
     }
 
-    //    class DateViewHolder extends RecyclerView.ViewHolder {
-//        RelativeLayout rltDate;
-//        TextView txtDate;
-//
-//        public DateViewHolder(@NonNull View itemView) {
-//            super(itemView);
-//            rltDate = itemView.findViewById(R.id.rlt_date);
-//            txtDate = itemView.findViewById(R.id.txt_date);
-//        }
-//    }
-//
-//    class DateItemAdapter extends RecyclerView.Adapter<DateViewHolder> {
-//
-//        @NonNull
-//        @Override
-//        public DateViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//            View view = LayoutInflater.from(getApplicationContext())
-//                    .inflate(R.layout.item_date, parent, false);
-//            return new DateViewHolder(view);
-//        }
-//
-//        @Override
-//        public void onBindViewHolder(@NonNull DateViewHolder holder, int position) {
-//
-//            holder.txtDate.setText(String.valueOf(position + 1) + getDateSuffix(position + 1) + " " + dayArray.get(position));
-//
-//        }
-//
-//        @Override
-//        public int getItemCount() {
-//            return dayArray.size();
-//        }
-//    }
-//
     private String getDateSuffix(int i) {
         switch (i) {
             case 1:
+                return ("0" + String.valueOf(i) + "st ");
             case 21:
             case 31:
                 return (String.valueOf(i) + "st ");
 
             case 2:
-            case 22:
                 return (String.valueOf(i) + "nd ");
+            case 22:
+                return ("0" + String.valueOf(i) + "nd ");
 
             case 3:
+                return ("0" + String.valueOf(i) + "rd ");
             case 23:
                 return (String.valueOf(i) + "rd ");
 
             case 4:
+            case 9:
             case 5:
             case 6:
             case 7:
             case 8:
-            case 9:
+                return ("0" + String.valueOf(i) + "th ");
+
+
             case 10:
             case 11:
             case 12:
@@ -529,4 +475,62 @@ public class Absence extends GetSafeBase {
                 return ("");
         }
     }
+
+    public void addUserAbsent(String date, String type) {
+        HashMap<String, String> tempParam = new HashMap<>();
+        tempParam.put("date", date);
+        tempParam.put("type", type);
+        tempParam.put("repeat", "true");
+
+
+        getSafeServices.networkJsonRequest(getApplicationContext(), tempParam, getString(R.string.BASE_URL) + getString(R.string.USER_ABSENCE), 2, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+
+//                    kidList = result;
+//                    if (kidList != null)
+//                        tinyDB.putString("selectedChildId", kidList.getJSONArray("children").getJSONObject(0).getString("id"));
+
+
+                } catch (Exception e) {
+
+                }
+
+            }
+        });
+
+
+    }
+
+    public void addChildAbsent(String date, String type) {
+        HashMap<String, String> tempParam = new HashMap<>();
+        tempParam.put("id", tinyDB.getString("selectedChildId"));
+        tempParam.put("date", date);
+        tempParam.put("type", type);
+        tempParam.put("repeat", "true");
+
+
+        getSafeServices.networkJsonRequest(getApplicationContext(), tempParam, getString(R.string.BASE_URL) + getString(R.string.CHILD_ABSENCE), 2, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+
+//                    kidList = result;
+//                    if (kidList != null)
+//                        tinyDB.putString("selectedChildId", kidList.getJSONArray("children").getJSONObject(0).getString("id"));
+
+
+                } catch (Exception e) {
+
+                }
+
+            }
+        });
+
+
+    }
+
 }

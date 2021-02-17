@@ -31,7 +31,7 @@ public class DriverProfile extends GetSafeBase {
     CardView cardDriverDetails;
     RoundedImageView imgDriver;
     Button btn_driver_route;
-   public static String driverId="1", phone;
+   public static String driverId, phone;
     GetSafeServices getSafeServices;
     JSONObject driverDetails;
     Dialog dialog;
