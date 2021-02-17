@@ -49,7 +49,7 @@ public class Home extends GetSafeBase {
     JSONArray homeOptions;
 
     JSONObject oneOption, twoOption, threeOption, fourOption, fiveOption, kidList;
-
+TextView account_type;
     Dialog dialog;
     GetSafeServices getSafeServices;
     ImageView sideMenuListener, selectChildDownArrow, selectChildUpArrow, btnNotification;
@@ -75,7 +75,7 @@ public class Home extends GetSafeBase {
         fourOption = new JSONObject();
         fiveOption = new JSONObject();
         tinyDB.putString("token", "11|dEtbVNSROd06fbWmnw7I7gEO0QW8tED1cEdOKo0r");
-        tinyDB.putBoolean("isStaffAccount", true);
+//        tinyDB.putBoolean("isStaffAccount", true);
         try {
 
             oneOption.put("heading", "Current Journey");
@@ -120,6 +120,7 @@ public class Home extends GetSafeBase {
         drawerHelpLyt = navigationView.findViewById(R.id.rlt_help);
         drawerSelectChildLyt = navigationView.findViewById(R.id.rlt_select_child);
         drawerAbsenceLyt = navigationView.findViewById(R.id.rlt_absence);
+        account_type = navigationView.findViewById(R.id.account_type);
 
         homeRecycler = findViewById(R.id.home_recycler);
         recyclerSelectChild = navigationView.findViewById(R.id.recycler_select_child);
@@ -180,10 +181,15 @@ public class Home extends GetSafeBase {
 
         drawerSelectChildLyt.setVisibility(View.GONE);
         fabAddKid.setVisibility(View.GONE);
+        account_type.setText("Switch to your student \ntransport account");
     }
 
     private void setupChildAccount() {
         getAllChildren();
+        drawerSelectChildLyt.setVisibility(View.VISIBLE);
+        fabAddKid.setVisibility(View.VISIBLE
+        );
+        account_type.setText("Switch to your office \ntransport account");
 
     }
 
@@ -289,6 +295,19 @@ public class Home extends GetSafeBase {
 
                     startActivity(new Intent(getApplicationContext(), JourneyDetails.class));
 
+            }
+        });
+        drawerSwapLyt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (tinyDB.getBoolean("isStaffAccount")) {
+                    tinyDB.putBoolean("isStaffAccount", false);
+                    setupChildAccount();
+                } else {
+                    tinyDB.putBoolean("isStaffAccount", true);
+                    setupStaffAccount();
+                }
             }
         });
 

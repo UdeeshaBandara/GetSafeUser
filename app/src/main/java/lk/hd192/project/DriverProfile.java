@@ -146,7 +146,7 @@ public class DriverProfile extends GetSafeBase {
 
                             img_vehicle_four.setVisibility(View.INVISIBLE);
 
-                        } else if (driverDetails.getJSONArray("vehicle_images").length() == 3) {
+                        } else if (driverDetails.getJSONArray("vehicle_images").length() != 0) {
                             img_vehicle_one.setImageBitmap(populateImage(driverDetails.getJSONArray("vehicle_images").getJSONObject(0).getString("image").substring(21)));
                             img_vehicle_four.setImageBitmap(populateImage(driverDetails.getJSONArray("vehicle_images").getJSONObject(3).getString("image").substring(21)));
 
