@@ -45,17 +45,17 @@ public class Messaging extends AppCompatActivity {
 
     SwipeRefreshLayout mRefreshLayout;
     EditText txtMsgContent;
-    private FirebaseAuth mAuth;
-    private String mCurrentUserId;
+
+
     private ImageView btnSend;
-    private EditText chatMessageView;
-    private String mChatUser;
+
+
     private LinearLayoutManager mLinearLayout;
     private MessageAdapter mAdapter;
     private static final int TOTAL_ITEMS_TO_LOAD = 10;
     private int mCurrentPage = 1;
     private DatabaseReference mRootRef, messageRef;
-    private RecyclerView mMessageList;
+    private RecyclerView mMessageList,chatMessageView;
     TinyDB tinyDB;
     private final List<Messages> messagesList = new ArrayList<>();
 
@@ -66,12 +66,12 @@ public class Messaging extends AppCompatActivity {
 
         tinyDB = new TinyDB(getApplicationContext());
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        mAuth = FirebaseAuth.getInstance();
 
+        mRootRef = FirebaseDatabase.getInstance().getReference();
         if (tinyDB.getBoolean("isStaffAccount"))
-            messageRef = FirebaseDatabase.getInstance().getReference().child("Staff_Drivers").child("add_driver_id_here").child("Passengers").child("Add_user_id_here").child("messages");
+            messageRef = mRootRef.child("Staff_Drivers").child("add_driver_id_here").child("Passengers").child("Add_user_id_here").child("messages");
         else
-            messageRef = FirebaseDatabase.getInstance().getReference().child("School_Drivers").child("add_driver_id_here").child("Passengers").child("Add_user_id_here").child("Add_child_id_here").child("messages");
+            messageRef = mRootRef.child("School_Drivers").child("add_driver_id_here").child("Passengers").child("Add_user_id_here").child(   tinyDB.getString("selectedChildId")).child("messages");
 
 
 //        mChatUser = "a0tW1ZdZySMuDb28Za0RyoSDrlz1";
@@ -116,23 +116,19 @@ public class Messaging extends AppCompatActivity {
     private void sendMessage() {
         String message = txtMsgContent.getText().toString();
         if (!TextUtils.isEmpty(message)) {
-//            String current_user_ref = "messages/" + mCurrentUserId + "/" + mChatUser;
-//            String chat_user_ref = "messages/" + mChatUser + "/" + mCurrentUserId;
-            //
-            DatabaseReference user_message_push =messageRef.push();
+
+
+            DatabaseReference user_message_push = messageRef.push();
             String push_id = user_message_push.getKey();
+
             java.util.Map messageMap = new HashMap();
             messageMap.put("message", message);
             messageMap.put("seen", false);
-            messageMap.put("type", "text");
+            messageMap.put("from", "driver");
             messageMap.put("time", ServerValue.TIMESTAMP);
-//            messageMap.put("from", mCurrentUserId);
 
-            Map messageUserMap = new HashMap();
-            messageUserMap.put(messageRef.child(push_id), messageMap);
-//            messageUserMap.put(chat_user_ref + "/" + push_id, messageMap);
             txtMsgContent.setText("");
-            messageRef.updateChildren(messageUserMap, new DatabaseReference.CompletionListener() {
+            messageRef.child(push_id).updateChildren(messageMap, new DatabaseReference.CompletionListener() {
                 @Override
                 public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                     if (databaseError != null) {
@@ -148,7 +144,7 @@ public class Messaging extends AppCompatActivity {
     private void loadMessages() {
 
         //Reference location to user msgs
-        DatabaseReference messageRef = mRootRef.child("messages").child(mCurrentUserId).child(mChatUser);
+
         Query messageQuery = messageRef.limitToLast(mCurrentPage * TOTAL_ITEMS_TO_LOAD);
         //Refresh recycle view with the newly sent msgs
         messageQuery.addChildEventListener(new ChildEventListener() {
@@ -224,15 +220,14 @@ public class Messaging extends AppCompatActivity {
         public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {
 
             Messages c = mMessageList.get(position);
-            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-            String current_user_id = currentUser.getUid();
+
 
             String from_user = c.getFrom();
 
             String timeAgo = GetTimeAgo.getTimeAgo(c.getTime(), mContext);
 
 
-            if (from_user.equals(current_user_id)) {
+            if (from_user.equals("user")) {
                 holder.lnrFrom.setVisibility(View.GONE);
                 holder.lnrTo.setVisibility(View.VISIBLE);
                 holder.txtMsgTo.setText(c.getMessage());

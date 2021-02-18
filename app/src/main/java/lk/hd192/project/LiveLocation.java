@@ -46,6 +46,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ServerValue;
 
 import org.json.JSONObject;
 
@@ -76,7 +77,7 @@ public class LiveLocation extends GetSafeBase {
 
     LocationManager locationManager;
     GetSafeServices getSafeServices;
-
+    private DatabaseReference mRootRef, locationRef;
     String locationProvider = LocationManager.GPS_PROVIDER;
     CameraPosition cameraPosition;
 
@@ -85,8 +86,7 @@ public class LiveLocation extends GetSafeBase {
     Polyline polyline;
     LocationListener locationListener;
     LocationManager locationManagerSender;
-    FirebaseDatabase database;
-    DatabaseReference myRef;
+
     Bitmap originMarker, finalMarker;
 
     Double dropLat, dropLon, currentLat, currentLon;
@@ -105,12 +105,16 @@ public class LiveLocation extends GetSafeBase {
 
         mapView = findViewById(R.id.mapView);
 
-
+        mRootRef = FirebaseDatabase.getInstance().getReference();
         btnBack = findViewById(R.id.btn_location_back);
 
-        database = FirebaseDatabase.getInstance();
-        myRef = database.getReference("message");
-        Query lastQuery = myRef.orderByKey().limitToLast(1);
+//        database = FirebaseDatabase.getInstance();
+//        myRef = database.getReference("message");
+//        Query lastQuery = myRef.orderByKey().limitToLast(1);
+        if (tinyDB.getBoolean("isStaffAccount"))
+            locationRef = mRootRef.child("Staff_Drivers").child("add_driver_id_here").child("Location");
+        else
+            locationRef = mRootRef.child("School_Drivers").child("add_driver_id_here").child("Location");
 
 
         if (ActivityCompat.checkSelfPermission(LiveLocation.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(LiveLocation.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -136,10 +140,24 @@ public class LiveLocation extends GetSafeBase {
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                pushId = myRef.push().getKey();
-                myRef.child(String.valueOf(pushId)).child("Latitude").setValue(location.getLatitude());
-                myRef.child(String.valueOf(pushId)).child("Longitude").setValue(location.getLongitude());
+
+                locationRef.child("Latitude").setValue(location.getLatitude());
+                locationRef.child("Longitude").setValue(location.getLongitude());
                 // pushId++;
+                java.util.Map messageMap = new HashMap();
+                messageMap.put("Latitude", location.getLatitude());
+                messageMap.put("Longitude", location.getLongitude());
+
+
+
+                locationRef.updateChildren(messageMap, new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                        if (databaseError != null) {
+                            Log.e("Error", databaseError.getMessage());
+                        }
+                    }
+                });
             }
 
             @Override
@@ -176,7 +194,7 @@ public class LiveLocation extends GetSafeBase {
         locationManagerSender.requestLocationUpdates(LocationManager.GPS_PROVIDER, 120000, 0, locationListener);
 
 
-        lastQuery.addChildEventListener(new ChildEventListener() {
+        locationRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 try {

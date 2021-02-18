@@ -2,19 +2,11 @@ package lk.hd192.project.pojo;
 
 public class Messages {
 
-    private String message, type, from;
+    private String message, from;
     private long time;
     private boolean seen;
 
     public Messages() {
-    }
-
-    public Messages(String message, String type, String from, long time, boolean seen) {
-        this.message = message;
-        this.type = type;
-        this.from = from;
-        this.time = time;
-        this.seen = seen;
     }
 
     public String getMessage() {
@@ -25,12 +17,11 @@ public class Messages {
         this.message = message;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+    public Messages(String message, String from, long time, boolean seen) {
+        this.message = message;
+        this.from = from;
+        this.time = time;
+        this.seen = seen;
     }
 
     public String getFrom() {
@@ -56,7 +47,5 @@ public class Messages {
     public void setSeen(boolean seen) {
         this.seen = seen;
     }
-
-
 }
 
