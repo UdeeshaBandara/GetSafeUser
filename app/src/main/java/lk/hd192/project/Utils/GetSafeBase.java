@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 
+import lk.hd192.project.Login;
 import lk.hd192.project.R;
 
 
@@ -75,7 +76,7 @@ public class GetSafeBase extends AppCompatActivity {
             window.setGravity(Gravity.BOTTOM);
 
 
-            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, 550);
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
             dialog.setTitle(null);
             dialog.setContentView(R.layout.toast_layout_location);
 
@@ -139,6 +140,9 @@ public class GetSafeBase extends AppCompatActivity {
             case 2:
                 dialog.setContentView(R.layout.toast_layout_success);
                 break;
+            case 3:
+                dialog.setContentView(R.layout.logout_popup);
+                break;
 
 
         }
@@ -155,6 +159,17 @@ public class GetSafeBase extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
+        if(type==3){
+            Button btnSignOut = dialog.findViewById(R.id.btn_sign_out);
+            btnSignOut.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    tinyDB.clear();
+                    startActivity(new Intent(getApplicationContext(), Login.class));
+                    finishAffinity();
+                }
+            });
+        }
         msgToShow.setText(msg);
 
         dialog.show();

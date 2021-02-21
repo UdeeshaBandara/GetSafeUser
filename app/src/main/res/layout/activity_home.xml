@@ -115,11 +115,11 @@
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:clipToPadding="false"
-                android:paddingBottom="5dp"
-                android:overScrollMode="never"
                 android:layout_above="@+id/side_menu_bottom"
-                android:layout_below="@id/side_menu_heading">
+                android:layout_below="@id/side_menu_heading"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:paddingBottom="5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -150,6 +150,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginRight="25dp"
                             android:src="@drawable/down_arrow" />
+
                         <ImageView
                             android:id="@+id/select_child_up_arrow"
                             android:layout_width="wrap_content"
@@ -157,18 +158,18 @@
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:layout_marginRight="25dp"
-                            android:visibility="gone"
-                            android:src="@drawable/up_arrow" />
+                            android:src="@drawable/up_arrow"
+                            android:visibility="gone" />
                     </RelativeLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_select_child"
                         android:layout_width="match_parent"
-                        android:visibility="gone"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
                         android:layout_marginTop="-15dp"
                         android:overScrollMode="never"
-                        android:layout_marginLeft="10dp"
-                        android:layout_height="wrap_content" />
+                        android:visibility="gone" />
 
                     <RelativeLayout
                         android:id="@+id/rlt_absence"
@@ -194,6 +195,7 @@
 
                             android:src="@drawable/journey_date" />
                     </RelativeLayout>
+
                     <RelativeLayout
                         android:id="@+id/rlt_transport_services"
                         android:layout_width="match_parent"
@@ -217,9 +219,6 @@
                             android:layout_marginRight="25dp"
                             android:src="@drawable/side_menu_icon_transport" />
                     </RelativeLayout>
-
-
-
 
 
                     <RelativeLayout
@@ -297,7 +296,7 @@
                         android:layout_marginLeft="20dp">
 
                         <TextView
-android:id="@+id/account_type"
+                            android:id="@+id/account_type"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
@@ -316,7 +315,7 @@ android:id="@+id/account_type"
                     </RelativeLayout>
 
                     <RelativeLayout
-                        android:id="@+id/rlt_help"
+                        android:id="@+id/rlt_logout"
                         android:layout_width="match_parent"
                         android:layout_height="65dp"
                         android:background="@drawable/side_menu_bottom_gradient">
@@ -326,9 +325,9 @@ android:id="@+id/account_type"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginLeft="20dp"
                             android:fontFamily="@font/nunito_bold"
-                            android:text="Need Help?"
+                            android:text="Sing Out"
                             android:textColor="@color/white"
                             android:textSize="15sp" />
 

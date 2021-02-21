@@ -32,7 +32,6 @@ import java.util.HashMap;
 
 import lk.hd192.project.Utils.GetSafeBase;
 import lk.hd192.project.Utils.GetSafeServices;
-import lk.hd192.project.Utils.SplashScreen;
 import lk.hd192.project.Utils.TinyDB;
 import lk.hd192.project.Utils.VolleyJsonCallback;
 
@@ -236,9 +235,9 @@ public class OTP extends GetSafeBase {
                     if (result.getBoolean("otp_token_validity")) {
                         tinyDB.putBoolean("isLogged", true);
                         tinyDB.putString("token", result.getString("access_token"));
-                        registerFirebaseUser();
-                        getDeviceToken();
-                        firebaseLogin();
+//                        registerFirebaseUser();
+                        getDeviceFcmToken();
+//                        firebaseLogin();
                         startActivity(new Intent(getApplicationContext(), InitLocation.class));
                         finishAffinity();
 
@@ -256,8 +255,9 @@ public class OTP extends GetSafeBase {
 
 
     }
+
     private void registerFirebaseUser() {
-        mAuth.createUserWithEmailAndPassword( tinyDB.getString("email"),tinyDB.getString("phone_no"))
+        mAuth.createUserWithEmailAndPassword(tinyDB.getString("email"), tinyDB.getString("phone_no"))
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -290,14 +290,14 @@ public class OTP extends GetSafeBase {
                 });
     }
 
-    private void firebaseLogin(){
+    private void firebaseLogin() {
 
-        mAuth.signInWithEmailAndPassword( tinyDB.getString("email"),tinyDB.getString("phone_no") ).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        mAuth.signInWithEmailAndPassword(tinyDB.getString("email"), tinyDB.getString("phone_no")).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
 
-                    Log.e("firebase login","success");
+                    Log.e("firebase login", "success");
 //                    startActivity(new Intent(getApplicationContext(),Messaging.class));
 //                    finishAffinity();
 
@@ -308,10 +308,7 @@ public class OTP extends GetSafeBase {
         });
 
 
-
-
     }
-
 
 
     private void existingUserValidateOTP() {
@@ -334,9 +331,11 @@ public class OTP extends GetSafeBase {
 
                         tinyDB.putBoolean("isLogged", true);
                         tinyDB.putString("token", result.getString("access_token"));
-                        SplashScreen.token = result.getString("access_token");
-                        getDeviceToken();
-                        firebaseLogin();
+                        tinyDB.putString("user_id", result.getJSONObject("user").getString("id"));
+                        tinyDB.putString("user_name", result.getJSONObject("user").getString("name"));
+//                        SplashScreen.token = result.getString("access_token");
+                        getDeviceFcmToken();
+//                        firebaseLogin();
                         startActivity(new Intent(getApplicationContext(), Home.class));
                         finishAffinity();
 
@@ -357,7 +356,7 @@ public class OTP extends GetSafeBase {
     }
 
 
-    public void getDeviceToken() {
+    public void getDeviceFcmToken() {
 
 
         FirebaseInstanceId.getInstance().getInstanceId()
@@ -389,7 +388,7 @@ public class OTP extends GetSafeBase {
         tempParam.put("fcm_token", fcmToken);
 
         showLoading();
-        getSafeServices.networkJsonRequest(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.UPDATE_FCM), 2, tinyDB.getString("token"),new VolleyJsonCallback() {
+        getSafeServices.networkJsonRequest(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.UPDATE_FCM), 2, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
                 hideLoading();

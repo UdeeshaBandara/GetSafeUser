@@ -64,6 +64,7 @@ import java.util.Locale;
 import lk.hd192.project.Utils.DirectionsJSONParser;
 import lk.hd192.project.Utils.GetSafeBase;
 import lk.hd192.project.Utils.GetSafeServices;
+import lk.hd192.project.Utils.TinyDB;
 import lk.hd192.project.pojo.LocationUpdates;
 
 
@@ -86,7 +87,7 @@ public class LiveLocation extends GetSafeBase {
     Polyline polyline;
     LocationListener locationListener;
     LocationManager locationManagerSender;
-
+TinyDB tinyDB;
     Bitmap originMarker, finalMarker;
 
     Double dropLat, dropLon, currentLat, currentLon;
@@ -104,7 +105,7 @@ public class LiveLocation extends GetSafeBase {
         getSafeServices = new GetSafeServices();
 
         mapView = findViewById(R.id.mapView);
-
+tinyDB=new TinyDB(getApplicationContext());
         mRootRef = FirebaseDatabase.getInstance().getReference();
         btnBack = findViewById(R.id.btn_location_back);
 

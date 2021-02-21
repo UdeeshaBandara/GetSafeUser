@@ -105,6 +105,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/home_heading"
         android:scaleType="centerCrop"
+        
         android:src="@drawable/bg_shadow" />
 
     <TextView

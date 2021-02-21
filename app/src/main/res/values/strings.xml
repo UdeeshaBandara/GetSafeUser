@@ -7,7 +7,7 @@
     <string name="REVERSE_GEO">https://maps.googleapis.com/maps/api/geocode/json</string>
 
 
-    <string name="BASE_URL">http://192.168.1.5:8000/v1/getsafe/api</string>
+    <string name="BASE_URL">http://192.168.1.4:8000/v1/getsafe/api</string>
     <string name="SAVE_USER">/register/saveuser</string>
     <string name="REGISTER_SEND_OTP">/register/sendotp</string>
     <string name="REGISTER_VALIDATE_OTP">/register/validateotp</string>

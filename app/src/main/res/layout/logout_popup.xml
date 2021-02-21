@@ -5,19 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_toast"
-    android:backgroundTint="#828388">
+    android:backgroundTint="#7F6583">
 
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/need_location_animation"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-
+        app:lottie_repeatCount="4"
         android:layout_alignParentTop="true"
-    
+
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
-        app:lottie_rawRes="@raw/add_kid_confirmation" />
+        app:lottie_rawRes="@raw/logout" />
 
     <TextView
         android:id="@+id/toast_message"
@@ -32,22 +32,39 @@
         android:textColor="@color/black"
         android:textSize="18sp" />
 
-
-    <Button
-        android:id="@+id/btn_ok"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/toast_message"
-
         android:layout_marginHorizontal="20dp"
-
         android:layout_marginBottom="30dp"
-        android:background="@drawable/bg_btn_ok"
-        android:fontFamily="@font/nunito_regular"
-        android:text="Okay, Nice"
-        android:textAllCaps="false"
-        android:textColor="@color/black"
-        android:textSize="18sp" />
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_ok"
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_height="45dp"
+            android:background="@drawable/bg_btn_ok"
+            android:fontFamily="@font/nunito_regular"
+            android:text="Cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/btn_sign_out"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="5"
+            android:background="@drawable/bg_singout"
+            android:layout_marginLeft="8dp"
+            android:fontFamily="@font/nunito_regular"
+            android:text="Yes, Please"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+    </LinearLayout>
 
 
 </RelativeLayout>

@@ -124,7 +124,7 @@ public class Messaging extends AppCompatActivity {
             java.util.Map messageMap = new HashMap();
             messageMap.put("message", message);
             messageMap.put("seen", false);
-            messageMap.put("from", "driver");
+            messageMap.put("from", "user");
             messageMap.put("time", ServerValue.TIMESTAMP);
 
             txtMsgContent.setText("");

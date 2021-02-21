@@ -18,7 +18,7 @@ import lk.hd192.project.Welcome;
 public class SplashScreen extends GetSafeBase {
     GetSafeServices getSafeServices;
     TinyDB tinyDB;
-    public static String token;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +34,7 @@ Log.e("islogged",tinyDB.getBoolean("isLogged")+"");
 
 
         if (tinyDB.getBoolean("isLogged")) {
-            token = tinyDB.getString("token");
-            Log.e("token splash",token);
+
             validateToken();
 
 
@@ -57,7 +56,7 @@ Log.e("islogged",tinyDB.getBoolean("isLogged")+"");
 
 
 
-        getSafeServices.networkJsonRequest(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.VALIDATE_TOKEN), 1,token, new VolleyJsonCallback() {
+        getSafeServices.networkJsonRequest(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.VALIDATE_TOKEN), 1,tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 

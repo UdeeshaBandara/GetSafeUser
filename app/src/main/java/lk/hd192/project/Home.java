@@ -35,6 +35,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
 import java.util.HashMap;
 
 import lk.hd192.project.Utils.GetSafeBase;
@@ -49,7 +50,7 @@ public class Home extends GetSafeBase {
     JSONArray homeOptions;
 
     JSONObject oneOption, twoOption, threeOption, fourOption, fiveOption, kidList;
-TextView account_type;
+    TextView account_type, txt_greeting;
     Dialog dialog;
     GetSafeServices getSafeServices;
     ImageView sideMenuListener, selectChildDownArrow, selectChildUpArrow, btnNotification;
@@ -57,7 +58,7 @@ TextView account_type;
     String imageUrl;
     int currentPosition = 0;
     NavigationView navigationView;
-    RelativeLayout drawerSideMenuHeading, drawerSelectChildLyt, drawerAbsenceLyt, drawerTransportLyt, drawerLocationLyt, drawerStatsLyt, drawerExpensesLyt, drawerSwapLyt, drawerHelpLyt;
+    RelativeLayout drawerSideMenuHeading, drawerSelectChildLyt, drawerAbsenceLyt, drawerTransportLyt, drawerLocationLyt, drawerStatsLyt, drawerExpensesLyt, drawerSwapLyt, drawerLogoutLyt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +76,7 @@ TextView account_type;
         fourOption = new JSONObject();
         fiveOption = new JSONObject();
         tinyDB.putString("token", "12|ufdzInYwTrUH6ND5WtO3S1oyhug7eMyDN5w600E6");
+        tinyDB.putString("user_name", "Udeesha Bandara");
 //        tinyDB.putBoolean("isStaffAccount", true);
         try {
 
@@ -108,6 +110,7 @@ TextView account_type;
         fabAddKid = findViewById(R.id.fab_add_kid);
         selectChildDownArrow = findViewById(R.id.select_child_down_arrow);
         selectChildUpArrow = findViewById(R.id.select_child_up_arrow);
+        txt_greeting = findViewById(R.id.txt_greeting);
         btnNotification = findViewById(R.id.btn_notification);
 
         drawerTransportLyt = navigationView.findViewById(R.id.rlt_transport_services);
@@ -117,7 +120,7 @@ TextView account_type;
         drawerStatsLyt = navigationView.findViewById(R.id.rlt_stats);
         drawerExpensesLyt = navigationView.findViewById(R.id.rlt_expenses);
         drawerSwapLyt = navigationView.findViewById(R.id.rlt_swap);
-        drawerHelpLyt = navigationView.findViewById(R.id.rlt_help);
+        drawerLogoutLyt = navigationView.findViewById(R.id.rlt_logout);
         drawerSelectChildLyt = navigationView.findViewById(R.id.rlt_select_child);
         drawerAbsenceLyt = navigationView.findViewById(R.id.rlt_absence);
         account_type = navigationView.findViewById(R.id.account_type);
@@ -139,6 +142,8 @@ TextView account_type;
         });
 
         drawerMenu();
+
+        getGreeting();
 
         fabAddKid.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,8 +186,8 @@ TextView account_type;
 
         drawerSelectChildLyt.setVisibility(View.GONE);
         fabAddKid.setVisibility(View.GONE);
-       if (recyclerSelectChild.getVisibility() != View.GONE)
-        drawerSelectChildLyt.performClick();
+        if (recyclerSelectChild.getVisibility() != View.GONE)
+            drawerSelectChildLyt.performClick();
         account_type.setText("Switch to your student \ntransport account");
     }
 
@@ -306,10 +311,19 @@ TextView account_type;
                 if (tinyDB.getBoolean("isStaffAccount")) {
                     tinyDB.putBoolean("isStaffAccount", false);
                     setupChildAccount();
+                    showToast(dialog, "Changed to kid(s) account ", 2);
                 } else {
                     tinyDB.putBoolean("isStaffAccount", true);
                     setupStaffAccount();
+                    showToast(dialog, "Changed to staff account ", 2);
                 }
+            }
+        });
+        drawerLogoutLyt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                showToast(dialog, "Are you sure you want to Sign out? ", 3);
             }
         });
 
@@ -344,7 +358,7 @@ TextView account_type;
             try {
 
 
-                if (currentPosition == position)
+                if (tinyDB.getString("selectedChildId").equals(kidList.getJSONArray("children").getJSONObject(position).getString("id")))
 
                     holder.kidSelector.setVisibility(View.VISIBLE);
                 else
@@ -362,10 +376,11 @@ TextView account_type;
 
                             if (holder.kidSelector.getVisibility() == View.GONE) {
 
-                                currentPosition = position;
+
                                 tinyDB.putString("selectedChildId", kidList.getJSONArray("children").getJSONObject(position).getString("id"));
                                 tinyDB.putString("selectedChildName", kidList.getJSONArray("children").getJSONObject(position).getString("name"));
                                 notifyDataSetChanged();
+                                showToast(dialog, "Profile changed to " + tinyDB.getString("selectedChildName"), 2);
 
                             }
 
@@ -571,6 +586,25 @@ TextView account_type;
         }
     }
 
+    private void getGreeting() {
+        Calendar c = Calendar.getInstance();
+        int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
+
+        if (timeOfDay >= 0 && timeOfDay < 12) {
+
+            txt_greeting.setText("Good Morning,\n" + tinyDB.getString("user_name"));
+        } else if (timeOfDay >= 12 && timeOfDay < 16) {
+            txt_greeting.setText("Good Afternoon,\n" + tinyDB.getString("user_name"));
+
+        } else if (timeOfDay >= 16 && timeOfDay < 21) {
+
+            txt_greeting.setText("Good Evening,\n" + tinyDB.getString("user_name"));
+        } else if (timeOfDay >= 21 && timeOfDay < 24) {
+
+            txt_greeting.setText("Good Night,\n" + tinyDB.getString("user_name"));
+        }
+    }
+
     public void getAllChildren() {
         HashMap<String, String> tempParam = new HashMap<>();
 
@@ -582,13 +616,13 @@ TextView account_type;
                 try {
 
                     kidList = result;
-                    if (kidList != null)
+
+                    if (kidList!=null) {
                         tinyDB.putString("selectedChildId", kidList.getJSONArray("children").getJSONObject(0).getString("id"));
-                    tinyDB.putString("selectedChildName", kidList.getJSONArray("children").getJSONObject(0).getString("name"));
+                        tinyDB.putString("selectedChildName", kidList.getJSONArray("children").getJSONObject(0).getString("name"));
 
-                    Log.e("kid lsit", kidList + "");
-                    recyclerSelectChild.getAdapter().notifyDataSetChanged();
-
+                        recyclerSelectChild.getAdapter().notifyDataSetChanged();
+                    }
 
                 } catch (Exception e) {
 

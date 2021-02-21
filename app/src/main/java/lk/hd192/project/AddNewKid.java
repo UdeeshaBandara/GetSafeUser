@@ -46,7 +46,7 @@ public class AddNewKid extends GetSafeBase {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_kid);
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 
         nonSwappableViewPager = findViewById(R.id.view_pager_container);
