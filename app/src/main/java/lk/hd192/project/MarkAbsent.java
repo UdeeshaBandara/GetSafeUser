@@ -41,6 +41,8 @@ import lk.hd192.project.Utils.GetSafeServices;
 import lk.hd192.project.Utils.TinyDB;
 import lk.hd192.project.Utils.VolleyJsonCallback;
 
+import static lk.hd192.project.Absence.isNewAbsentAdded;
+
 public class MarkAbsent extends GetSafeBaseFragment {
     Button btnMorning, btnEvening, btnBoth, btnBothSelect, btnMorningSelect, btnEveningSelect, btnSaveAbsence, btnAddToList;
 
@@ -71,7 +73,6 @@ public class MarkAbsent extends GetSafeBaseFragment {
     }
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -87,7 +88,7 @@ public class MarkAbsent extends GetSafeBaseFragment {
         absenceDateList = new JSONArray();
         absenceDate = new JSONObject();
         getSafeServices = new GetSafeServices();
-        tinyDB =new TinyDB(getActivity());
+        tinyDB = new TinyDB(getActivity());
 
 
         dialog = new Dialog(getActivity(), android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
@@ -122,20 +123,20 @@ public class MarkAbsent extends GetSafeBaseFragment {
         dateInFormat = new SimpleDateFormat("dd-MM-yyyy");
 
 
-        btnBoth =view. findViewById(R.id.btn_both);
+        btnBoth = view.findViewById(R.id.btn_both);
         btnBothSelect = view.findViewById(R.id.btn_both_select);
         btnEvening = view.findViewById(R.id.btn_evening);
         btnMorning = view.findViewById(R.id.btn_morning);
         btnEveningSelect = view.findViewById(R.id.btn_evening_select);
-        btnMorningSelect =view. findViewById(R.id.btn_morning_select);
-        monthPicker =view. findViewById(R.id.month_picker);
+        btnMorningSelect = view.findViewById(R.id.btn_morning_select);
+        monthPicker = view.findViewById(R.id.month_picker);
         sub_heading_absence = view.findViewById(R.id.sub_heading_absence);
 
-        btnSaveAbsence =view. findViewById(R.id.btn_save_absence);
+        btnSaveAbsence = view.findViewById(R.id.btn_save_absence);
 
-        subHeadingAbsence =view. findViewById(R.id.sub_heading_absence);
-        btnAddToList =view. findViewById(R.id.btn_add_to_list);
-        chk_repeat =view. findViewById(R.id.chk_repeat);
+        subHeadingAbsence = view.findViewById(R.id.sub_heading_absence);
+        btnAddToList = view.findViewById(R.id.btn_add_to_list);
+        chk_repeat = view.findViewById(R.id.chk_repeat);
 
         chk_repeat.setText("Repeat on every " + selectedDay);
 
@@ -169,7 +170,7 @@ public class MarkAbsent extends GetSafeBaseFragment {
                         else if (absenceDateList.getJSONObject(j).getString("session").equals("Morning"))
                             type = "1";
                         String date = absenceDateList.getJSONObject(j).getString("date").substring(0, 2) + "-" + (String.valueOf(monthArray.indexOf(absenceDateList.getJSONObject(j).getString("month")) + 1)) + "-" + absenceDateList.getJSONObject(j).getString("year");
-
+Log.e("selected date ",date);
                         if (tinyDB.getBoolean("isStaffAccount")) {
                             addUserAbsent(date, type);
                         } else {
@@ -199,6 +200,7 @@ public class MarkAbsent extends GetSafeBaseFragment {
                     currentYear = Integer.parseInt(String.valueOf(date.getYear()).substring(1)) + 2000;
                 selectedMonthNumber = date.getMonth();
                 selectedDateNumber = date.getDate();
+                Log.e("selectedDateNumber",String.valueOf(selectedDateNumber));
                 selectedDay = dayNames[date.getDay()];
                 chk_repeat.setText("Repeat on every " + selectedDay);
 
@@ -347,6 +349,7 @@ public class MarkAbsent extends GetSafeBaseFragment {
         });
 
     }
+
     class MonthViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout rltMonth, rltMonthFocus;
         TextView txtMonth, txtYear, txtDate, txtSession;
@@ -497,12 +500,23 @@ public class MarkAbsent extends GetSafeBaseFragment {
             public void onSuccessResponse(JSONObject result) {
 
                 try {
+                    Log.e("res", result + "");
 
-                    if(result.getBoolean("status"))
-                        showToast(dialog, "Absent date(s)added", 2);
-                    else
+                    if (result.getBoolean("status")) {
+                        showToast(dialog, "Absent date(s) added", 2);
+                        absenceDateList = new JSONArray();
+                        recyclerAbsence.getAdapter().notifyDataSetChanged();
+                        btnEveningSelect.setVisibility(View.GONE);
+                        btnEvening.setVisibility(View.VISIBLE);
+                        btnMorningSelect.setVisibility(View.GONE);
+                        btnMorning.setVisibility(View.VISIBLE);
+                        btnBothSelect.setVisibility(View.GONE);
+                        btnBoth.setVisibility(View.VISIBLE);
+                        btnSaveAbsence.setVisibility(View.INVISIBLE);
+                        subHeadingAbsence.setVisibility(View.INVISIBLE);
+                        isNewAbsentAdded=true;
+                    } else
                         showToast(dialog, "Please try again.", 0);
-
 
 
                 } catch (Exception e) {
@@ -529,10 +543,21 @@ public class MarkAbsent extends GetSafeBaseFragment {
 
                 try {
 
-
-                    if(result.getBoolean("status"))
-                        showToast(dialog, "Absent date(s)added", 2);
-                    else
+                    Log.e("res", result + "");
+                    if (result.getBoolean("status")) {
+                        showToast(dialog, "Absent date(s) added", 2);
+                        absenceDateList = new JSONArray();
+                        recyclerAbsence.getAdapter().notifyDataSetChanged();
+                        btnEveningSelect.setVisibility(View.GONE);
+                        btnEvening.setVisibility(View.VISIBLE);
+                        btnMorningSelect.setVisibility(View.GONE);
+                        btnMorning.setVisibility(View.VISIBLE);
+                        btnBothSelect.setVisibility(View.GONE);
+                        btnBoth.setVisibility(View.VISIBLE);
+                        btnSaveAbsence.setVisibility(View.INVISIBLE);
+                        subHeadingAbsence.setVisibility(View.INVISIBLE);
+                        isNewAbsentAdded=true;
+                    } else
                         showToast(dialog, "Please try again.", 0);
 
 

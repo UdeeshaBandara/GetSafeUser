@@ -29,6 +29,12 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker;
 
 import org.json.JSONArray;
@@ -51,12 +57,11 @@ import lk.hd192.project.Utils.VolleyJsonCallback;
 public class Absence extends GetSafeBase {
 
     private SwappableViewPager swappableViewPager;
-    int selectedItem = -1;
-    int absenceDatesIndex = 0;
+public static boolean isNewAbsentAdded=false;
     MarkAbsent markAbsent;
     ViewAbsent viewAbsent;
     View mark_indicator, review_indicator;
-    TextView txt_current_name,heading;
+    TextView txt_current_name, heading;
 
     @SuppressLint("SimpleDateFormat")
     @Override
@@ -71,6 +76,8 @@ public class Absence extends GetSafeBase {
         findViewById(R.id.btn_absence_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                viewAbsent.removeDates();
                 onBackPressed();
             }
         });
@@ -84,6 +91,10 @@ public class Absence extends GetSafeBase {
             @Override
             public void onClick(View v) {
                 swappableViewPager.setCurrentItem(1);
+                if (tinyDB.getBoolean("isStaffAccount"))
+                    viewAbsent.getUserAbsent();
+                else
+                    viewAbsent.getChildAbsent();
             }
         });
         txt_current_name = findViewById(R.id.txt_current_name);
@@ -118,6 +129,15 @@ public class Absence extends GetSafeBase {
                     mark_indicator.setVisibility(View.INVISIBLE);
                     review_indicator.setVisibility(View.VISIBLE);
                     heading.setText("Review Absent");
+                    if (tinyDB.getBoolean("isStaffAccount")&isNewAbsentAdded) {
+                        viewAbsent.removeDates();
+                        viewAbsent.getUserAbsent();
+                        isNewAbsentAdded=false;
+                    } else if (!tinyDB.getBoolean("isStaffAccount")&isNewAbsentAdded){
+                        isNewAbsentAdded=false;
+                        viewAbsent.removeDates();
+                        viewAbsent.getChildAbsent();
+                    }
                 }
 
             }
