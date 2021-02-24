@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".MarkAbsent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:background="@color/white">
+
+        <LinearLayout
+            android:id="@+id/lnr_session"
+            android:layout_width="match_parent"
+            android:layout_height="37dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_morning"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="3"
+                android:background="@drawable/bg_btn_absence_session"
+
+                android:drawableStart="@drawable/icon_cancel_deselect"
+                android:paddingLeft="2dp"
+                android:paddingRight="5dp"
+                android:text="Morning"
+                android:textAllCaps="false"
+                android:visibility="visible" />
+
+            <Button
+                android:id="@+id/btn_morning_select"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="3"
+                android:background="@drawable/bg_btn_absence_session_select"
+
+                android:drawableStart="@drawable/icon_cancel"
+                android:paddingLeft="2dp"
+                android:paddingRight="5dp"
+                android:text="Morning"
+                android:textAllCaps="false"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/btn_evening"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="3"
+                android:background="@drawable/bg_btn_absence_session"
+
+                android:drawableStart="@drawable/icon_cancel_deselect"
+                android:paddingLeft="2dp"
+                android:paddingRight="5dp"
+                android:text="Evening"
+                android:textAllCaps="false"
+                android:visibility="visible" />
+
+            <Button
+                android:id="@+id/btn_evening_select"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="3"
+                android:background="@drawable/bg_btn_absence_session_select"
+
+                android:drawableStart="@drawable/icon_cancel"
+                android:paddingLeft="2dp"
+                android:paddingRight="5dp"
+                android:text="Evening"
+                android:textAllCaps="false"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/btn_both"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="3"
+                android:background="@drawable/bg_btn_absence_session"
+                android:drawableStart="@drawable/icon_cancel_deselect"
+                android:paddingLeft="2dp"
+                android:paddingRight="5dp"
+                android:text="Both"
+                android:textAllCaps="false"
+                android:visibility="visible" />
+
+            <Button
+                android:id="@+id/btn_both_select"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="3"
+                android:background="@drawable/bg_btn_absence_session_select"
+                android:drawableStart="@drawable/icon_cancel"
+                android:paddingLeft="2dp"
+                android:paddingRight="5dp"
+                android:text="Both"
+                android:textAllCaps="false"
+                android:visibility="gone" />
+
+
+        </LinearLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lnr_session"
+            android:layout_marginTop="5dp"
+            android:overScrollMode="never"
+            android:scrollbars="none">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/date_year"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_marginTop="10dp"
+
+                    android:orientation="horizontal">
+
+                    <com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker
+                        android:id="@+id/month_picker"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/date_year"
+
+                        app:fontFamily="@font/nunito_bold"
+                        app:picker_curved="true"
+                        app:picker_curvedMaxAngle="70"
+                        app:picker_cyclic="true"
+
+                        app:picker_displayDays="true"
+                        app:picker_displayDaysOfMonth="false"
+                        app:picker_displayHours="false"
+                        app:picker_displayMinutes="false"
+                        app:picker_displayMonth="false"
+                        app:picker_displayMonthNumbers="false"
+                        app:picker_displayYears="false"
+                        app:picker_itemSpacing="20dp"
+
+                        app:picker_selectedTextColor="#3D5AF1"
+                        app:picker_selectorColor="@android:color/transparent"
+
+                        app:picker_todayText=""
+                        app:picker_visibleItemCount="5" />
+
+
+                </LinearLayout>
+
+                <CheckBox
+                    android:id="@+id/chk_repeat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/date_year"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Absence on every "
+                    android:visibility="invisible" />
+
+                <Button
+                    android:id="@+id/btn_add_to_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_below="@id/date_year"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/custom_edittext"
+                    android:fontFamily="@font/nunito_regular"
+                    android:text="Add to list"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/btn_add_to_list"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:id="@+id/sub_heading_absence"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:fontFamily="@font/nunito_regular"
+                        android:text="Yuthmika absence on"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_absence"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/sub_heading_absence"
+                        android:layout_gravity="center_horizontal"
+                        android:clipToPadding="false"
+                        android:overScrollMode="never"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="10dp"
+                        android:scrollbars="none" />
+
+                    <Button
+                        android:id="@+id/btn_save_absence"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_below="@id/recycler_absence"
+                        android:layout_marginHorizontal="15dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/bg_btn_resend"
+                        android:fontFamily="@font/nunito_regular"
+                        android:text="Confirm"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+
+        </androidx.core.widget.NestedScrollView>
+    </RelativeLayout>
+
+</FrameLayout>

@@ -30,7 +30,7 @@ public class SplashScreen extends GetSafeBase {
 
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-Log.e("islogged",tinyDB.getBoolean("isLogged")+"");
+        Log.e("islogged", tinyDB.getBoolean("isLogged") + "");
 
 
         if (tinyDB.getBoolean("isLogged")) {
@@ -40,7 +40,7 @@ Log.e("islogged",tinyDB.getBoolean("isLogged")+"");
 
         } else {
             OTP.optType = 0;
-            Log.e("otpType", OTP.optType+"");
+            Log.e("otpType", OTP.optType + "");
             startActivity(new Intent(SplashScreen.this, Welcome.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
             finish();
         }
@@ -54,23 +54,22 @@ Log.e("islogged",tinyDB.getBoolean("isLogged")+"");
         HashMap<String, String> tempParam = new HashMap<>();
 
 
-
-
-        getSafeServices.networkJsonRequest(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.VALIDATE_TOKEN), 1,tinyDB.getString("token"), new VolleyJsonCallback() {
+        getSafeServices.networkJsonRequest(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.VALIDATE_TOKEN), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 
                 try { //startActivity(new Intent(SplashScreen.this, Home.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
 
-                    if (result.getBoolean("logged-in-status"))
+                    if (result.getBoolean("logged-in-status")) {
 
-
+                        tinyDB.putString("user_id", result.getJSONObject("user").getString("id"));
+                        tinyDB.putString("driver_id", result.getJSONObject("user").getString("driver_id"));
                         startActivity(new Intent(SplashScreen.this, Home.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
-                    else {
+                    } else {
                         OTP.optType = 0;
                         startActivity(new Intent(SplashScreen.this, Login.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
                     }
-                    Log.e("token",tinyDB.getString("token"));
+                    Log.e("token", tinyDB.getString("token"));
 
                     finish();
 

@@ -1,6 +1,7 @@
 package lk.hd192.project.Utils;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -16,6 +17,7 @@ import androidx.fragment.app.Fragment;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 
+import lk.hd192.project.Login;
 import lk.hd192.project.R;
 
 public class GetSafeBaseFragment extends Fragment {
@@ -85,27 +87,49 @@ public class GetSafeBaseFragment extends Fragment {
     }
 
 
-    public void customToast(String message, int type) {
-
-        View toastView = getLayoutInflater().inflate(R.layout.toast_layout_warning, null);
-
-        toastView.setMinimumWidth(device_width);
-        toastView.setMinimumHeight(100);
-
-        if (type == 1)
-            toastView.findViewById(R.id.lnr_bg_toast).setBackgroundColor(getResources().getColor(R.color.toast_warning_color));
-
-        TextView textView = toastView.findViewById(R.id.toast_message);
-
-        textView.setText(message);
+    public void showToast(final Dialog dialog, String msg, int type) {
 
 
-        Toast toast = new Toast(getActivity());
+        // Setting dialogview
+        Window window = dialog.getWindow();
+        window.setGravity(Gravity.BOTTOM);
 
-        toast.setView(toastView);
-        toast.setDuration(Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.TOP, 0, 0);
-        toast.show();
+
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.setTitle(null);
+        switch (type) {
+            case 0:
+                dialog.setContentView(R.layout.toast_layout_warning);
+                break;
+            case 1:
+                dialog.setContentView(R.layout.toast_layout_location);
+                break;
+            case 2:
+                dialog.setContentView(R.layout.toast_layout_success);
+                break;
+            case 3:
+                dialog.setContentView(R.layout.logout_popup);
+                break;
+
+
+        }
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(true);
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        TextView msgToShow = dialog.findViewById(R.id.toast_message);
+        Button btnOk = dialog.findViewById(R.id.btn_ok);
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        msgToShow.setText(msg);
+
+        dialog.show();
     }
 
     static public void showHUD(String msg) {

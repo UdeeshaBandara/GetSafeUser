@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
 
 import lk.payhere.androidsdk.PHConfigs;
 import lk.payhere.androidsdk.PHConstants;
@@ -20,17 +23,26 @@ import lk.payhere.androidsdk.model.StatusResponse;
 public class Payment extends AppCompatActivity {
 
     final static int PAYHERE_REQUEST=11010;
+    ImageView imgBanner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
+
+        imgBanner=findViewById(R.id.imgBanner);
+
         findViewById(R.id.btn_pay).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 handlePayment();
             }
         });
+
+        Picasso.get()
+                .load("https://www.payhere.lk/downloads/images/payhere_square_banner_dark.png").placeholder(R.drawable.payhere).fit().centerInside()
+                .into(imgBanner);
+
 
     }
     private void handlePayment(){

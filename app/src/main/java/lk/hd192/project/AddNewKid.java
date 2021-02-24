@@ -74,6 +74,7 @@ public class AddNewKid extends GetSafeBase {
         nonSwappableViewPager.setOffscreenPageLimit(1);
         setupViewPager(nonSwappableViewPager);
 
+
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

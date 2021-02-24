@@ -75,9 +75,8 @@ public class Home extends GetSafeBase {
         threeOption = new JSONObject();
         fourOption = new JSONObject();
         fiveOption = new JSONObject();
-        tinyDB.putString("token", "12|ufdzInYwTrUH6ND5WtO3S1oyhug7eMyDN5w600E6");
+        tinyDB.putString("token", "7|gEtW7gkoMyLwmda42WV8maP5kQPr8j3H5UU2Qmjd");
         tinyDB.putString("user_name", "Udeesha Bandara");
-//        tinyDB.putBoolean("isStaffAccount", true);
         try {
 
             oneOption.put("heading", "Current Journey");
@@ -93,8 +92,8 @@ public class Home extends GetSafeBase {
             fourOption.put("heading", "Your Payments");
             fourOption.put("subHeading", "Make payments");
             homeOptions.put(fourOption);
-            fiveOption.put("heading", "Your Calendar");
-            fiveOption.put("subHeading", "Schedule absent days");
+            fiveOption.put("heading", "Your Route and Calendar");
+            fiveOption.put("subHeading", "Add alternative drop-off &\nManage absent days");
             homeOptions.put(fiveOption);
 
         } catch (Exception e) {
@@ -313,6 +312,7 @@ public class Home extends GetSafeBase {
                     setupChildAccount();
                     showToast(dialog, "Changed to kid(s) account ", 2);
                 } else {
+                    Log.e("else ataff","ok");
                     tinyDB.putBoolean("isStaffAccount", true);
                     setupStaffAccount();
                     showToast(dialog, "Changed to staff account ", 2);
@@ -379,6 +379,7 @@ public class Home extends GetSafeBase {
 
                                 tinyDB.putString("selectedChildId", kidList.getJSONArray("children").getJSONObject(position).getString("id"));
                                 tinyDB.putString("selectedChildName", kidList.getJSONArray("children").getJSONObject(position).getString("name"));
+                                tinyDB.putString("driver_id", kidList.getJSONArray("children").getJSONObject(position).getString("driver_id"));
                                 notifyDataSetChanged();
                                 showToast(dialog, "Profile changed to " + tinyDB.getString("selectedChildName"), 2);
 
@@ -487,7 +488,7 @@ public class Home extends GetSafeBase {
                             drawerLayout.closeDrawers();
                             break;
                         case 4:
-                            startActivity(new Intent(getApplicationContext(), Absence.class));
+                            startActivity(new Intent(getApplicationContext(), AlternativeRoutes.class));
                             drawerLayout.closeDrawers();
                             break;
 
@@ -596,13 +597,14 @@ public class Home extends GetSafeBase {
         } else if (timeOfDay >= 12 && timeOfDay < 16) {
             txt_greeting.setText("Good Afternoon,\n" + tinyDB.getString("user_name"));
 
-        } else if (timeOfDay >= 16 && timeOfDay < 21) {
+        } else if (timeOfDay >= 16) {
 
             txt_greeting.setText("Good Evening,\n" + tinyDB.getString("user_name"));
-        } else if (timeOfDay >= 21 && timeOfDay < 24) {
-
-            txt_greeting.setText("Good Night,\n" + tinyDB.getString("user_name"));
         }
+//        } else if (timeOfDay >= 21 && timeOfDay < 24) {
+//
+//            txt_greeting.setText("Good Night,\n" + tinyDB.getString("user_name"));
+//        }
     }
 
     public void getAllChildren() {
@@ -620,6 +622,7 @@ public class Home extends GetSafeBase {
                     if (kidList!=null) {
                         tinyDB.putString("selectedChildId", kidList.getJSONArray("children").getJSONObject(0).getString("id"));
                         tinyDB.putString("selectedChildName", kidList.getJSONArray("children").getJSONObject(0).getString("name"));
+                        tinyDB.putString("driver_id", kidList.getJSONArray("children").getJSONObject(0).getString("driver_id"));
 
                         recyclerSelectChild.getAdapter().notifyDataSetChanged();
                     }

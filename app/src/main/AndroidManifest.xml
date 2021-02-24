@@ -20,7 +20,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DriverRoute"></activity>
+        <activity android:name=".AlternativeRoutes"></activity>
+        <activity android:name=".DriverRoute" />
         <activity android:name=".Payment" />
         <activity
             android:name=".Messaging"
@@ -73,9 +74,7 @@
             android:launchMode="singleTop" />
         <activity
             android:name=".DriverProfile"
-            android:launchMode="singleTop">
-
-        </activity>
+            android:launchMode="singleTop"></activity>
         <activity
             android:name=".JourneyDetails"
             android:launchMode="singleTop" />

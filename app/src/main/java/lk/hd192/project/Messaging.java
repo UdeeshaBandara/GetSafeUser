@@ -9,6 +9,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -55,7 +56,7 @@ public class Messaging extends AppCompatActivity {
     private static final int TOTAL_ITEMS_TO_LOAD = 10;
     private int mCurrentPage = 1;
     private DatabaseReference mRootRef, messageRef;
-    private RecyclerView mMessageList,chatMessageView;
+    private RecyclerView mMessageList, chatMessageView;
     TinyDB tinyDB;
     private final List<Messages> messagesList = new ArrayList<>();
 
@@ -63,15 +64,15 @@ public class Messaging extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messaging);
-
+Log.e("android id", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
         tinyDB = new TinyDB(getApplicationContext());
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
+        tinyDB.putString("user_id","test_user_id");
         mRootRef = FirebaseDatabase.getInstance().getReference();
         if (tinyDB.getBoolean("isStaffAccount"))
-            messageRef = mRootRef.child("Staff_Drivers").child("add_driver_id_here").child("Passengers").child("Add_user_id_here").child("messages");
+            messageRef = mRootRef.child("Staff_Drivers").child("add_driver_id_here").child("Passengers").child(tinyDB.getString("user_id")).child("messages");
         else
-            messageRef = mRootRef.child("School_Drivers").child("add_driver_id_here").child("Passengers").child("Add_user_id_here").child(   tinyDB.getString("selectedChildId")).child("messages");
+            messageRef = mRootRef.child("School_Drivers").child("add_driver_id_here").child("Passengers").child(tinyDB.getString("user_id")).child(tinyDB.getString("selectedChildId")).child("messages");
 
 
 //        mChatUser = "a0tW1ZdZySMuDb28Za0RyoSDrlz1";
