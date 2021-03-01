@@ -58,7 +58,7 @@ public class Home extends GetSafeBase {
     String imageUrl;
     int currentPosition = 0;
     NavigationView navigationView;
-    RelativeLayout drawerSideMenuHeading, drawerSelectChildLyt, drawerAbsenceLyt, drawerTransportLyt, drawerLocationLyt, drawerStatsLyt, drawerExpensesLyt, drawerSwapLyt, drawerLogoutLyt;
+    RelativeLayout drawerSideMenuHeading, drawerSelectChildLyt, drawerAlternativeLyt, drawerTransportLyt, drawerLocationLyt, drawerStatsLyt, drawerExpensesLyt, drawerSwapLyt, drawerLogoutLyt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,8 +92,8 @@ public class Home extends GetSafeBase {
             fourOption.put("heading", "Your Payments");
             fourOption.put("subHeading", "Make payments");
             homeOptions.put(fourOption);
-            fiveOption.put("heading", "Your Route and Calendar");
-            fiveOption.put("subHeading", "Add alternative drop-off &\nManage absent days");
+            fiveOption.put("heading", "Absent Calendar");
+            fiveOption.put("subHeading", "View and add absent days");
             homeOptions.put(fiveOption);
 
         } catch (Exception e) {
@@ -121,7 +121,7 @@ public class Home extends GetSafeBase {
         drawerSwapLyt = navigationView.findViewById(R.id.rlt_swap);
         drawerLogoutLyt = navigationView.findViewById(R.id.rlt_logout);
         drawerSelectChildLyt = navigationView.findViewById(R.id.rlt_select_child);
-        drawerAbsenceLyt = navigationView.findViewById(R.id.rlt_absence);
+        drawerAlternativeLyt = navigationView.findViewById(R.id.rlt_absence);
         account_type = navigationView.findViewById(R.id.account_type);
 
         homeRecycler = findViewById(R.id.home_recycler);
@@ -254,7 +254,7 @@ public class Home extends GetSafeBase {
 
             }
         });
-        drawerAbsenceLyt.setOnClickListener(new View.OnClickListener() {
+        drawerAlternativeLyt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 isDeviceLocationTurnedOn(dialog);
@@ -266,7 +266,7 @@ public class Home extends GetSafeBase {
                 } else if (isEnable) {
 
 
-                    startActivity(new Intent(getApplicationContext(), Absence.class));
+                    startActivity(new Intent(getApplicationContext(), AlternativeRoutes.class));
 
                 }
 
@@ -488,7 +488,7 @@ public class Home extends GetSafeBase {
                             drawerLayout.closeDrawers();
                             break;
                         case 4:
-                            startActivity(new Intent(getApplicationContext(), AlternativeRoutes.class));
+                            startActivity(new Intent(getApplicationContext(), Absence.class));
                             drawerLayout.closeDrawers();
                             break;
 

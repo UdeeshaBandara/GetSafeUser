@@ -55,8 +55,7 @@
             android:name=".Absence"
             android:launchMode="singleTop" />
         <activity
-            android:name=".AddNewKid"
-            android:launchMode="singleTop" />
+            android:name=".AddNewKid" />
         <activity
             android:name=".Map"
             android:launchMode="singleTop" />

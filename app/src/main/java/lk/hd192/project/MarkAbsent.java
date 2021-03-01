@@ -170,7 +170,7 @@ public class MarkAbsent extends GetSafeBaseFragment {
                         else if (absenceDateList.getJSONObject(j).getString("session").equals("Morning"))
                             type = "1";
                         String date = absenceDateList.getJSONObject(j).getString("date").substring(0, 2) + "-" + (String.valueOf(monthArray.indexOf(absenceDateList.getJSONObject(j).getString("month")) + 1)) + "-" + absenceDateList.getJSONObject(j).getString("year");
-Log.e("selected date ",date);
+                        Log.e("selected date ", date);
                         if (tinyDB.getBoolean("isStaffAccount")) {
                             addUserAbsent(date, type);
                         } else {
@@ -200,7 +200,7 @@ Log.e("selected date ",date);
                     currentYear = Integer.parseInt(String.valueOf(date.getYear()).substring(1)) + 2000;
                 selectedMonthNumber = date.getMonth();
                 selectedDateNumber = date.getDate();
-                Log.e("selectedDateNumber",String.valueOf(selectedDateNumber));
+                Log.e("selectedDateNumber", String.valueOf(selectedDateNumber));
                 selectedDay = dayNames[date.getDay()];
                 chk_repeat.setText("Repeat on every " + selectedDay);
 
@@ -514,7 +514,7 @@ Log.e("selected date ",date);
                         btnBoth.setVisibility(View.VISIBLE);
                         btnSaveAbsence.setVisibility(View.INVISIBLE);
                         subHeadingAbsence.setVisibility(View.INVISIBLE);
-                        isNewAbsentAdded=true;
+                        isNewAbsentAdded = true;
                     } else
                         showToast(dialog, "Please try again.", 0);
 
@@ -556,7 +556,7 @@ Log.e("selected date ",date);
                         btnBoth.setVisibility(View.VISIBLE);
                         btnSaveAbsence.setVisibility(View.INVISIBLE);
                         subHeadingAbsence.setVisibility(View.INVISIBLE);
-                        isNewAbsentAdded=true;
+                        isNewAbsentAdded = true;
                     } else
                         showToast(dialog, "Please try again.", 0);
 

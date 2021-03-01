@@ -182,7 +182,7 @@
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:fontFamily="@font/nunito_bold"
-                            android:text="Manage Absence"
+                            android:text="Alternate Routes"
                             android:textColor="@color/dark_blue"
                             android:textSize="12sp" />
 

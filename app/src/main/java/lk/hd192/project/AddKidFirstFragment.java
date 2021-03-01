@@ -83,7 +83,7 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
         tinyDB = new TinyDB(getActivity());
 
         try {
-            schools = new JSONObject(readFile());
+//            schools = new JSONObject(readFile());
 
         } catch (Exception e) {
 
@@ -181,21 +181,21 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
 
         }
     }
-    public String readFile() throws IOException
-    {
-        BufferedReader reader = null;
-        reader = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.schools), "UTF-8"));
-
-        String content = "";
-        String line;
-        while ((line = reader.readLine()) != null)
-        {
-            content = content + line;
-        }
-
-        return content;
-
-    }
+//    public String readFile() throws IOException
+//    {
+//        BufferedReader reader = null;
+//        reader = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.schools), "UTF-8"));
+//
+//        String content = "";
+//        String line;
+//        while ((line = reader.readLine()) != null)
+//        {
+//            content = content + line;
+//        }
+//
+//        return content;
+//
+//    }
 
     public void addKidBasicDetails() {
         HashMap<String, String> tempParam = new HashMap<>();

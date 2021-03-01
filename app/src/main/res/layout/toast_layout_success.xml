@@ -44,6 +44,7 @@
         android:layout_marginBottom="30dp"
         android:background="@drawable/bg_btn_ok"
         android:fontFamily="@font/nunito_regular"
+        android:shadowColor="#FFFFFF"
         android:text="Okay, Nice"
         android:textAllCaps="false"
         android:textColor="@color/black"
