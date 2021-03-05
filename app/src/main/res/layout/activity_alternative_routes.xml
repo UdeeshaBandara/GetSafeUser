@@ -39,24 +39,25 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="15dp"
-                android:paddingTop="20dp"
-                android:paddingBottom="2dp"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+
+                >
 
                 <Button
                     android:id="@+id/btn_morning"
                     android:layout_width="0dp"
-                    android:layout_height="45dp"
+                    android:layout_height="wrap_content"
 
+                    android:layout_gravity="center"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
                     android:layout_weight="5"
-
-
                     android:background="@drawable/custom_edittext"
                     android:fontFamily="@font/nunito_regular"
                     android:shadowColor="#FFFFFF"
-                    android:text="Morning"
+                    android:text="Morning Pickup"
                     android:textAllCaps="false"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
@@ -64,17 +65,20 @@
                 <Button
                     android:id="@+id/btn_evening"
                     android:layout_width="0dp"
-                    android:layout_height="45dp"
+                    android:layout_height="wrap_content"
 
+                    android:layout_gravity="center"
+                    android:layout_marginStart="15dp"
                     android:layout_marginLeft="15dp"
-
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="20dp"
                     android:layout_weight="5"
-
 
                     android:background="@drawable/custom_edittext"
                     android:fontFamily="@font/nunito_regular"
                     android:shadowColor="#FFFFFF"
-                    android:text="Evening"
+                    android:text="Evening Drop-off"
                     android:textAllCaps="false"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
@@ -89,7 +93,6 @@
                 android:layout_marginLeft="15dp"
 
 
-                android:layout_marginTop="20dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginBottom="5dp"
                 android:background="@color/white"
@@ -183,12 +186,12 @@
 
                 android:layout_marginHorizontal="15dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/bg_btn_ok"
+                android:background="@drawable/custom_edittext"
                 android:drawableLeft="@drawable/icon_add"
                 android:fontFamily="@font/nunito_regular"
 
-                android:paddingLeft="30dp"
-                android:paddingRight="30dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
                 android:shadowColor="#FFFFFF"
                 android:text="Add"
                 android:textAllCaps="false"
@@ -200,9 +203,10 @@
                 android:id="@+id/recycler_alternate_dates"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="15dp"
                 android:layout_marginTop="20dp"
+                android:clipToPadding="false"
                 android:overScrollMode="never"
+                android:paddingBottom="60dp"
                 android:scrollbars="none" />
 
         </LinearLayout>
@@ -211,23 +215,19 @@
     </androidx.core.widget.NestedScrollView>
 
     <Button
-        android:id="@+id/btn_submit"
+        android:id="@+id/btn_save_alternate"
         android:layout_width="match_parent"
-
         android:layout_height="45dp"
-
-
         android:layout_alignParentBottom="true"
         android:layout_marginHorizontal="15dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/bg_btn_ok"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/bg_btn_resend"
         android:fontFamily="@font/nunito_regular"
-        android:shadowColor="#FFFFFF"
-        android:text="Submit"
+        android:text="Confirm"
         android:textAllCaps="false"
-        android:textColor="@color/black"
-        android:textSize="18sp" />
+        android:textColor="@color/white"
+        android:textSize="16sp" />
 
 
 </RelativeLayout>

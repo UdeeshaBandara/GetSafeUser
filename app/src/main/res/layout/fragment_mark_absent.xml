@@ -199,7 +199,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:fontFamily="@font/nunito_regular"
-                        android:text="Yuthmika absence on"
+
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 

@@ -1,72 +1,117 @@
 package lk.hd192.project;
 
 import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker;
 import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
+import com.tsongkha.spinnerdatepicker.DatePicker;
+import com.tsongkha.spinnerdatepicker.DatePickerDialog;
+import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
 import lk.hd192.project.Utils.GetSafeBase;
 
 
-public class AlternativeRoutes extends GetSafeBase {
+public class AlternativeRoutes extends GetSafeBase implements DatePickerDialog.OnDateSetListener {
 
     JSONObject singleAlternate;
     JSONArray alternateRoute;
-    Button btn_add;
-
+    Button btn_add, btn_morning, btn_evening, mConfirm, btn_save_alternate;
+    RecyclerView recycler_alternate_dates;
+    String selectedSession = "";
+    Dialog dialog;
+    SimpleDateFormat simpleDateFormat;
+    int year;
+    int month;
+    int day;
+    View popupView;
+    LatLng pinnedLocation;
+    String locationProvider = LocationManager.GPS_PROVIDER;
+    CameraPosition cameraPosition;
+    MapView mPickupLocation;
+    Double latitude, longitude;
+    GoogleMap googleMap;
+    TextView txt_location, txt_date;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alternative_routes);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        btn_add=findViewById(R.id.btn_add);
+        btn_add = findViewById(R.id.btn_add);
+        recycler_alternate_dates = findViewById(R.id.recycler_alternate_dates);
+        btn_morning = findViewById(R.id.btn_morning);
+        btn_evening = findViewById(R.id.btn_evening);
+        txt_location = findViewById(R.id.txt_location);
+        txt_date = findViewById(R.id.txt_date);
+        btn_save_alternate = findViewById(R.id.btn_save_alternate);
 
-        alternateRoute=new JSONArray();
 
+        final Calendar c = Calendar.getInstance();
+        year = c.get(Calendar.YEAR);
+        month = c.get(Calendar.MONTH);
+        day = c.get(Calendar.DAY_OF_MONTH);
+        simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
+
+        alternateRoute = new JSONArray();
+        dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
         findViewById(R.id.card_date).setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-                Log.e("date","cli");
-                new SingleDateAndTimePickerDialog.Builder(getApplicationContext())
-                        //.bottomSheet()
-                        //.curved()
-                        //.stepSizeMinutes(15)
-                        //.displayHours(false)
-                        //.displayMinutes(false)
-                        //.todayText("aujourd'hui")
-                        .displayListener(new SingleDateAndTimePickerDialog.DisplayListener() {
-                            @Override
-                            public void onDisplayed(SingleDateAndTimePicker picker) {
-
-                            }
-                        })
-                        .title("Simple")
-                        .listener(new SingleDateAndTimePickerDialog.Listener() {
-                            @Override
-                            public void onDateSelected(Date date) {
-
-                            }
-                        }).display();
+                showDate(year, month, day, R.style.DatePickerSpinner);
             }
         });
 
@@ -76,50 +121,385 @@ public class AlternativeRoutes extends GetSafeBase {
                 addDate();
             }
         });
+        btn_save_alternate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveAlternatePickups();
+            }
+        });
+        findViewById(R.id.card_location).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onCreateMapPopup(view, savedInstanceState);
+            }
+        });
+        btn_morning.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (selectedSession.equals("Evening Drop-off") || selectedSession.equals("")) {
+                    selectedSession = "Morning Pickup";
+                    btn_morning.setBackground(getDrawable(R.drawable.bg_absence_date));
+                    btn_evening.setBackground(getDrawable(R.drawable.custom_edittext));
+                }
+            }
+        });
+        btn_evening.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (selectedSession.equals("Morning Pickup") || selectedSession.equals("")) {
+                    selectedSession = "Evening Drop-off";
+                    btn_evening.setBackground(getDrawable(R.drawable.bg_absence_date));
+                    btn_morning.setBackground(getDrawable(R.drawable.custom_edittext));
+                }
+            }
+        });
+        recycler_alternate_dates.setAdapter(new AlternativeAbsentAdapter());
+        recycler_alternate_dates.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
+
     }
 
-    private void addDate(){
+    @VisibleForTesting
+    void showDate(int year, int monthOfYear, int dayOfMonth, int spinnerTheme) {
+        new SpinnerDatePickerDialogBuilder()
+                .context(this)
+                .callback(this)
+                .spinnerTheme(spinnerTheme)
+                .showDaySpinner(true)
+                .minDate(year, month, day)
+
+                .defaultDate(year, monthOfYear, dayOfMonth)
+                .build()
+                .show();
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+        Calendar calendar = new GregorianCalendar(year, monthOfYear, dayOfMonth);
+        txt_date.setText(simpleDateFormat.format(calendar.getTime()));
+
+
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//add network call here //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//           ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //
+    private void saveAlternatePickups() {
+
+
+    }
+
+    public static void dimBehind(PopupWindow popupWindow) {
+
+        View container = popupWindow.getContentView().getRootView();
+        Context context = popupWindow.getContentView().getContext();
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        WindowManager.LayoutParams p = (WindowManager.LayoutParams) container.getLayoutParams();
+        p.flags |= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        p.dimAmount = 0.7f;
+        wm.updateViewLayout(container, p);
+    }
+
+    public void onCreateMapPopup(View view, Bundle savedInstanceState) {
+
+
+        LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+        popupView = inflater.inflate(R.layout.activity_map, null);
+
+        final PopupWindow popupWindow = new PopupWindow(popupView, GetSafeBase.device_width - 150, GetSafeBase.device_height - 250, true);
+
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+        dimBehind(popupWindow);
+
+        mConfirm = popupView.findViewById(R.id.btn_confirmMapLocation);
+        mPickupLocation = popupView.findViewById(R.id.map_pickupLocation);
+
 
         try {
-            singleAlternate = new JSONObject();
-            singleAlternate.put("date","");
-            singleAlternate.put("location","");
-            singleAlternate.put("session","");
-
+            MapsInitializer.initialize(getApplicationContext());
+            loadMap();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        catch (Exception e){
+        mPickupLocation.onCreate(savedInstanceState);
+        mPickupLocation.onResume();
+        locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+
+
+        popupView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                //  popupWindow.dismiss();
+                return true;
+            }
+        });
+
+
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+
+
+            }
+        });
+
+        mConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAddressPopup(popupWindow);
+
+//                txtParentAddress.setText(GetSafeBase.LOC_ADDRESS);
+
+            }
+        });
+
+    }
+
+    public void locationAddress(double lat, double lon) {
+        Geocoder geocoder;
+        List<Address> addressList;
+
+        geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+
+        try {
+            addressList = geocoder.getFromLocation(lat, lon, 1);
+
+
+            if (addressList.size() == 0) {
+
+
+                // customToast("Oops.. \nNo Address Found in this Area ",0);
+                mConfirm.setEnabled(false);
+
+            } else {
+                mConfirm.setEnabled(true);
+                GetSafeBase.LOC_ADDRESS = addressList.get(0).getAddressLine(0);
+            }
+
+
+        } catch (IOException e) {
+            //   customToast("Oops.. \nan error occurred",1);
+            e.printStackTrace();
+        }
+    }
+
+    public void loadMap() {
+        mPickupLocation.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap mMap) {
+                try {
+                    googleMap = mMap;
+                    googleMap.setMapStyle(
+                            MapStyleOptions.loadRawResourceStyle(
+                                    getApplicationContext(), R.raw.dark_map));
+                    if (ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        askForPermission(android.Manifest.permission.ACCESS_FINE_LOCATION, 100);
+                        return;
+                    }
+                    googleMap.setMyLocationEnabled(true);
+
+
+                    if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+
+                        Intent settings = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivity(settings);
+
+                    }
+                    final Location location = locationManager.getLastKnownLocation(locationProvider);
+
+                    if (pinnedLocation == null)
+                        cameraPosition = new CameraPosition.Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(15).build();
+                    else
+                        cameraPosition = new CameraPosition.Builder().target(pinnedLocation).zoom(15).build();
+
+                    googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+
+                    googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+                        @Override
+                        public void onCameraChange(CameraPosition cameraPosition) {
+
+                            locationAddress(cameraPosition.target.latitude, cameraPosition.target.longitude);
+                            pinnedLocation = new LatLng(cameraPosition.target.latitude, cameraPosition.target.longitude);
+
+
+                            latitude = cameraPosition.target.latitude;
+                            longitude = cameraPosition.target.longitude;
+
+
+                        }
+                    });
+
+                } catch (Exception e) {
+
+                }
+
+
+            }
+        });
+    }
+
+    private void askForPermission(String permission, Integer requestCode) {
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), permission) != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            ActivityCompat.requestPermissions(this, new String[]{permission}, requestCode);
+        } else {
+            //Toast.makeText(this, "" + permission + " is already granted.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    private void addDate() {
+        boolean isAdded = false;
+        try {
+            if (selectedSession.equals(""))
+                showToast(dialog, "Please select session", 0);
+            else if (txt_date.getText().toString().equals("Select Date"))
+                showToast(dialog, "Please select date", 0);
+            else if (txt_location.getText().toString().equals("Select Location"))
+                showToast(dialog, "Please select location", 0);
+
+            else {
+                singleAlternate = new JSONObject();
+                singleAlternate.put("date", txt_date.getText().toString());
+                singleAlternate.put("location", txt_location.getText().toString());
+                singleAlternate.put("session", selectedSession);
+                for (int i = 0; i < alternateRoute.length(); i++) {
+                    if (alternateRoute.getJSONObject(i).getString("date").equals(singleAlternate.getString("date")) & alternateRoute.getJSONObject(i).getString("session").equals(singleAlternate.getString("session"))) {
+
+                        showToast(dialog, "Alternate route already added", 0);
+                        isAdded = true;
+                    }
+
+
+                }
+                if (!isAdded) {
+
+                    alternateRoute.put(singleAlternate);
+                    recycler_alternate_dates.getAdapter().notifyDataSetChanged();
+                }
+
+            }
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
 
-
-
-
     }
-    class AlternativeAbsentHolder extends RecyclerView.ViewHolder{
+
+    public void showAddressPopup(final PopupWindow popupWindow) {
+
+
+        Window window = dialog.getWindow();
+        window.setGravity(Gravity.TOP);
+
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.setTitle(null);
+
+        dialog.setContentView(R.layout.address_popup);
+
+
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(true);
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.CalendarAnimation;
+
+        final EditText txtAddOne = dialog.findViewById(R.id.txt_add_one);
+        final EditText txtAddTwo = dialog.findViewById(R.id.txt_add_two);
+        Button btnOk = dialog.findViewById(R.id.btn_ok);
+
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                if (TextUtils.isEmpty(txtAddOne.getText().toString())) {
+
+
+                    YoYo.with(Techniques.Bounce)
+                            .duration(1000)
+                            .playOn(txtAddOne);
+                    txtAddOne.setError("Please enter address line one");
+                    txtAddOne.requestFocus(0);
+                } else if (TextUtils.isEmpty(txtAddTwo.getText().toString())) {
+
+
+                    YoYo.with(Techniques.Bounce)
+                            .duration(1000)
+                            .playOn(txtAddTwo);
+                    txtAddTwo.setError("Please enter address line two");
+                    txtAddTwo.requestFocus(0);
+                } else {
+
+
+                    txt_location.setText(txtAddOne.getText().toString() + " " + txtAddTwo.getText().toString());
+
+
+                    popupWindow.dismiss();
+                    dialog.dismiss();
+                }
+
+
+            }
+        });
+
+
+        dialog.show();
+    }
+
+
+    class AlternativeAbsentHolder extends RecyclerView.ViewHolder {
+        TextView alter_session, alter_date, alter_add;
 
         public AlternativeAbsentHolder(@NonNull View itemView) {
             super(itemView);
+            alter_add = itemView.findViewById(R.id.alter_add);
+            alter_date = itemView.findViewById(R.id.alter_date);
+            alter_session = itemView.findViewById(R.id.alter_session);
+
         }
     }
-    class AlternativeAbsentAdapter extends RecyclerView.Adapter<AlternativeAbsentHolder>{
+
+    class AlternativeAbsentAdapter extends RecyclerView.Adapter<AlternativeAbsentHolder> {
 
         @NonNull
         @Override
         public AlternativeAbsentHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(getApplicationContext())
-                    .inflate(R.layout.item_home, parent, false);
+                    .inflate(R.layout.item_alternate, parent, false);
             return new AlternativeAbsentHolder(view);
         }
 
         @Override
         public void onBindViewHolder(@NonNull AlternativeAbsentHolder holder, int position) {
 
+            try {
+                holder.alter_add.setText(alternateRoute.getJSONObject(position).getString("location"));
+                holder.alter_session.setText(alternateRoute.getJSONObject(position).getString("session"));
+                holder.alter_date.setText(alternateRoute.getJSONObject(position).getString("date"));
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         }
 
         @Override
         public int getItemCount() {
-            return 0;
+            return alternateRoute.length();
         }
     }
 

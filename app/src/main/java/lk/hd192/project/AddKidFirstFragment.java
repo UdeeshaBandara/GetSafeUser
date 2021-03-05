@@ -258,7 +258,7 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
         Calendar calendar = new GregorianCalendar(year, monthOfYear, dayOfMonth);
-        calenderBirthday.setHint(simpleDateFormat.format(calendar.getTime()));
+        calenderBirthday.setText(simpleDateFormat.format(calendar.getTime()));
 
     }
 

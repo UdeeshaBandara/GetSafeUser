@@ -50,7 +50,7 @@ public class Home extends GetSafeBase {
     JSONArray homeOptions;
 
     JSONObject oneOption, twoOption, threeOption, fourOption, fiveOption, kidList;
-    TextView account_type, txt_greeting;
+    TextView account_type, txt_greeting, txt_account_type, txt_user_name;
     Dialog dialog;
     GetSafeServices getSafeServices;
     ImageView sideMenuListener, selectChildDownArrow, selectChildUpArrow, btnNotification;
@@ -76,7 +76,7 @@ public class Home extends GetSafeBase {
         fourOption = new JSONObject();
         fiveOption = new JSONObject();
         tinyDB.putString("token", "7|gEtW7gkoMyLwmda42WV8maP5kQPr8j3H5UU2Qmjd");
-        tinyDB.putString("user_name", "Udeesha Bandara");
+        tinyDB.putString("user_name", "Udeesha Induras Bandara Kalumahanage");
         try {
 
             oneOption.put("heading", "Current Journey");
@@ -105,7 +105,9 @@ public class Home extends GetSafeBase {
 
         sideMenuListener = findViewById(R.id.btn_side_menu);
         drawerLayout = findViewById(R.id.main_drawer_layout);
+        txt_account_type = findViewById(R.id.txt_account_type);
         navigationView = findViewById(R.id.main_navigation);
+        txt_user_name = findViewById(R.id.txt_user_name);
         fabAddKid = findViewById(R.id.fab_add_kid);
         selectChildDownArrow = findViewById(R.id.select_child_down_arrow);
         selectChildUpArrow = findViewById(R.id.select_child_up_arrow);
@@ -188,6 +190,7 @@ public class Home extends GetSafeBase {
         if (recyclerSelectChild.getVisibility() != View.GONE)
             drawerSelectChildLyt.performClick();
         account_type.setText("Switch to your student \ntransport account");
+        txt_account_type.setText("Staff Transport Account");
     }
 
     private void setupChildAccount() {
@@ -196,6 +199,7 @@ public class Home extends GetSafeBase {
         fabAddKid.setVisibility(View.VISIBLE
         );
         account_type.setText("Switch to your office \ntransport account");
+        txt_account_type.setText("Student Transport Account");
 
     }
 
@@ -312,7 +316,7 @@ public class Home extends GetSafeBase {
                     setupChildAccount();
                     showToast(dialog, "Changed to kid(s) account ", 2);
                 } else {
-                    Log.e("else ataff","ok");
+                    Log.e("else ataff", "ok");
                     tinyDB.putBoolean("isStaffAccount", true);
                     setupStaffAccount();
                     showToast(dialog, "Changed to staff account ", 2);
@@ -601,6 +605,9 @@ public class Home extends GetSafeBase {
 
             txt_greeting.setText("Good Evening,\n" + tinyDB.getString("user_name"));
         }
+
+
+        txt_user_name.setText(tinyDB.getString("user_name"));
 //        } else if (timeOfDay >= 21 && timeOfDay < 24) {
 //
 //            txt_greeting.setText("Good Night,\n" + tinyDB.getString("user_name"));
@@ -619,7 +626,7 @@ public class Home extends GetSafeBase {
 
                     kidList = result;
 
-                    if (kidList!=null) {
+                    if (kidList != null) {
                         tinyDB.putString("selectedChildId", kidList.getJSONArray("children").getJSONObject(0).getString("id"));
                         tinyDB.putString("selectedChildName", kidList.getJSONArray("children").getJSONObject(0).getString("name"));
                         tinyDB.putString("driver_id", kidList.getJSONArray("children").getJSONObject(0).getString("driver_id"));

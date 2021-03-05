@@ -106,7 +106,7 @@ public class EditProfile extends GetSafeBase {
     Button btnEditDone;
     Boolean isDropLocation;
     Double latitude, dropLatitude, longitude, dropLongitude;
-public static boolean needToEnableEditMode;
+    public static boolean needToEnableEditMode;
     String imgDecodableString = "", originalName, originalNumber, originalEmail, originalAddressOne, originalAddressTwo, originalDropAddressOne, originalDropAddressTwo;
 
 
@@ -142,11 +142,10 @@ public static boolean needToEnableEditMode;
         view = findViewById(R.id.disable_layout);
 
 
-        if (    tinyDB.getBoolean("isStaffAccount"))
+        if (tinyDB.getBoolean("isStaffAccount"))
             locationDropMain.setVisibility(View.VISIBLE);
         else
             locationDropMain.setVisibility(View.GONE);
-
 
 
         //init network call to get already exist details
@@ -159,7 +158,7 @@ public static boolean needToEnableEditMode;
         btnEditDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("performClick","performClick");
+                Log.e("performClick", "performClick");
                 if (btnEditDone.getText().equals("Edit")) {
 
                     btnEditDone.setText("Done");
@@ -200,11 +199,11 @@ public static boolean needToEnableEditMode;
                 }
             }
         });
-        if(needToEnableEditMode){
+        if (needToEnableEditMode) {
 //            btnEditDone.setText("Done");
-            Log.e("needToEnableEditMode",needToEnableEditMode+"");
+            Log.e("needToEnableEditMode", needToEnableEditMode + "");
             btnEditDone.performClick();
-            needToEnableEditMode=false;
+            needToEnableEditMode = false;
         }
         editTxtParentName.setFilters(new InputFilter[]{
                 new InputFilter() {
@@ -342,7 +341,6 @@ public static boolean needToEnableEditMode;
         getAllChildren();
 
     }
-
 
 
     @Override
@@ -796,7 +794,7 @@ public static boolean needToEnableEditMode;
 
         if (isValidated) {
             updateUserPickupLocation();
-            if ( tinyDB.getBoolean("isStaffAccount"))
+            if (tinyDB.getBoolean("isStaffAccount"))
                 updateUserDropLocation();
         }
 
@@ -878,7 +876,7 @@ public static boolean needToEnableEditMode;
 
 
                     kidList = result.getJSONArray("children");
-                    Log.e("kids from edit",kidList+"");
+                    Log.e("kids from edit", kidList + "");
 
                     recyclerKidList.getAdapter().notifyDataSetChanged();
 
@@ -911,7 +909,7 @@ public static boolean needToEnableEditMode;
                 try {
 
                     if (result.getBoolean("location_saved_status"))
-                        if ( !tinyDB.getBoolean("isStaffAccount")) {
+                        if (!tinyDB.getBoolean("isStaffAccount")) {
                             showToast(dialog, "Updated Successfully", 2);
                             hideLoading();
                         }
