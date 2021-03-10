@@ -225,6 +225,7 @@
         android:background="@drawable/bg_btn_resend"
         android:fontFamily="@font/nunito_regular"
         android:text="Confirm"
+        android:visibility="invisible"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="16sp" />

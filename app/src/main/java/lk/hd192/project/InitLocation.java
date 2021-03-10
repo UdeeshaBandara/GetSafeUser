@@ -79,7 +79,7 @@ public class InitLocation extends GetSafeBase {
         tinyDB = new TinyDB(getApplicationContext());
 
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
-        tinyDB.putString("token", "1|q2pWwtm1SMNxGFSk9tzUkvB2cAGWPVK1zZ4e014y");
+
         txtAddOne = findViewById(R.id.txt_address_one);
         txtAddTwo = findViewById(R.id.txt_address_two);
         txtAddressPick = findViewById(R.id.txt_address_pick);
