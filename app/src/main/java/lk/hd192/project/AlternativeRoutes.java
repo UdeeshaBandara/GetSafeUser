@@ -132,7 +132,7 @@ public class AlternativeRoutes extends GetSafeBase implements DatePickerDialog.O
                 addDate();
             }
         });
-        tinyDB.putString("user_id", "1");
+
         btn_save_alternate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

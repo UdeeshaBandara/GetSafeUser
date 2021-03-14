@@ -75,8 +75,8 @@ public class Home extends GetSafeBase {
         threeOption = new JSONObject();
         fourOption = new JSONObject();
         fiveOption = new JSONObject();
-        tinyDB.putString("token", "6|PaCeQQ3p501sVqp7wrgrxK5IuEp1FAGdcrQFYKQk\n");
-        tinyDB.putString("user_name", "Udeesha Induras Bandara Kalumahanage");
+        tinyDB.putString("token", "6|dWepTzfAIb72SIRRhP4Wf89Lp5NK6Gy915fsaloe");
+        tinyDB.putString("user_name", "Udeesha Induras");
         try {
 
             oneOption.put("heading", "Current Journey");

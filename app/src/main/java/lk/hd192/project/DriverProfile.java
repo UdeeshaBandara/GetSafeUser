@@ -69,6 +69,7 @@ public class DriverProfile extends GetSafeBase {
         try {
             driverId = getIntent().getStringExtra("driver_id");
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
 
@@ -110,7 +111,7 @@ public class DriverProfile extends GetSafeBase {
 
     private void sendStaffDriverRequest() {
         HashMap<String, String> param = new HashMap<>();
-        param.put("driver_id",driverId);
+        param.put("driver_id", driverId);
 
 
         getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.USER_REQUEST_DRIVER), 2, tinyDB.getString("token"), new VolleyJsonCallback() {
@@ -118,7 +119,7 @@ public class DriverProfile extends GetSafeBase {
             public void onSuccessResponse(JSONObject result) {
 
                 try {
-Log.e("res",result+"");
+                    Log.e("res", result + "");
 
                     if (result.getBoolean("saved_status")) {
                         showToast(dialog, "Request sent to driver", 2);
@@ -139,7 +140,7 @@ Log.e("res",result+"");
 
     private void sendStudentDriverRequest() {
         HashMap<String, String> param = new HashMap<>();
-        param.put("driver_id",driverId);
+        param.put("driver_id", driverId);
         param.put("child_id", tinyDB.getString("selectedChildId"));
 
         getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.STUDENT_REQUEST_DRIVER), 2, tinyDB.getString("token"), new VolleyJsonCallback() {
@@ -147,7 +148,7 @@ Log.e("res",result+"");
             public void onSuccessResponse(JSONObject result) {
 
                 try {
-                    Log.e("res",result+"");
+                    Log.e("res", result + "");
 
                     if (result.getBoolean("saved_status")) {
                         showToast(dialog, "Request sent to driver", 2);
@@ -171,7 +172,7 @@ Log.e("res",result+"");
         HashMap<String, String> param = new HashMap<>();
 
 
-        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_DRIVER_DETAILS) + "?id="+driverId, 1, tinyDB.getString("token"), new VolleyJsonCallback() {
+        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_DRIVER_DETAILS) + "?id=" + driverId, 1, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 

@@ -53,6 +53,14 @@
      <string name="SET_ALTERNATE_DROP">/alternatelocations/dropoff/user/new</string>
 
 
+     <string name="JOURNEY_DETAILS_RANGE_CHILD">/child/journey/details/range</string>
+     <string name="JOURNEY_DETAILS_RANGE">/user/journey/details/range</string>
+     <string name="GET_ALL_JOURNEY_DETAILS">/user/journey/alltrips</string>
+     <string name="GET_ALL_JOURNEY_DETAILS_CHILD">/child/journey/alltrips</string>
+     <string name="GET_SINGLE_JOURNEY_DETAILS">/user/journey/details/byid</string>
+     <string name="GET_SINGLE_JOURNEY_DETAILS_CHILD">/child/journey/details/byid</string>
+
+
 
 
 </resources>
