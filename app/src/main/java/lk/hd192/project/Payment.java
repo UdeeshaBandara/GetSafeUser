@@ -1,17 +1,22 @@
 package lk.hd192.project;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.squareup.picasso.Picasso;
 
+import lk.hd192.project.Utils.GetSafeBase;
 import lk.payhere.androidsdk.PHConfigs;
 import lk.payhere.androidsdk.PHConstants;
 import lk.payhere.androidsdk.PHMainActivity;
@@ -20,17 +25,24 @@ import lk.payhere.androidsdk.model.InitRequest;
 import lk.payhere.androidsdk.model.Item;
 import lk.payhere.androidsdk.model.StatusResponse;
 
-public class Payment extends AppCompatActivity {
+public class Payment extends GetSafeBase {
 
-    final static int PAYHERE_REQUEST=11010;
+    LinearLayout lnr_year, lnr_month;
+    final static int PAYHERE_REQUEST = 11010;
     ImageView imgBanner;
+    CardView card_month, card_year;
+Double selectedAmount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
 
-        imgBanner=findViewById(R.id.imgBanner);
+        imgBanner = findViewById(R.id.imgBanner);
+        card_year = findViewById(R.id.card_year);
+        card_month = findViewById(R.id.card_month);
+        lnr_year = findViewById(R.id.lnr_year);
+        lnr_month = findViewById(R.id.lnr_month);
 
         findViewById(R.id.btn_pay).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,23 +50,46 @@ public class Payment extends AppCompatActivity {
                 handlePayment();
             }
         });
-
+        findViewById(R.id.btn_payment_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              onBackPressed();
+            }
+        });
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         Picasso.get()
                 .load("https://www.payhere.lk/downloads/images/payhere_square_banner_dark.png").placeholder(R.drawable.payhere).fit().centerInside()
                 .into(imgBanner);
 
+        card_month.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                lnr_year.setBackgroundResource(0);
+                lnr_month.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg_payment_selected));
+                selectedAmount=100.0;
+            }
+        });
+        card_year.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                lnr_month.setBackgroundResource(0);
+                lnr_year.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg_payment_selected));
+                selectedAmount=1100.0;
+            }
+        });
+
 
     }
-    private void handlePayment(){
+
+    private void handlePayment() {
         InitRequest req = new InitRequest();
         req.setMerchantId("1216746");       // Your Merchant PayHere ID
         req.setMerchantSecret("4Txk4P68X2p4JLCdKRUsgk4eSlFpFjHqT8VyZUuyRHbJ"); // Your Merchant secret (Add your app at Settings > Domains & Credentials, to get this))
         req.setCurrency("LKR");             // Currency code LKR/USD/GBP/EUR/AUD
-        req.setAmount(1000.00);             // Final Amount to be charged
+        req.setAmount(selectedAmount);             // Final Amount to be charged
         req.setOrderId("230000123");        // Unique Reference ID
-        req.setItemsDescription("Door bell wireless");  // Item description title
-        req.setCustom1("This is the custom message 1");
-        req.setCustom2("This is the custom message 2");
+        req.setItemsDescription("Get Safe Payments");  // Item description title
+
         req.getCustomer().setFirstName("Saman");
         req.getCustomer().setLastName("Perera");
         req.getCustomer().setEmail("samanp@gmail.com");
@@ -74,7 +109,8 @@ public class Payment extends AppCompatActivity {
         PHConfigs.setBaseUrl(PHConfigs.SANDBOX_URL);
         startActivityForResult(intent, PAYHERE_REQUEST); //unique request ID like private final static int PAYHERE_REQUEST = 11010;
 
-      }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

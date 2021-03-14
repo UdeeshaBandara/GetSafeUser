@@ -23,33 +23,54 @@
     </RelativeLayout>
 
 
+    <Button
+        android:id="@+id/btn_payment_back"
+        android:layout_width="80dp"
+        android:layout_height="35dp"
+        android:layout_below="@id/status_bar"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/bg_btn_next_forward"
+        android:drawableLeft="@drawable/icon_back"
+        android:paddingLeft="10dp"
+        android:text="Back"
+        android:textAllCaps="false"
+        android:textColor="@color/white" />
+
+    <ImageView
+        android:id="@+id/imgBanner"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/status_bar"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="right"
+        android:layout_marginTop="15dp"
+
+        android:layout_marginEnd="15dp"
+        android:paddingVertical="12dp"
+        android:scaleType="centerCrop" />
+
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/status_bar">
+        android:layout_below="@+id/imgBanner">
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="15dp"
+
             android:layout_marginVertical="15dp"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/imgBanner"
-
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:paddingVertical="12dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/payhere" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
                 android:layout_marginTop="15dp"
                 android:orientation="horizontal">
 
@@ -78,7 +99,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginTop="15dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -105,6 +127,7 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                android:layout_marginHorizontal="15dp"
                 android:layout_marginTop="15dp"
                 android:background="@drawable/bg_singout"
                 android:text="View payment History"
@@ -112,8 +135,10 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_marginTop="5dp"
-                android:layout_height="2dp" />
+                android:layout_height="1dp"
+                android:layout_marginTop="15dp"
+
+                android:background="#6F9C9999" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -125,66 +150,101 @@
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
-
-            <LinearLayout
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_month"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+
+
+                android:layout_marginHorizontal="15dp"
                 android:layout_marginTop="15dp"
+                android:layout_marginBottom="5dp"
+
                 android:background="@drawable/bg_payment_selected"
-                android:orientation="horizontal"
-                android:padding="20dp">
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="15dp">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="5"
-                    android:text="30 Days"
-                    android:textColor="@color/black" />
+                <LinearLayout
+                    android:id="@+id/lnr_month"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="5"
-                    android:gravity="right"
-                    android:text="LKR 100.00"
-                    android:textColor="@color/black" />
+                    android:background="@drawable/bg_payment_selected"
+                    android:orientation="horizontal"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:text="30 Days"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:gravity="right"
+                        android:text="LKR 100.00"
+                        android:textColor="@color/black" />
 
 
-            </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
-            <LinearLayout
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_year"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+
+
+                android:layout_marginHorizontal="15dp"
                 android:layout_marginTop="15dp"
+                android:layout_marginBottom="5dp"
+
                 android:background="@drawable/bg_payment_selected"
-                android:orientation="horizontal"
-                android:padding="20dp">
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="15dp">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="5"
-                    android:text="One year"
-                    android:textColor="@color/black" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="5"
-                    android:gravity="right"
-                    android:text="LKR 1100.00"
-                    android:textColor="@color/black" />
+                <LinearLayout
+                    android:id="@+id/lnr_year"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
 
-            </LinearLayout>
+
+                    android:orientation="horizontal"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:text="One year"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:gravity="right"
+                        android:text="LKR 1100.00"
+                        android:textColor="@color/black" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
             <Button
                 android:id="@+id/btn_pay"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
+                android:layout_marginHorizontal="15dp"
                 android:layout_marginTop="25dp"
                 android:background="@drawable/bg_btn_ok"
                 android:text="Pay"
                 android:textAllCaps="false" />
+
+
         </LinearLayout>
     </ScrollView>
 
