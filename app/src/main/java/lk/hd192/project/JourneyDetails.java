@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONObject;
@@ -33,7 +34,8 @@ public class JourneyDetails extends GetSafeBase {
     String tripId,driverId;
     TextView driver_name, txt_date, txt_pick_up_time, txt_prickup_location, txt_drop_off_time, txt_dropoff_location, trip_type, trp_id;
     JSONObject response;
-
+    View view;
+    LottieAnimationView loading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +54,8 @@ public class JourneyDetails extends GetSafeBase {
         txt_prickup_location = findViewById(R.id.txt_prickup_location);
         txt_dropoff_location = findViewById(R.id.txt_dropoff_location);
         trip_type = findViewById(R.id.trip_type);
-
+        loading = findViewById(R.id.loading);
+        view = findViewById(R.id.disable_layout);
         response = new JSONObject();
 
         findViewById(R.id.btn_view_driver_profile).setOnClickListener(new View.OnClickListener() {
@@ -91,7 +94,7 @@ public class JourneyDetails extends GetSafeBase {
     private void getSingleTripDetailsForChild() {
         HashMap<String, String> tempParam = new HashMap<>();
 
-
+showLoading();
         getSafeServices.networkJsonRequest(getApplicationContext(), tempParam, getString(R.string.BASE_URL) + getString(R.string.GET_SINGLE_JOURNEY_DETAILS_CHILD) + "?tripid=" + tripId + "&childid=" + tinyDB.getString("selectedChildId"), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
@@ -108,7 +111,7 @@ public class JourneyDetails extends GetSafeBase {
                     e.printStackTrace();
 
                 }
-
+hideLoading();
             }
         });
 
@@ -119,7 +122,7 @@ public class JourneyDetails extends GetSafeBase {
 
         HashMap<String, String> tempParam = new HashMap<>();
 
-
+showLoading();
         getSafeServices.networkJsonRequest(getApplicationContext(), tempParam, getString(R.string.BASE_URL) + getString(R.string.GET_SINGLE_JOURNEY_DETAILS) + "?id=" + tripId, 1, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
@@ -136,6 +139,7 @@ public class JourneyDetails extends GetSafeBase {
                     e.printStackTrace();
 
                 }
+                hideLoading();
 
             }
         });
@@ -161,5 +165,20 @@ public class JourneyDetails extends GetSafeBase {
 
 
     }
+    void showLoading() {
 
+        view.setVisibility(View.VISIBLE);
+        loading.setVisibility(View.VISIBLE);
+        loading.playAnimation();
+
+
+    }
+
+    void hideLoading() {
+
+
+        loading.setVisibility(View.GONE);
+        view.setVisibility(View.GONE);
+
+    }
 }

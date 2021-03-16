@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import org.json.JSONObject;
@@ -35,6 +36,8 @@ public class DriverProfile extends GetSafeBase {
     GetSafeServices getSafeServices;
     JSONObject driverDetails;
     Dialog dialog;
+    View view;
+    LottieAnimationView loading;
     Button btn_send_request;
     ImageView driver_photo, img_vehicle_one, img_vehicle_two, img_vehicle_three, img_vehicle_four;
     TextView txt_facilities, txt_driver_name, txt_transport_category, txt_vehicle_type, txt_vehicle_model, txt_vehicle_reg_no, txt_seating;
@@ -63,6 +66,8 @@ public class DriverProfile extends GetSafeBase {
         img_vehicle_three = findViewById(R.id.img_vehicle_three);
         img_vehicle_four = findViewById(R.id.img_vehicle_four);
         txt_facilities = findViewById(R.id.txt_facilities);
+        loading = findViewById(R.id.loading);
+        view = findViewById(R.id.disable_layout);
         getSafeServices = new GetSafeServices();
         driverDetails = new JSONObject();
 
@@ -113,7 +118,7 @@ public class DriverProfile extends GetSafeBase {
         HashMap<String, String> param = new HashMap<>();
         param.put("driver_id", driverId);
 
-
+        showLoading();
         getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.USER_REQUEST_DRIVER), 2, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
@@ -133,16 +138,18 @@ public class DriverProfile extends GetSafeBase {
                     Log.e("ex from loc", e.getMessage());
 
                 }
-
+                hideLoading();
             }
+
         });
+
     }
 
     private void sendStudentDriverRequest() {
         HashMap<String, String> param = new HashMap<>();
         param.put("driver_id", driverId);
         param.put("child_id", tinyDB.getString("selectedChildId"));
-
+        showLoading();
         getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.STUDENT_REQUEST_DRIVER), 2, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
@@ -163,15 +170,17 @@ public class DriverProfile extends GetSafeBase {
                     Log.e("ex from loc", e.getMessage());
 
                 }
+                hideLoading();
 
             }
         });
+
     }
 
     private void getDriverDetails() {
         HashMap<String, String> param = new HashMap<>();
 
-
+        showLoading();
         getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_DRIVER_DETAILS) + "?id=" + driverId, 1, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
@@ -236,14 +245,32 @@ public class DriverProfile extends GetSafeBase {
                     Log.e("ex from loc", e.getMessage());
 
                 }
-
+                hideLoading();
             }
         });
+
     }
 
     private Bitmap populateImage(String encodedImage) {
         byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+    }
+
+    void showLoading() {
+
+        view.setVisibility(View.VISIBLE);
+        loading.setVisibility(View.VISIBLE);
+        loading.playAnimation();
+
+
+    }
+
+    void hideLoading() {
+
+
+        loading.setVisibility(View.GONE);
+        view.setVisibility(View.GONE);
 
     }
 }

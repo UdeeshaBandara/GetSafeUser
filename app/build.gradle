@@ -84,7 +84,7 @@ dependencies {
     implementation 'com.github.florent37:singledateandtimepicker:2.2.7'
 
     //image cropper
-    implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
+//    implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
 
     implementation platform('com.google.firebase:firebase-bom:26.2.0')
 

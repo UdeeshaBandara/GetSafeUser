@@ -58,7 +58,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.theartofdev.edmodo.cropper.CropImage;
+//import com.theartofdev.edmodo.cropper.CropImage;
 import com.tsongkha.spinnerdatepicker.DatePicker;
 import com.tsongkha.spinnerdatepicker.DatePickerDialog;
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
@@ -327,67 +327,67 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == RESULT_OK) {
-            Uri imgURL = data.getData();
-            //set aspect ratio of image
-            CropImage.activity(imgURL).setAspectRatio(1, 1).start(this);
-
-
-        }
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
-                progressDialog = new ProgressDialog(EditKidProfile.this);
-                progressDialog.setTitle("Uploading Image");
-                progressDialog.setMessage("Please wait while we uploading the image");
-                progressDialog.setCanceledOnTouchOutside(false);
-                progressDialog.show();
-                try {
-                    Uri resultUri = result.getUri();
-                    final InputStream imageStream;
-                    imageStream = getContentResolver().openInputStream(resultUri);
-                    final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                    imgKid.setImageBitmap(selectedImage);
-                    progressDialog.dismiss();
-                } catch (Exception e) {
-
-                }
-
-
-//                StorageReference filePath = imageReference.child("profile_images").child(firebaseUser.getUid() + ".jpg");
-//                filePath.putFile(resultUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                    @Override
-//                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//        if (requestCode == 1 && resultCode == RESULT_OK) {
+//            Uri imgURL = data.getData();
+//            //set aspect ratio of image
+//            CropImage.activity(imgURL).setAspectRatio(1, 1).start(this);
 //
 //
-//                        filePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                            @Override
-//                            public void onSuccess(Uri uri) {
-//                                downUrl = uri.toString();
-//                                Log.e("Down url", downUrl);
-//                                if (!TextUtils.isEmpty(downUrl))
-//                                    userDatabase.child("Image").setValue(downUrl).addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                        @Override
-//                                        public void onSuccess(Void aVoid) {
+//        }
+//        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+//            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+//            if (resultCode == RESULT_OK) {
+//                progressDialog = new ProgressDialog(EditKidProfile.this);
+//                progressDialog.setTitle("Uploading Image");
+//                progressDialog.setMessage("Please wait while we uploading the image");
+//                progressDialog.setCanceledOnTouchOutside(false);
+//                progressDialog.show();
+//                try {
+//                    Uri resultUri = result.getUri();
+//                    final InputStream imageStream;
+//                    imageStream = getContentResolver().openInputStream(resultUri);
+//                    final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+//                    imgKid.setImageBitmap(selectedImage);
+//                    progressDialog.dismiss();
+//                } catch (Exception e) {
 //
-//                                            progressDialog.dismiss();
-//                                            Toast.makeText(SettingsActivity.this, "Profile picture updated", Toast.LENGTH_SHORT).show();
-//                                        }
-//
-//                                    });
-//
-//                            }
-//                        });
+//                }
 //
 //
-//                    }
-//                });
-
-
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
-            }
-        }
+////                StorageReference filePath = imageReference.child("profile_images").child(firebaseUser.getUid() + ".jpg");
+////                filePath.putFile(resultUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+////                    @Override
+////                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+////
+////
+////                        filePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+////                            @Override
+////                            public void onSuccess(Uri uri) {
+////                                downUrl = uri.toString();
+////                                Log.e("Down url", downUrl);
+////                                if (!TextUtils.isEmpty(downUrl))
+////                                    userDatabase.child("Image").setValue(downUrl).addOnSuccessListener(new OnSuccessListener<Void>() {
+////                                        @Override
+////                                        public void onSuccess(Void aVoid) {
+////
+////                                            progressDialog.dismiss();
+////                                            Toast.makeText(SettingsActivity.this, "Profile picture updated", Toast.LENGTH_SHORT).show();
+////                                        }
+////
+////                                    });
+////
+////                            }
+////                        });
+////
+////
+////                    }
+////                });
+//
+//
+//            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+//                Exception error = result.getError();
+//            }
+//        }
     }
 
     void showDate(int year, int monthOfYear, int dayOfMonth, int spinnerTheme) {

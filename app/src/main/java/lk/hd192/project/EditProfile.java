@@ -64,7 +64,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.theartofdev.edmodo.cropper.CropImage;
+//import com.theartofdev.edmodo.cropper.CropImage;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -138,6 +138,7 @@ public class EditProfile extends GetSafeBase {
         imgDropLocEditIndicator = findViewById(R.id.img_drop_loc_edit_indicator);
         imgParent = findViewById(R.id.img_parent);
         txtParentDropAddress = findViewById(R.id.txt_parent_drop_address);
+
         loading = findViewById(R.id.loading);
         view = findViewById(R.id.disable_layout);
 
@@ -423,83 +424,83 @@ public class EditProfile extends GetSafeBase {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.e("onactivityResult", data + "");
-
-        if ((requestCode == 1 | requestCode == 0) & resultCode == RESULT_OK & null != data) {
-            Uri imgURL;
-            Log.e("inside big if", "ok");
-            //set aspect ratio of image
-            if (resultCode != RESULT_CANCELED) {
-                Log.e("inside small if", "ok");
-                switch (requestCode) {
-                    case 0:
-                        if (resultCode == RESULT_OK && data != null) {
-                            //File object of camera image
-                            File file = new File(Environment.getExternalStorageDirectory(), "MyPhoto.jpg");
-
-                            //Uri of camera image
-                            Uri uri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider", file);
-
-                            Log.e("CropImage", "before");
-
-                            CropImage.activity(uri).setAspectRatio(1, 1).start(this);
-
-
-                            //  imgParent.setImageBitmap(selectedImage);
-                        }
-
-                        break;
-                    case 1:
-                        if (data != null) {
-                            imgURL = data.getData();
-                            Log.e("URL gallery", imgURL + "");
-                            CropImage.activity(imgURL).setAspectRatio(1, 1).start(this);
-
-//                            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-//                            if (selectedImage != null) {
-//                                Cursor cursor = getContentResolver().query(selectedImage,
-//                                        filePathColumn, null, null, null);
-//                                if (cursor != null) {
-//                                    cursor.moveToFirst();
+//        Log.e("onactivityResult", data + "");
 //
-//                                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-//                                    String picturePath = cursor.getString(columnIndex);
-//                                    imgParent.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-//                                    cursor.close();
-//                                }
-//                            }
-
-                        }
-                        break;
-                }
-            }
-
-
-        }
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
-                progressDialog = new ProgressDialog(EditProfile.this);
-                progressDialog.setTitle("Uploading Image");
-                progressDialog.setMessage("Please wait while we uploading the image");
-                progressDialog.setCanceledOnTouchOutside(false);
-                progressDialog.show();
-
-            }
-
-            try {
-                Uri resultUri = result.getUri();
-                final InputStream imageStream;
-                imageStream = getContentResolver().openInputStream(resultUri);
-                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                imgParent.setImageBitmap(selectedImage);
-
-                progressDialog.dismiss();
-                updateImage(selectedImage);
-            } catch (Exception e) {
-
-            }
-        }
+//        if ((requestCode == 1 | requestCode == 0) & resultCode == RESULT_OK & null != data) {
+//            Uri imgURL;
+//            Log.e("inside big if", "ok");
+//            //set aspect ratio of image
+//            if (resultCode != RESULT_CANCELED) {
+//                Log.e("inside small if", "ok");
+//                switch (requestCode) {
+//                    case 0:
+//                        if (resultCode == RESULT_OK && data != null) {
+//                            //File object of camera image
+//                            File file = new File(Environment.getExternalStorageDirectory(), "MyPhoto.jpg");
+//
+//                            //Uri of camera image
+//                            Uri uri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider", file);
+//
+//                            Log.e("CropImage", "before");
+//
+//                            CropImage.activity(uri).setAspectRatio(1, 1).start(this);
+//
+//
+//                            //  imgParent.setImageBitmap(selectedImage);
+//                        }
+//
+//                        break;
+//                    case 1:
+//                        if (data != null) {
+//                            imgURL = data.getData();
+//                            Log.e("URL gallery", imgURL + "");
+//                            CropImage.activity(imgURL).setAspectRatio(1, 1).start(this);
+//
+////                            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+////                            if (selectedImage != null) {
+////                                Cursor cursor = getContentResolver().query(selectedImage,
+////                                        filePathColumn, null, null, null);
+////                                if (cursor != null) {
+////                                    cursor.moveToFirst();
+////
+////                                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+////                                    String picturePath = cursor.getString(columnIndex);
+////                                    imgParent.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+////                                    cursor.close();
+////                                }
+////                            }
+//
+//                        }
+//                        break;
+//                }
+//            }
+//
+//
+//        }
+//        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+//            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+//            if (resultCode == RESULT_OK) {
+//                progressDialog = new ProgressDialog(EditProfile.this);
+//                progressDialog.setTitle("Uploading Image");
+//                progressDialog.setMessage("Please wait while we uploading the image");
+//                progressDialog.setCanceledOnTouchOutside(false);
+//                progressDialog.show();
+//
+//            }
+//
+//            try {
+//                Uri resultUri = result.getUri();
+//                final InputStream imageStream;
+//                imageStream = getContentResolver().openInputStream(resultUri);
+//                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+//                imgParent.setImageBitmap(selectedImage);
+//
+//                progressDialog.dismiss();
+//                updateImage(selectedImage);
+//            } catch (Exception e) {
+//
+//            }
+//        }
     }
 
     private void updateImage(Bitmap selectedImage) {

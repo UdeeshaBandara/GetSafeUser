@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.otaliastudios.autocomplete.Autocomplete;
 import com.otaliastudios.autocomplete.AutocompleteCallback;
 import com.otaliastudios.autocomplete.AutocompletePolicy;
@@ -49,6 +50,8 @@ public class ExploreTransport extends GetSafeBase {
     String pickUpText = "";
     String dropText = "";
     Dialog dialog;
+    View view;
+    LottieAnimationView loading;
     Button pickupMap, dropMap;
     //    ImageView imgAc, imgNonAc;
     Double pickLat = 0.0, pickLng = 0.0;
@@ -70,11 +73,13 @@ public class ExploreTransport extends GetSafeBase {
         dropDropDown = findViewById(R.id.drop_dropdwn);
         dropMap = findViewById(R.id.drop_map);
         pickupMap = findViewById(R.id.pickup_map);
+        loading = findViewById(R.id.loading);
+        view = findViewById(R.id.disable_layout);
 //        imgAc = findViewById(R.id.img_ac);
 //        imgNonAc = findViewById(R.id.img_non_ac);
         pickDropDown.setText(pickAddress);
         getSafeServices = new GetSafeServices();
-        driverList= new JSONArray();
+        driverList = new JSONArray();
 
         pickUpText = pickAddress;
         pickLat = GetSafeBase.pickLat;
@@ -104,7 +109,7 @@ public class ExploreTransport extends GetSafeBase {
             @Override
             public void onClick(View v) {
                 if (tinyDB.getBoolean("isStaffAccount"))
-          searchDriverForStaff();
+                    searchDriverForStaff();
                 else
                     searchDriverForChild();
             }
@@ -210,9 +215,9 @@ public class ExploreTransport extends GetSafeBase {
     private void getChildLocationDetails() {
         HashMap<String, String> param = new HashMap<>();
 
+        showLoading();
 
-
-        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_KID_LOCATION_BY_ID)+"?id="+tinyDB.getString("selectedChildId"), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
+        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_KID_LOCATION_BY_ID) + "?id=" + tinyDB.getString("selectedChildId"), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 
@@ -230,15 +235,17 @@ public class ExploreTransport extends GetSafeBase {
                     Log.e("ex from loc", e.getMessage());
 
                 }
+                hideLoading();
 
             }
         });
+
     }
 
     private void getStaffUserLocationDetails() {
         HashMap<String, String> tempParam = new HashMap<>();
 
-
+        showLoading();
         getSafeServices.networkJsonRequest(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.USER_LOCATION), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
@@ -256,15 +263,18 @@ public class ExploreTransport extends GetSafeBase {
 
 
                 }
-
+                hideLoading();
             }
         });
 
+
+
     }
-    private void searchDriverForStaff(){
+
+    private void searchDriverForStaff() {
         HashMap<String, String> param = new HashMap<>();
 //        param.put("id", tinyDB.getString("selectedChildId"));
-
+        showLoading();
 
         getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.SEARCH_DRIVER_FOR_STAFF), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
@@ -272,54 +282,54 @@ public class ExploreTransport extends GetSafeBase {
 
                 try {
 
-                    Log.e("result",result+"");
-                    driverList=result.getJSONArray("list_of_drivers");
+                    Log.e("result", result + "");
+                    driverList = result.getJSONArray("list_of_drivers");
 
-                    if (driverList.length()==0) {
+                    if (driverList.length() == 0) {
 
                         showToast(dialog, "No drivers found. Try again", 1);
-                    }
-                    else
+                    } else
                         recyclerDriver.getAdapter().notifyDataSetChanged();
 
                 } catch (Exception e) {
                     Log.e("ex from loc", e.getMessage());
 
                 }
-
+                hideLoading();
             }
         });
 
     }
+
     private void searchDriverForChild() {
 
         HashMap<String, String> param = new HashMap<>();
 
+        showLoading();
 
-
-        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.SEARCH_DRIVER_FOR_KID)+"?id="+tinyDB.getString("selectedChildId"), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
+        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.SEARCH_DRIVER_FOR_KID) + "?id=" + tinyDB.getString("selectedChildId"), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 
                 try {
 
-                    Log.e("result",result+"");
-                    driverList=result.getJSONArray("list_of_drivers");
+                    Log.e("result", result + "");
+                    driverList = result.getJSONArray("list_of_drivers");
 
-                    if (driverList.length()==0) {
+                    if (driverList.length() == 0) {
 
                         showToast(dialog, "No drivers found. Try again", 1);
-                    }
-                    else
+                    } else
                         recyclerDriver.getAdapter().notifyDataSetChanged();
 
                 } catch (Exception e) {
                     Log.e("ex from loc", e.getMessage());
 
                 }
-
+                hideLoading();
             }
         });
+
     }
 
     // set up nearest town auto complete
@@ -532,7 +542,7 @@ public class ExploreTransport extends GetSafeBase {
         HashMap<String, String> tempParam = new HashMap<>();
         tempParam.put("", "");
 
-
+        showLoading();
         getSafeServices.googleAPIRequest(this, tempParam, getString(R.string.REVERSE_GEO) + "?address=" + pickUpText + "&key=" + getString(R.string.API_KEY), 1, new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
@@ -550,6 +560,7 @@ public class ExploreTransport extends GetSafeBase {
 
             }
         });
+        hideLoading();
 
 
     }
@@ -559,7 +570,7 @@ public class ExploreTransport extends GetSafeBase {
         HashMap<String, String> tempParam = new HashMap<>();
         tempParam.put("", "");
 
-
+        showLoading();
         getSafeServices.googleAPIRequest(this, tempParam, getString(R.string.REVERSE_GEO) + "?address=" + dropText + "&key=" + getString(R.string.API_KEY), 1, new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
@@ -577,6 +588,7 @@ public class ExploreTransport extends GetSafeBase {
 
             }
         });
+        hideLoading();
 
 
     }
@@ -585,7 +597,7 @@ public class ExploreTransport extends GetSafeBase {
     class DriverViewHolder extends RecyclerView.ViewHolder {
 
         RelativeLayout oneDriver;
-        TextView txt_driver_name,txt_start,txt_end,txt_rate;
+        TextView txt_driver_name, txt_start, txt_end, txt_rate;
 
         public DriverViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -611,16 +623,16 @@ public class ExploreTransport extends GetSafeBase {
         public void onBindViewHolder(@NonNull DriverViewHolder holder, final int position) {
 
             try {
-                holder.txt_driver_name.setText(" : "+driverList.getJSONObject(position).getString("name"));
-                holder.txt_start.setText(" : "+driverList.getJSONObject(position).getString("phone_no"));
-                holder.txt_end.setText(" : "+driverList.getJSONObject(position).getString("email"));
+                holder.txt_driver_name.setText(" : " + driverList.getJSONObject(position).getString("name"));
+                holder.txt_start.setText(" : " + driverList.getJSONObject(position).getString("phone_no"));
+                holder.txt_end.setText(" : " + driverList.getJSONObject(position).getString("email"));
 
                 holder.oneDriver.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent= new Intent(getApplicationContext(), DriverProfile.class);
+                        Intent intent = new Intent(getApplicationContext(), DriverProfile.class);
                         try {
-                            intent.putExtra("driver_id",driverList.getJSONObject(position).getString("id"));
+                            intent.putExtra("driver_id", driverList.getJSONObject(position).getString("id"));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -638,5 +650,22 @@ public class ExploreTransport extends GetSafeBase {
         public int getItemCount() {
             return driverList.length();
         }
+    }
+
+    void showLoading() {
+
+        view.setVisibility(View.VISIBLE);
+        loading.setVisibility(View.VISIBLE);
+        loading.playAnimation();
+
+
+    }
+
+    void hideLoading() {
+
+
+        loading.setVisibility(View.GONE);
+        view.setVisibility(View.GONE);
+
     }
 }

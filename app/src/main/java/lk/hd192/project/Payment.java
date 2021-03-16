@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.squareup.picasso.Picasso;
 
 import lk.hd192.project.Utils.GetSafeBase;
@@ -31,7 +32,9 @@ public class Payment extends GetSafeBase {
     final static int PAYHERE_REQUEST = 11010;
     ImageView imgBanner;
     CardView card_month, card_year;
-Double selectedAmount;
+    Double selectedAmount;
+    View view;
+    LottieAnimationView loading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,8 @@ Double selectedAmount;
         card_month = findViewById(R.id.card_month);
         lnr_year = findViewById(R.id.lnr_year);
         lnr_month = findViewById(R.id.lnr_month);
+        loading = findViewById(R.id.loading);
+        view = findViewById(R.id.disable_layout);
 
         findViewById(R.id.btn_pay).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,7 +58,7 @@ Double selectedAmount;
         findViewById(R.id.btn_payment_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              onBackPressed();
+                onBackPressed();
             }
         });
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -66,7 +71,7 @@ Double selectedAmount;
             public void onClick(View view) {
                 lnr_year.setBackgroundResource(0);
                 lnr_month.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg_payment_selected));
-                selectedAmount=100.0;
+                selectedAmount = 100.0;
             }
         });
         card_year.setOnClickListener(new View.OnClickListener() {
@@ -74,7 +79,7 @@ Double selectedAmount;
             public void onClick(View view) {
                 lnr_month.setBackgroundResource(0);
                 lnr_year.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg_payment_selected));
-                selectedAmount=1100.0;
+                selectedAmount = 1100.0;
             }
         });
 
@@ -134,5 +139,22 @@ Double selectedAmount;
 //                    textView.setText("User canceled the request");
             }
         }
+    }
+
+    void showLoading() {
+
+        view.setVisibility(View.VISIBLE);
+        loading.setVisibility(View.VISIBLE);
+        loading.playAnimation();
+
+
+    }
+
+    void hideLoading() {
+
+
+        loading.setVisibility(View.GONE);
+        view.setVisibility(View.GONE);
+
     }
 }

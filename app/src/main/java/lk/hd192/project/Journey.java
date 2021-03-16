@@ -19,6 +19,8 @@ import android.widget.CalendarView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -41,6 +43,8 @@ public class Journey extends GetSafeBase {
     TinyDB tinyDB;
     JSONArray tripDetails;
     Button btn_reset;
+    View view;
+    LottieAnimationView loading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +62,8 @@ public class Journey extends GetSafeBase {
         btn_from = findViewById(R.id.btn_from);
         btn_to = findViewById(R.id.btn_to);
         btn_reset = findViewById(R.id.btn_reset);
+        loading = findViewById(R.id.loading);
+        view = findViewById(R.id.disable_layout);
 
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
         recycleJourney.setAdapter(new JourneyAdapter());
@@ -252,7 +258,7 @@ public class Journey extends GetSafeBase {
 
         HashMap<String, String> tempParam = new HashMap<>();
 
-
+        showLoading();
         getSafeServices.networkJsonRequest(getApplicationContext(), tempParam, getString(R.string.BASE_URL) + getString(R.string.GET_ALL_JOURNEY_DETAILS), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
@@ -268,7 +274,7 @@ public class Journey extends GetSafeBase {
                     e.printStackTrace();
 
                 }
-
+                hideLoading();
             }
         });
 
@@ -279,7 +285,7 @@ public class Journey extends GetSafeBase {
 
         HashMap<String, String> tempParam = new HashMap<>();
 
-
+        showLoading();
         getSafeServices.networkJsonRequest(getApplicationContext(), tempParam, getString(R.string.BASE_URL) + getString(R.string.GET_ALL_JOURNEY_DETAILS_CHILD) + "?childid=" + tinyDB.getString("selectedChildId"), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
@@ -295,9 +301,10 @@ public class Journey extends GetSafeBase {
                     e.printStackTrace();
 
                 }
-
+                hideLoading();
             }
         });
+
 
 
     }
@@ -307,7 +314,7 @@ public class Journey extends GetSafeBase {
 
         HashMap<String, String> tempParam = new HashMap<>();
 
-
+        showLoading();
         getSafeServices.networkJsonRequest(getApplicationContext(), tempParam, getString(R.string.BASE_URL) + getString(R.string.JOURNEY_DETAILS_RANGE) + "?fromdate=" + btn_from.getText().toString() + "&todate=" + btn_to.getText().toString(), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
@@ -322,9 +329,10 @@ public class Journey extends GetSafeBase {
                     e.printStackTrace();
 
                 }
-
+                hideLoading();
             }
         });
+
 
 
     }
@@ -334,7 +342,7 @@ public class Journey extends GetSafeBase {
 
         HashMap<String, String> tempParam = new HashMap<>();
 
-
+        showLoading();
         getSafeServices.networkJsonRequest(getApplicationContext(), tempParam, getString(R.string.BASE_URL) + getString(R.string.JOURNEY_DETAILS_RANGE_CHILD) + "?id=" + tinyDB.getString("selectedChildId") + "&fromdate=" + btn_from.getText().toString() + "&todate=" + btn_to.getText().toString(), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
@@ -351,10 +359,27 @@ public class Journey extends GetSafeBase {
                     e.printStackTrace();
 
                 }
-
+                hideLoading();
             }
         });
 
+
+    }
+
+    void showLoading() {
+
+        view.setVisibility(View.VISIBLE);
+        loading.setVisibility(View.VISIBLE);
+        loading.playAnimation();
+
+
+    }
+
+    void hideLoading() {
+
+
+        loading.setVisibility(View.GONE);
+        view.setVisibility(View.GONE);
 
     }
 

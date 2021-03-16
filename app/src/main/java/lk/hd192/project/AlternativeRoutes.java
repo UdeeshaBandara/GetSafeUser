@@ -32,6 +32,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker;
@@ -83,6 +84,8 @@ public class AlternativeRoutes extends GetSafeBase implements DatePickerDialog.O
     int year;
     int month;
     int day;
+    View view;
+    LottieAnimationView loading;
     View popupView;
     LatLng pinnedLocation;
     String locationProvider = LocationManager.GPS_PROVIDER;
@@ -106,7 +109,8 @@ public class AlternativeRoutes extends GetSafeBase implements DatePickerDialog.O
         txt_location = findViewById(R.id.txt_location);
         txt_date = findViewById(R.id.txt_date);
         btn_save_alternate = findViewById(R.id.btn_save_alternate);
-
+        loading = findViewById(R.id.loading);
+        view = findViewById(R.id.disable_layout);
         tinyDB = new TinyDB(getApplicationContext());
 
         getSafeServices = new GetSafeServices();
@@ -145,24 +149,24 @@ public class AlternativeRoutes extends GetSafeBase implements DatePickerDialog.O
                         if (tinyDB.getBoolean("isStaffAccount")) {
 
                             if (alternateRoute.getJSONObject(g).getString("session").equals("Morning Pickup"))
-                                saveAlternatePickups(date,loc, selectedLatLong.get(g));
+                                saveAlternatePickups(date, loc, selectedLatLong.get(g));
                             else
-                                saveAlternateDrop(date,loc, selectedLatLong.get(g));
+                                saveAlternateDrop(date, loc, selectedLatLong.get(g));
 
                         } else {
 
                             if (alternateRoute.getJSONObject(g).getString("session").equals("Morning Pickup"))
-                                saveAlternatePickupsKid(date,loc, selectedLatLong.get(g));
+                                saveAlternatePickupsKid(date, loc, selectedLatLong.get(g));
                             else
-                                saveAlternateDropKid(date,loc, selectedLatLong.get(g));
+                                saveAlternateDropKid(date, loc, selectedLatLong.get(g));
                         }
 
 
                     }
-                    alternateRoute= new JSONArray();
+                    alternateRoute = new JSONArray();
                     recycler_alternate_dates.getAdapter().notifyDataSetChanged();
                     btn_save_alternate.setVisibility(View.INVISIBLE);
-                    showToast(dialog,"Alternate routes added",2);
+                    showToast(dialog, "Alternate routes added", 2);
                     txt_date.setText("Select Date");
                     txt_location.setText("Select Location");
                     btn_evening.setBackground(getDrawable(R.drawable.custom_edittext));
@@ -251,7 +255,7 @@ public class AlternativeRoutes extends GetSafeBase implements DatePickerDialog.O
         tempParam.put("date", date);
         tempParam.put("add1", location);
         tempParam.put("repeat_every_week", "0");
-
+        showLoading();
 
         getSafeServices.networkJsonRequest(getApplicationContext(), tempParam, getString(R.string.BASE_URL) + getString(R.string.SET_ALTERNATE_PICKUP_), 2, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
@@ -272,9 +276,10 @@ public class AlternativeRoutes extends GetSafeBase implements DatePickerDialog.O
                     e.printStackTrace();
 
                 }
-
+                hideLoading();
             }
         });
+
 
     }
 
@@ -288,7 +293,7 @@ public class AlternativeRoutes extends GetSafeBase implements DatePickerDialog.O
         tempParam.put("date", date);
         tempParam.put("add1", location);
         tempParam.put("repeat_every_week", "0");
-
+        showLoading();
         getSafeServices.networkJsonRequest(getApplicationContext(), tempParam, getString(R.string.BASE_URL) + getString(R.string.SET_ALTERNATE_PICKUP_KID), 2, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
@@ -307,9 +312,10 @@ public class AlternativeRoutes extends GetSafeBase implements DatePickerDialog.O
                     e.printStackTrace();
 
                 }
-
+                hideLoading();
             }
         });
+
 
     }
 
@@ -324,7 +330,7 @@ public class AlternativeRoutes extends GetSafeBase implements DatePickerDialog.O
         tempParam.put("date", date);
         tempParam.put("add1", location);
         tempParam.put("repeat_every_week", "0");
-
+        showLoading();
         getSafeServices.networkJsonRequest(getApplicationContext(), tempParam, getString(R.string.BASE_URL) + getString(R.string.SET_ALTERNATE_DROP), 2, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
@@ -345,8 +351,11 @@ public class AlternativeRoutes extends GetSafeBase implements DatePickerDialog.O
 
                 }
 
+                hideLoading();
+
             }
         });
+
 
     }
 
@@ -360,7 +369,7 @@ public class AlternativeRoutes extends GetSafeBase implements DatePickerDialog.O
         tempParam.put("longitude", String.valueOf(loc.longitude));
 
         tempParam.put("repeat_every_week", "0");
-
+        showLoading();
         getSafeServices.networkJsonRequest(getApplicationContext(), tempParam, getString(R.string.BASE_URL) + getString(R.string.SET_ALTERNATE_DROP_KID), 2, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
@@ -379,9 +388,10 @@ public class AlternativeRoutes extends GetSafeBase implements DatePickerDialog.O
                     e.printStackTrace();
 
                 }
-
+                hideLoading();
             }
         });
+
 
     }
 
@@ -683,9 +693,9 @@ public class AlternativeRoutes extends GetSafeBase implements DatePickerDialog.O
                     @Override
                     public void onClick(View view) {
                         alternateRoute.remove(position);
-                        if(alternateRoute.length()==0)
+                        if (alternateRoute.length() == 0)
                             btn_save_alternate.setVisibility(View.INVISIBLE);
-                       notifyDataSetChanged();
+                        notifyDataSetChanged();
                     }
                 });
             } catch (JSONException e) {
@@ -700,5 +710,20 @@ public class AlternativeRoutes extends GetSafeBase implements DatePickerDialog.O
         }
     }
 
+    void showLoading() {
 
+        view.setVisibility(View.VISIBLE);
+        loading.setVisibility(View.VISIBLE);
+        loading.playAnimation();
+
+
+    }
+
+    void hideLoading() {
+
+
+        loading.setVisibility(View.GONE);
+        view.setVisibility(View.GONE);
+
+    }
 }

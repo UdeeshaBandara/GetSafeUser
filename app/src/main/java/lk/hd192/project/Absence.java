@@ -57,11 +57,14 @@ import lk.hd192.project.Utils.VolleyJsonCallback;
 public class Absence extends GetSafeBase {
 
     private SwappableViewPager swappableViewPager;
-public static boolean isNewAbsentAdded=false;
+    public static boolean isNewAbsentAdded = false;
     MarkAbsent markAbsent;
     ViewAbsent viewAbsent;
+    View view;
+    LottieAnimationView loading;
     View mark_indicator, review_indicator;
     TextView txt_current_name, heading;
+
 
     @SuppressLint("SimpleDateFormat")
     @Override
@@ -72,6 +75,9 @@ public static boolean isNewAbsentAdded=false;
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         markAbsent = new MarkAbsent();
         viewAbsent = new ViewAbsent();
+
+        loading = findViewById(R.id.loading);
+        view = findViewById(R.id.disable_layout);
 
         findViewById(R.id.btn_absence_back).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,12 +135,12 @@ public static boolean isNewAbsentAdded=false;
                     mark_indicator.setVisibility(View.INVISIBLE);
                     review_indicator.setVisibility(View.VISIBLE);
                     heading.setText("Review Absent");
-                    if (tinyDB.getBoolean("isStaffAccount")&isNewAbsentAdded) {
+                    if (tinyDB.getBoolean("isStaffAccount") & isNewAbsentAdded) {
                         viewAbsent.removeDates();
                         viewAbsent.getUserAbsent();
-                        isNewAbsentAdded=false;
-                    } else if (!tinyDB.getBoolean("isStaffAccount")&isNewAbsentAdded){
-                        isNewAbsentAdded=false;
+                        isNewAbsentAdded = false;
+                    } else if (!tinyDB.getBoolean("isStaffAccount") & isNewAbsentAdded) {
+                        isNewAbsentAdded = false;
                         viewAbsent.removeDates();
                         viewAbsent.getChildAbsent();
                     }
@@ -184,6 +190,22 @@ public static boolean isNewAbsentAdded=false;
 
 
         viewPager.setAdapter(sectionsPager);
+    }
+    void showLoading() {
+
+        view.setVisibility(View.VISIBLE);
+        loading.setVisibility(View.VISIBLE);
+        loading.playAnimation();
+
+
+    }
+
+    void hideLoading() {
+
+
+        loading.setVisibility(View.GONE);
+        view.setVisibility(View.GONE);
+
     }
 
 }
