@@ -87,7 +87,7 @@ public class LiveLocation extends GetSafeBase {
     Polyline polyline;
     LocationListener locationListener;
     LocationManager locationManagerSender;
-TinyDB tinyDB;
+    TinyDB tinyDB;
     Bitmap originMarker, finalMarker;
 
     Double dropLat, dropLon, currentLat, currentLon;
@@ -105,7 +105,7 @@ TinyDB tinyDB;
         getSafeServices = new GetSafeServices();
 
         mapView = findViewById(R.id.mapView);
-tinyDB=new TinyDB(getApplicationContext());
+        tinyDB = new TinyDB(getApplicationContext());
         mRootRef = FirebaseDatabase.getInstance().getReference();
         btnBack = findViewById(R.id.btn_location_back);
 
@@ -148,7 +148,6 @@ tinyDB=new TinyDB(getApplicationContext());
                 java.util.Map messageMap = new HashMap();
                 messageMap.put("Latitude", location.getLatitude());
                 messageMap.put("Longitude", location.getLongitude());
-
 
 
                 locationRef.updateChildren(messageMap, new DatabaseReference.CompletionListener() {
@@ -431,7 +430,7 @@ tinyDB=new TinyDB(getApplicationContext());
 
 
         // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest +wayPoints+avoidList + "&key=" + getString(R.string.API_KEY);
+        String parameters = str_origin + "&" + str_dest + wayPoints + avoidList + "&key=" + getString(R.string.API_KEY);
 
         // Output format
         String output = "json";
@@ -440,7 +439,7 @@ tinyDB=new TinyDB(getApplicationContext());
         // Building the url to the web service
         String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
 
-        Log.e("direction url",url);
+        Log.e("direction url", url);
 
         return url;
     }

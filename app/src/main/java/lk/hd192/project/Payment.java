@@ -32,7 +32,7 @@ public class Payment extends GetSafeBase {
     final static int PAYHERE_REQUEST = 11010;
     ImageView imgBanner;
     CardView card_month, card_year;
-    Double selectedAmount;
+    Double selectedAmount=100.0;
     View view;
     LottieAnimationView loading;
 

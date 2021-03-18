@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,9 +38,11 @@ public class ViewAbsent extends GetSafeBaseFragment {
     GetSafeServices getSafeServices;
     TinyDB tinyDB;
     Dialog dialog;
+    Button btn_delete_absent;
     JSONObject absentDetails;
     TextView txt_date, txt_session, txt_month;
     static String months[];
+    String selectedDateID;
 
     public ViewAbsent() {
         // Required empty public constructor
@@ -59,6 +62,7 @@ public class ViewAbsent extends GetSafeBaseFragment {
         txt_date = view.findViewById(R.id.txt_date);
         txt_session = view.findViewById(R.id.txt_session);
         txt_month = view.findViewById(R.id.txt_month);
+        btn_delete_absent = view.findViewById(R.id.btn_delete_absent);
         getSafeServices = new GetSafeServices();
         tinyDB = new TinyDB(getActivity());
         dialog = new Dialog(getActivity(), android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
@@ -82,7 +86,7 @@ public class ViewAbsent extends GetSafeBaseFragment {
         view.findViewById(R.id.btn_delete_absent).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                removeDates();
+                deleteAbsent();
             }
         });
         mCalendarView.setOnDateClickListener(new OnDateClickListener() {
@@ -190,7 +194,7 @@ public class ViewAbsent extends GetSafeBaseFragment {
 
             Log.e("mark", absentDetails.getJSONArray("models").getJSONObject(0).getString("date"));
             for (int i = 0; i < absentDetails.getJSONArray("models").length(); i++) {
-                mCalendarView.markDate(new DateData(Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(i).getString("date").substring(0, 4)), Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(i).getString("date").substring(5, 7)), (Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(i).getString("date").substring(8, 10)) )).setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, R.color.button_blue)));//mark multiple dates with this code.
+                mCalendarView.markDate(new DateData(Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(i).getString("date").substring(0, 4)), Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(i).getString("date").substring(5, 7)), (Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(i).getString("date").substring(8, 10)))).setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, R.color.button_blue)));//mark multiple dates with this code.
 
 
             }
@@ -218,6 +222,7 @@ public class ViewAbsent extends GetSafeBaseFragment {
             for (int i = 0; i < absentDetails.getJSONArray("models").length(); i++) {
 //                mCalendarView.markDate(new DateData(Integer.parseInt(), Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(i).getString("date").substring(5, 7)), Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(i).getString("date").substring(8, 10))).setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, R.color.button_blue)));//mark multiple dates with this code.
                 if (absentDetails.getJSONArray("models").getJSONObject(i).getString("date").substring(0, 10).equals(dtStart)) {
+                    selectedDateID=absentDetails.getJSONArray("models").getJSONObject(i).getString("id");
                     if ((Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(i).getString("date").substring(8, 10)) + 1) == 4) {
                         Log.e("session", absentDetails.getJSONArray("models").getJSONObject(i).getString("type"));
                     }
@@ -237,5 +242,36 @@ public class ViewAbsent extends GetSafeBaseFragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void deleteAbsent() {
+
+
+        HashMap<String, String> tempParam = new HashMap<>();
+
+
+        getSafeServices.networkJsonRequest(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.DELETE_ABSENT_CHILD) +"?id="+selectedDateID, 4, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+
+                    if (!result.getBoolean("status"))
+
+                        showToast(dialog, "Failed to delete. Please try again.", 0);
+                    else {
+
+                        showToast(dialog, "Deleted successfully.", 2);
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                }
+
+            }
+        });
+
+
     }
 }

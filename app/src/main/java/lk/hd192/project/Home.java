@@ -383,7 +383,7 @@ public class Home extends GetSafeBase {
 
                                 tinyDB.putString("selectedChildId", kidList.getJSONArray("children").getJSONObject(position).getString("id"));
                                 tinyDB.putString("selectedChildName", kidList.getJSONArray("children").getJSONObject(position).getString("name"));
-                                tinyDB.putString("driver_id", kidList.getJSONArray("children").getJSONObject(position).getString("driver_id"));
+                                tinyDB.putString("kid_driver_id", kidList.getJSONArray("children").getJSONObject(position).getString("driver_id"));
                                 notifyDataSetChanged();
                                 showToast(dialog, "Profile changed to " + tinyDB.getString("selectedChildName"), 2);
 
@@ -629,7 +629,7 @@ public class Home extends GetSafeBase {
                     if (kidList != null) {
                         tinyDB.putString("selectedChildId", kidList.getJSONArray("children").getJSONObject(0).getString("id"));
                         tinyDB.putString("selectedChildName", kidList.getJSONArray("children").getJSONObject(0).getString("name"));
-                        tinyDB.putString("driver_id", kidList.getJSONArray("children").getJSONObject(0).getString("driver_id"));
+                        tinyDB.putString("kid_driver_id", kidList.getJSONArray("children").getJSONObject(0).getString("driver_id"));
 
                         recyclerSelectChild.getAdapter().notifyDataSetChanged();
                     }

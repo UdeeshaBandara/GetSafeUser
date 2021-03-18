@@ -191,7 +191,11 @@ public class GetSafeServices extends GetSafeBase {
 
             requestMethod = Request.Method.PUT;
 
-        } else {
+        } else if (method == 4) {
+
+            requestMethod = Request.Method.DELETE;
+
+        }else {
 
             requestMethod = Request.Method.GET;
 

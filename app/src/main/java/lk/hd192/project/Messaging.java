@@ -64,15 +64,15 @@ public class Messaging extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messaging);
-Log.e("android id", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+        Log.e("android id", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
         tinyDB = new TinyDB(getApplicationContext());
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        tinyDB.putString("user_id","test_user_id");
+
         mRootRef = FirebaseDatabase.getInstance().getReference();
         if (tinyDB.getBoolean("isStaffAccount"))
-            messageRef = mRootRef.child("Staff_Drivers").child("add_driver_id_here").child("Passengers").child(tinyDB.getString("user_id")).child("messages");
+            messageRef = mRootRef.child("Staff_Drivers").child(tinyDB.getString("driver_id")).child("Passengers").child(tinyDB.getString("user_id")).child("messages");
         else
-            messageRef = mRootRef.child("School_Drivers").child("add_driver_id_here").child("Passengers").child(tinyDB.getString("user_id")).child(tinyDB.getString("selectedChildId")).child("messages");
+            messageRef = mRootRef.child("School_Drivers").child(tinyDB.getString("kid_driver_id")).child("Passengers").child(tinyDB.getString("user_id")).child(tinyDB.getString("selectedChildId")).child("messages");
 
 
 //        mChatUser = "a0tW1ZdZySMuDb28Za0RyoSDrlz1";
