@@ -73,6 +73,7 @@ public class DriverProfile extends GetSafeBase {
 
         try {
             driverId = getIntent().getStringExtra("driver_id");
+            Log.e("driver id",driverId);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -150,7 +151,7 @@ public class DriverProfile extends GetSafeBase {
         param.put("driver_id", driverId);
         param.put("child_id", tinyDB.getString("selectedChildId"));
         showLoading();
-        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.STUDENT_REQUEST_DRIVER), 2, tinyDB.getString("token"), new VolleyJsonCallback() {
+        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.CHILD_REQUEST_DRIVER), 2, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 
@@ -187,7 +188,7 @@ public class DriverProfile extends GetSafeBase {
 
                 try {
 
-
+Log.e("driver",result+"");
                     if (result.getBoolean("status")) {
 
                         driverDetails = result.getJSONObject("data");

@@ -113,9 +113,9 @@ public class LiveLocation extends GetSafeBase {
 //        myRef = database.getReference("message");
 //        Query lastQuery = myRef.orderByKey().limitToLast(1);
         if (tinyDB.getBoolean("isStaffAccount"))
-            locationRef = mRootRef.child("Staff_Drivers").child("add_driver_id_here").child("Location");
+            locationRef = mRootRef.child("Staff_Drivers").child(tinyDB.getString("kid_driver_id")).child(tinyDB.getString("kid_driver_id")).child("Location");
         else
-            locationRef = mRootRef.child("School_Drivers").child("add_driver_id_here").child("Location");
+            locationRef = mRootRef.child("School_Drivers").child(tinyDB.getString("kid_driver_id")).child(tinyDB.getString("kid_driver_id")).child("Location");
 
 
         if (ActivityCompat.checkSelfPermission(LiveLocation.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(LiveLocation.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

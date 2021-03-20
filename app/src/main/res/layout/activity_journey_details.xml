@@ -422,71 +422,9 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/bg_journey_details_item"
-                android:orientation="horizontal"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="5dp">
 
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="5"
-                    android:fontFamily="@font/nunito_regular"
-                    android:text="Trip Rating"
-                    android:textColor="@color/dark_blue"
-                    android:textSize="14sp" />
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="5"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/txt_rating"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="4"
-                        android:fontFamily="@font/nunito_regular"
-                        android:text="Sudesh Bandara"
-                        android:textColor="@color/dark_blue"
-                        android:textSize="14sp" />
-
-                    <Button
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_marginBottom="7dp"
-                        android:layout_weight="6"
-                        android:background="@drawable/bg_btn_next_forward"
-                        android:drawableRight="@drawable/icon_forward"
-                        android:paddingRight="10dp"
-                        android:text="Give Your Rating"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white" />
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/bg_btn_next_forward"
-                android:drawableLeft="@drawable/icon_button_location"
-                android:drawableRight="@drawable/icon_forward"
-                android:paddingLeft="15dp"
-                android:paddingRight="25dp"
-                android:text="View Route Taken By Driver"
-                android:textAllCaps="false"
-                android:textColor="@color/white" />
 
         </LinearLayout>
 

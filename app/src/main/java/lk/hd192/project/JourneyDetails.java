@@ -31,7 +31,7 @@ public class JourneyDetails extends GetSafeBase {
 
     GetSafeServices getSafeServices;
     TinyDB tinyDB;
-    String tripId,driverId;
+    String tripId, driverId;
     TextView driver_name, txt_date, txt_pick_up_time, txt_prickup_location, txt_drop_off_time, txt_dropoff_location, trip_type, trp_id;
     JSONObject response;
     View view;
@@ -61,9 +61,9 @@ public class JourneyDetails extends GetSafeBase {
         findViewById(R.id.btn_view_driver_profile).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             Intent intent=new Intent(getApplicationContext(), DriverProfile.class);
-             intent.putExtra("driver_id",driverId);
-             startActivity(intent);
+                Intent intent = new Intent(getApplicationContext(), DriverProfile.class);
+                intent.putExtra("driver_id", driverId);
+                startActivity(intent);
             }
         });
 
@@ -75,9 +75,9 @@ public class JourneyDetails extends GetSafeBase {
         });
 
         try {
-            Log.e("trip id", "before");
+
             tripId = getIntent().getStringExtra("trip_id");
-            Log.e("trip id", tripId);
+
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -94,13 +94,15 @@ public class JourneyDetails extends GetSafeBase {
     private void getSingleTripDetailsForChild() {
         HashMap<String, String> tempParam = new HashMap<>();
 
-showLoading();
+
+        showLoading();
         getSafeServices.networkJsonRequest(getApplicationContext(), tempParam, getString(R.string.BASE_URL) + getString(R.string.GET_SINGLE_JOURNEY_DETAILS_CHILD) + "?tripid=" + tripId + "&childid=" + tinyDB.getString("selectedChildId"), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 
                 try {
 
+                    Log.e("res", result + "");
 
                     if (result.getBoolean("status")) {
                         response = result;
@@ -111,7 +113,7 @@ showLoading();
                     e.printStackTrace();
 
                 }
-hideLoading();
+                hideLoading();
             }
         });
 
@@ -122,7 +124,7 @@ hideLoading();
 
         HashMap<String, String> tempParam = new HashMap<>();
 
-showLoading();
+        showLoading();
         getSafeServices.networkJsonRequest(getApplicationContext(), tempParam, getString(R.string.BASE_URL) + getString(R.string.GET_SINGLE_JOURNEY_DETAILS) + "?id=" + tripId, 1, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
@@ -151,12 +153,13 @@ showLoading();
         try {
             txt_date.setText(response.getJSONObject("models").getString("date").substring(0, 10));
 //            txt_date.setText("response.getJSONObject(.getString");
-            driverId=response.getJSONObject("models").getJSONObject("info").getString("driver_id");
-            trp_id.setText(response.getJSONObject("models").getJSONObject("info").getString("id"));
-            txt_pick_up_time.setText(response.getJSONObject("models").getString("date"));
-            txt_prickup_location.setText(response.getJSONObject("models").getJSONObject("pick_up_location_data").getString("pick_up_add1") + " " + response.getJSONObject("models").getJSONObject("pick_up_location_data").getString("pick_up_add2"));
-            txt_dropoff_location.setText(response.getJSONObject("models").getJSONObject("pick_up_location_data").getString("drop_off_add1") + " " + response.getJSONObject("models").getJSONObject("pick_up_location_data").getString("drop_off_add2"));
-
+            driverId = response.getJSONObject("models").getString("driver_id");
+            trp_id.setText(response.getJSONObject("models").getJSONObject("info").getString("trip_id"));
+            txt_pick_up_time.setText(response.getJSONObject("models").getJSONObject("info").getString("pickup_time").substring(11, 16));
+            txt_drop_off_time.setText(response.getJSONObject("models").getJSONObject("info").getString("dropoff_time").substring(11, 16));
+            txt_prickup_location.setText(response.getJSONObject("models").getJSONObject("location_data").getString("pick_up_add1") + " " + response.getJSONObject("models").getJSONObject("location_data").getString("pick_up_add2"));
+            txt_dropoff_location.setText(response.getJSONObject("models").getJSONObject("location_data").getString("drop_off_add1") + " " + response.getJSONObject("models").getJSONObject("location_data").getString("drop_off_add2"));
+            driver_name.setText(response.getJSONObject("models").getJSONObject("driver").getString("name"));
             trip_type.setText(response.getJSONObject("models").getString("type"));
 
         } catch (Exception e) {
@@ -165,6 +168,7 @@ showLoading();
 
 
     }
+
     void showLoading() {
 
         view.setVisibility(View.VISIBLE);
