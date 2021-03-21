@@ -468,35 +468,36 @@ public class AlternativeRoutes extends GetSafeBase implements DatePickerDialog.O
 
     }
 
-    public void locationAddress(double lat, double lon) {
-        Geocoder geocoder;
-        List<Address> addressList;
-
-        geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
-
-        try {
-            addressList = geocoder.getFromLocation(lat, lon, 1);
-
-
-            if (addressList.size() == 0) {
-
-
-                // customToast("Oops.. \nNo Address Found in this Area ",0);
-                mConfirm.setEnabled(false);
-
-            } else {
-                mConfirm.setEnabled(true);
-                GetSafeBase.LOC_ADDRESS = addressList.get(0).getAddressLine(0);
-            }
-
-
-        } catch (IOException e) {
-            //   customToast("Oops.. \nan error occurred",1);
-            e.printStackTrace();
-        }
-    }
+//    public void locationAddress(double lat, double lon) {
+//        Geocoder geocoder;
+//        List<Address> addressList;
+//
+//        geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+//
+//        try {
+//            addressList = geocoder.getFromLocation(lat, lon, 1);
+//
+//
+//            if (addressList.size() == 0) {
+//
+//
+//                // customToast("Oops.. \nNo Address Found in this Area ",0);
+//                mConfirm.setEnabled(false);
+//
+//            } else {
+//                mConfirm.setEnabled(true);
+//                GetSafeBase.LOC_ADDRESS = addressList.get(0).getAddressLine(0);
+//            }
+//
+//
+//        } catch (IOException e) {
+//            //   customToast("Oops.. \nan error occurred",1);
+//            e.printStackTrace();
+//        }
+//    }
 
     public void loadMap() {
+        Log.e("inside","loadMap");
         mPickupLocation.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap mMap) {
@@ -520,31 +521,34 @@ public class AlternativeRoutes extends GetSafeBase implements DatePickerDialog.O
                     }
                     final Location location = locationManager.getLastKnownLocation(locationProvider);
 
-                    if (pinnedLocation == null)
-                        cameraPosition = new CameraPosition.Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(15).build();
-                    else
-                        cameraPosition = new CameraPosition.Builder().target(pinnedLocation).zoom(15).build();
+
+                    cameraPosition = new CameraPosition.Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(15).build();
+
 
                     googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
+                    Log.e("inside","map");
 
                     googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
                         @Override
                         public void onCameraChange(CameraPosition cameraPosition) {
 
-                            locationAddress(cameraPosition.target.latitude, cameraPosition.target.longitude);
-                            pinnedLocation = new LatLng(cameraPosition.target.latitude, cameraPosition.target.longitude);
+//                            locationAddress(cameraPosition.target.latitude, cameraPosition.target.longitude);
+//                            pinnedLocation = new LatLng(cameraPosition.target.latitude, cameraPosition.target.longitude);
 
 
                             latitude = cameraPosition.target.latitude;
                             longitude = cameraPosition.target.longitude;
-
+                            Log.e("loc", "picker");
+                            Log.e("loc", latitude + "");
+                            Log.e("loc", longitude + "");
+                            selectedLatLong.add(new LatLng(latitude, longitude));
 
                         }
                     });
 
                 } catch (Exception e) {
-
+                    e.printStackTrace();
                 }
 
 
@@ -590,8 +594,9 @@ public class AlternativeRoutes extends GetSafeBase implements DatePickerDialog.O
                 if (!isAdded) {
                     btn_save_alternate.setVisibility(View.VISIBLE);
                     alternateRoute.put(singleAlternate);
-                    selectedLatLong.add(new LatLng(latitude, longitude));
                     recycler_alternate_dates.getAdapter().notifyDataSetChanged();
+
+
                 }
 
             }
@@ -700,6 +705,7 @@ public class AlternativeRoutes extends GetSafeBase implements DatePickerDialog.O
                     @Override
                     public void onClick(View view) {
                         alternateRoute.remove(position);
+                        selectedLatLong.remove(position);
                         if (alternateRoute.length() == 0)
                             btn_save_alternate.setVisibility(View.INVISIBLE);
                         notifyDataSetChanged();

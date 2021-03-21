@@ -115,7 +115,7 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
 
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
 
-        txtSchoolName = findViewById(R.id.txt_school_name);
+        txtSchoolName = findViewById(R.id.txt_edit__school_name);
         txtBirthday = findViewById(R.id.txt_birthday);
         txtPickupAddress = findViewById(R.id.txt_pickup_address);
         txtKidName = findViewById(R.id.txt_kid_name);

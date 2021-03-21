@@ -40,6 +40,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import lk.hd192.project.Utils.GetSafeBase;
+import lk.hd192.project.Utils.TinyDB;
 
 public class AddKidThirdFragment extends Fragment {
 
@@ -47,6 +48,7 @@ public class AddKidThirdFragment extends Fragment {
     RelativeLayout rltDropDown, mapScrollContainer;
     ScrollView mapScrollView;
     AddNewKid addNewKid;
+    TinyDB tinyDB;
     TextView reviewKidName, reviewSchoolAddress, reviewSchoolName, reviewKidDob, reviewAddress, reviewMapLocationAddress;
 
     Bitmap finalMarker;
@@ -73,6 +75,7 @@ public class AddKidThirdFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        tinyDB= new TinyDB(getActivity());
 
         editDetails = view.findViewById(R.id.edit_animation);
         reviewKidName = view.findViewById(R.id.review_kid_name);
@@ -99,7 +102,7 @@ public class AddKidThirdFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //   addNewKid.goToFirstStep();
-                startActivity(new Intent(getActivity(), EditKidProfile.class));
+//                startActivity(new Intent(getActivity(), EditKidProfile.class));
             }
         });
 
@@ -146,7 +149,8 @@ public class AddKidThirdFragment extends Fragment {
         reviewSchoolName.setText(AddNewKid.SchoolName);
         reviewKidDob.setText(AddNewKid.Birthday);
 
-        reviewAddress.setText(AddNewKid.AddOne + ", " + AddNewKid.AddTwo + ", " + AddNewKid.City);
+
+        reviewAddress.setText(tinyDB.getString("temp_kid_add"));
 
         reviewMapLocationAddress.setText(GetSafeBase.LOC_ADDRESS);
 

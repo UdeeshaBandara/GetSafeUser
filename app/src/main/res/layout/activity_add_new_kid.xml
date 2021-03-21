@@ -125,7 +125,7 @@
         android:layout_marginHorizontal="15dp"
         android:layout_marginBottom="15dp"
         android:background="@drawable/bg_button_contact_driver"
-        android:text="Save"
+        android:text="Okay"
         android:textAllCaps="false"
         android:visibility="gone" />
 

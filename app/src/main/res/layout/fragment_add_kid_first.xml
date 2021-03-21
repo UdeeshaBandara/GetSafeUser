@@ -19,7 +19,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="75dp"
             android:layout_marginTop="10dp">
 
             <EditText
@@ -73,7 +74,7 @@
 
                 android:fontFamily="@font/nunito_regular"
                 android:gravity="center"
-                android:hint="School Name"
+                android:text="School Namme"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:textSize="14sp"
@@ -129,7 +130,7 @@
                 android:maxLines="1"
                 android:paddingRight="10dp"
                 android:ellipsize="end"
-                android:hint="Birthday"
+                android:text="Birthday"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 

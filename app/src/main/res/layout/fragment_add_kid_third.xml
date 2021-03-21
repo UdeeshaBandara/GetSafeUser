@@ -81,6 +81,7 @@
                                 android:layout_height="100dp"
                                 android:layout_gravity="center"
                                 app:lottie_autoPlay="true"
+                                android:visibility="gone"
                                 app:lottie_loop="true"
                                 app:lottie_rawRes="@raw/edit_button" />
 
@@ -252,100 +253,13 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/kidGurdianDetailsBox"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/email_main"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginRight="15dp">
 
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <View
-                        android:id="@+id/SplitLine_hor4"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#FFD5D6D6" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="6"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/kid_gurdian_name_label"
-                                android:layout_width="match_parent"
-                                android:layout_height="20dp"
-                                android:fontFamily="@font/nunito_regular"
-                                android:gravity="center_vertical"
-                                android:hint="Guardian's Details"
-                                android:textColor="@color/black"
-                                android:textSize="14sp" />
-
-                            <TextView
-                                android:id="@+id/review_guardian_name"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:fontFamily="@font/nunito_bold"
-                                android:text=""
-                                android:textColor="@color/black"
-                                android:textSize="18sp" />
-
-                            <TextView
-                                android:id="@+id/review_guardian_contact"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:drawableLeft="@drawable/icon_call"
-                                android:fontFamily="@font/nunito_regular"
-                                android:text=" "
-                                android:textColor="@color/black"
-                                android:textSize="14sp" />
-
-
-                        </LinearLayout>
-
-                        <RelativeLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical">
-
-                            <com.makeramen.roundedimageview.RoundedImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="40dp"
-                                android:layout_alignParentTop="true"
-                                android:src="@drawable/icon_home_next"
-                                android:visibility="gone" />
-
-                        </RelativeLayout>
-
-
-                    </LinearLayout>
-
-
-                </LinearLayout>
-
-
-            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/kidAddressBox"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/kidGurdianDetailsBox"
+                android:layout_below="@+id/email_main"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="15dp">

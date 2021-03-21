@@ -49,7 +49,9 @@
                         android:layout_toRightOf="@id/location_heading"
                         android:scaleType="fitCenter"
                         app:lottie_autoPlay="true"
+                        android:paddingBottom="10dp"
                         app:lottie_loop="true"
+                        app:lottie_repeatCount="5"
                         app:lottie_rawRes="@raw/explore_route" />
 
                     <Button
@@ -274,56 +276,17 @@
                 </RelativeLayout>
 
 
-                <LinearLayout
-                    android:id="@+id/lnr_options"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_below="@+id/drop_lyt"
-                    android:layout_marginTop="15dp"
-
-                    android:gravity="center"
-                    android:orientation="horizontal">
 
 
-                    <Button
-                        android:id="@+id/btn_search"
-                        android:layout_width="100dp"
-                        android:layout_height="40dp"
-                        android:layout_alignParentRight="true"
-                        android:background="@drawable/bg_pick_drop"
-                        android:fontFamily="@font/nunito_bold"
-                        android:gravity="center"
-                        android:layout_gravity="center"
-
-                        android:text="Search"
-                        android:textAllCaps="false"
-                        android:textColor="@color/dark_blue"
-                        android:textSize="12sp" />
-<!--                    <ImageView-->
-<!--                        android:id="@+id/img_ac"-->
-<!--                        android:layout_width="0dp"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_weight="5"-->
-<!--                        android:src="@drawable/icon_ac_non_ac" />-->
-
-<!--                    <ImageView-->
-<!--                        android:id="@+id/img_non_ac"-->
-<!--                        android:layout_width="0dp"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_weight="5"-->
-<!--                        android:visibility="gone"-->
-<!--                        android:src="@drawable/icon_non_ac" />-->
-
-
-                </LinearLayout>
 
                 <TextView
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/lnr_options"
+                    android:layout_below="@id/drop_lyt"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="5dp"
+                    android:paddingVertical="3dp"
                     android:fontFamily="@font/nunito_bold"
                     android:text="Transport services that match your prefernces "
                     android:textColor="@color/black"

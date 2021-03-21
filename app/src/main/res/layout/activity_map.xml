@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/school_map_marker"
-        android:src="@drawable/school_map_marker"
+        android:src="@drawable/marker_end"
         android:layout_marginBottom="40dp"
         android:layout_centerInParent="true"
 

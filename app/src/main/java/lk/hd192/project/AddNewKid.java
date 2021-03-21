@@ -39,7 +39,7 @@ public class AddNewKid extends GetSafeBase {
     LottieAnimationView loading;
     public static boolean isEditing = false, isLocationRemembered;
 
-    public static String FirstName, LastName, SchoolName, Gender="null", Birthday, AddOne, AddTwo, City, PinnedLoc,kidId,kidLocId;
+    public static String FirstName, LastName, SchoolName, Gender="null", Birthday,  PinnedLoc,kidId,kidLocId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +99,7 @@ public class AddNewKid extends GetSafeBase {
                         addKidSecondFragment.addKidLocationDetails();
                         addKidThirdFragment.updateFields();
                         nonSwappableViewPager.setCurrentItem(2);
-                        txtSubHeading.setText("Confirm Details");
+                        txtSubHeading.setText("Kid's Summary");
                         doneAnimation.setVisibility(View.VISIBLE);
                         locationAnimation.setVisibility(View.GONE);
                         kidAnimation.setVisibility(View.GONE);
@@ -114,9 +114,8 @@ public class AddNewKid extends GetSafeBase {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mainSaveAnimation.setVisibility(View.VISIBLE);
-                mainSaveAnimation.playAnimation();
-                mainSaveAnimation.setVisibility(View.GONE);
+         onBackPressed();
+
 
             }
         });

@@ -67,7 +67,7 @@ public class AddKidSecondFragment extends GetSafeBaseFragment {
 
     View popupView;
     TinyDB tinyDB;
-    LinearLayout lnrRemember;
+//    LinearLayout lnrRemember;
     MapView mPickupLocation;
     GoogleMap googleMap;
     LocationManager locationManager;
@@ -76,7 +76,7 @@ public class AddKidSecondFragment extends GetSafeBaseFragment {
     AddNewKid addNewKid;
     String locationProvider = LocationManager.GPS_PROVIDER;
     CameraPosition cameraPosition;
-    LottieAnimationView rememberAnimation;
+//    LottieAnimationView rememberAnimation;
     EditText txtAddressOne, txtAddressTwo, txtCity;
     TextView txtLocation;
 
@@ -108,21 +108,14 @@ public class AddKidSecondFragment extends GetSafeBaseFragment {
         txtAddressTwo = view.findViewById(R.id.txt_address_two);
         txtCity = view.findViewById(R.id.txt_city);
         txtLocation = view.findViewById(R.id.txt_location);
-        rememberAnimation = view.findViewById(R.id.remember_location_animation);
-        lnrRemember = view.findViewById(R.id.lnr_remember);
+//        rememberAnimation = view.findViewById(R.id.remember_location_animation);
+//        lnrRemember = view.findViewById(R.id.lnr_remember);
 
-        rememberAnimation.setSpeed(0.35f);
-        rememberAnimation.setMinAndMaxProgress(0.0f, 0.7f);
+//        rememberAnimation.setSpeed(0.35f);
+//        rememberAnimation.setMinAndMaxProgress(0.0f, 0.7f);
         addNewKid = new AddNewKid();
 
-        if (AddNewKid.isEditing) {
 
-            txtAddressOne.setText(AddNewKid.AddOne);
-            txtAddressTwo.setText(AddNewKid.AddTwo);
-            txtCity.setText(AddNewKid.City);
-            txtLocation.setText(AddNewKid.PinnedLoc);
-
-        }
 
         pinLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,24 +129,24 @@ public class AddKidSecondFragment extends GetSafeBaseFragment {
                 }
             }
         });
-        lnrRemember.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (AddNewKid.isLocationRemembered) {
-                    rememberAnimation.setMinAndMaxProgress(0.0f, .7f);
-                    rememberAnimation.setSpeed(1f);
-                    AddNewKid.isLocationRemembered = false;
-                    rememberAnimation.playAnimation();
-
-                } else {
-                    rememberAnimation.setMinAndMaxProgress(0.7f, 1f);
-
-                    rememberAnimation.playAnimation();
-                    AddNewKid.isLocationRemembered = true;
-                    rememberAnimation.setSpeed(0.35f);
-                }
-            }
-        });
+//        lnrRemember.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (AddNewKid.isLocationRemembered) {
+//                    rememberAnimation.setMinAndMaxProgress(0.0f, .7f);
+//                    rememberAnimation.setSpeed(1f);
+//                    AddNewKid.isLocationRemembered = false;
+//                    rememberAnimation.playAnimation();
+//
+//                } else {
+//                    rememberAnimation.setMinAndMaxProgress(0.7f, 1f);
+//
+//                    rememberAnimation.playAnimation();
+//                    AddNewKid.isLocationRemembered = true;
+//                    rememberAnimation.setSpeed(0.35f);
+//                }
+//            }
+//        });
 
     }
 
@@ -267,6 +260,7 @@ public class AddKidSecondFragment extends GetSafeBaseFragment {
         tempParam.put("longitude", longitude.toString());
         tempParam.put("add1", txtAddressOne.getText().toString());
         tempParam.put("add2", txtAddressTwo.getText().toString());
+        tinyDB.putString("temp_kid_add",txtAddressOne.getText().toString()+", "+txtAddressTwo.getText().toString()+", "+ txtCity.getText().toString());
 
 
         ((AddNewKid) Objects.requireNonNull(getActivity())).showLoading();
@@ -284,9 +278,8 @@ public class AddKidSecondFragment extends GetSafeBaseFragment {
 
                                 AddNewKid.kidLocId = result.getJSONObject("location").getString("locationable_id");
 
-                                AddNewKid.AddOne = txtAddressOne.getText().toString();
-                                AddNewKid.AddTwo = txtAddressTwo.getText().toString();
-                                AddNewKid.City = txtCity.getText().toString();
+
+
 
                             } else
                                 showWarningToast(dialog, result.getString("validation_errors"), 0);

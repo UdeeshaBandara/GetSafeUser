@@ -105,15 +105,10 @@ public class ExploreTransport extends GetSafeBase {
 //
 //            }
 //        });
-        findViewById(R.id.btn_search).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (tinyDB.getBoolean("isStaffAccount"))
-                    searchDriverForStaff();
-                else
-                    searchDriverForChild();
-            }
-        });
+        if (tinyDB.getBoolean("isStaffAccount"))
+            searchDriverForStaff();
+        else
+            searchDriverForChild();
 
         recyclerDriver.setAdapter(new DriverAdapter());
         recyclerDriver.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));

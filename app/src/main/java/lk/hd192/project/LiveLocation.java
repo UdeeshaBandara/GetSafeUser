@@ -176,6 +176,7 @@ public class LiveLocation extends GetSafeBase {
             getLocationDetailsOfUser();
         else
             getLocationDetailsOfChild();
+
         valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

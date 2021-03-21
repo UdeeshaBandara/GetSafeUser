@@ -11,6 +11,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 
@@ -64,7 +65,7 @@ public class Register extends GetSafeBase {
         getSafeServices = new GetSafeServices();
         tinyDB = new TinyDB(getApplicationContext());
 
-
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
 
         txtFullName.addTextChangedListener(new TextWatcher() {

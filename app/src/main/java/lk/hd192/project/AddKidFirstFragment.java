@@ -81,6 +81,7 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
         rbnGrpGender = view.findViewById(R.id.rbn_grp_gender);
         getSafeServices = new GetSafeServices();
         tinyDB = new TinyDB(getActivity());
+        schools= new JSONObject();
 
         try {
 //            schools = new JSONObject(readFile());
@@ -154,7 +155,7 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
             txtLastName.setError("Please enter kid last name");
             AddNewKid.firstCompleted = false;
 
-        } else if (txtSchoolName.getHint().toString().equals("School Name")) {
+        } else if (txtSchoolName.getText().toString().equals("School Name")) {
             YoYo.with(Techniques.Bounce)
                     .duration(1000)
                     .playOn(txtSchoolName);
@@ -169,11 +170,11 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
 
             AddNewKid.firstCompleted = false;
 
-        } else if (calenderBirthday.getHint().toString().equals("Birthday")) {
+        } else if (calenderBirthday.getText().toString().equals("Birthday")) {
             YoYo.with(Techniques.Bounce)
                     .duration(1000)
                     .playOn(calenderBirthday);
-            calenderBirthday.setError("Please select kid birthday");
+            calenderBirthday.setError("Please select kid's birthday");
             AddNewKid.firstCompleted = false;
         } else {
             AddNewKid.firstCompleted = true;
@@ -201,7 +202,7 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
         HashMap<String, String> tempParam = new HashMap<>();
         tempParam.put("name", txtFirstName.getText().toString() + " " + txtLastName.getText().toString());
         tempParam.put("school-name", txtSchoolName.getText().toString());
-        tempParam.put("birthday", calenderBirthday.getHint().toString());
+        tempParam.put("birthday", calenderBirthday.getText().toString());
         tempParam.put("gender", AddNewKid.Gender);
         tempParam.put("guardian", "");
 
@@ -221,7 +222,7 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
                                 AddNewKid.FirstName = txtFirstName.getText().toString();
                                 AddNewKid.LastName = txtLastName.getText().toString();
                                 AddNewKid.SchoolName = txtSchoolName.getText().toString();
-                                AddNewKid.Birthday = calenderBirthday.getHint().toString();
+                                AddNewKid.Birthday = calenderBirthday.getText().toString();
 
 
                             } else
