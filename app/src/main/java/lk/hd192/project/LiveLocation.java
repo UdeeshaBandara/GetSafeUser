@@ -26,7 +26,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -47,6 +49,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONObject;
 
@@ -57,6 +60,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -65,6 +69,7 @@ import lk.hd192.project.Utils.DirectionsJSONParser;
 import lk.hd192.project.Utils.GetSafeBase;
 import lk.hd192.project.Utils.GetSafeServices;
 import lk.hd192.project.Utils.TinyDB;
+import lk.hd192.project.Utils.VolleyJsonCallback;
 import lk.hd192.project.pojo.LocationUpdates;
 
 
@@ -73,7 +78,8 @@ public class LiveLocation extends GetSafeBase {
     Button btnBack;
     MapView mapView;
 
-
+    View view;
+    LottieAnimationView loading;
     private GoogleMap googleMap;
 
     LocationManager locationManager;
@@ -84,14 +90,18 @@ public class LiveLocation extends GetSafeBase {
 
     String pushId = "";
 
+    TextView time,distance;
     Polyline polyline;
     LocationListener locationListener;
     LocationManager locationManagerSender;
     TinyDB tinyDB;
+    Boolean isFirstTime = true;
     Bitmap originMarker, finalMarker;
-
-    Double dropLat, dropLon, currentLat, currentLon;
+    int timeOfDay;
+    Double driverLat, dropLat, driverLon, dropLon, currentLat, currentLon;
     Dialog dialog;
+    public static String timeS,distanceS;
+    ValueEventListener valueEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,11 +113,18 @@ public class LiveLocation extends GetSafeBase {
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
 
         getSafeServices = new GetSafeServices();
-
+        loading = findViewById(R.id.loading);
+        view = findViewById(R.id.disable_layout);
         mapView = findViewById(R.id.mapView);
         tinyDB = new TinyDB(getApplicationContext());
         mRootRef = FirebaseDatabase.getInstance().getReference();
         btnBack = findViewById(R.id.btn_location_back);
+        time = findViewById(R.id.time);
+        distance = findViewById(R.id.distance);
+
+        Calendar c = Calendar.getInstance();
+        timeOfDay = c.get(Calendar.HOUR_OF_DAY);
+
 
 //        database = FirebaseDatabase.getInstance();
 //        myRef = database.getReference("message");
@@ -127,99 +144,54 @@ public class LiveLocation extends GetSafeBase {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         originMarker = bitmapSizeByScale(BitmapFactory.decodeResource(getResources(), R.drawable.van_map_marker), 1);
-        finalMarker = bitmapSizeByScale(BitmapFactory.decodeResource(getResources(), R.drawable.school_map_marker), 1);
+        finalMarker = bitmapSizeByScale(BitmapFactory.decodeResource(getResources(), R.drawable.marker_end), 1);
 
-        dropLat = 6.965495959761049;
-        dropLon = 79.95475497680536;
-        btnBack.setOnClickListener(new View.OnClickListener() {
+//        dropLat = 6.965495959761049;
+//        dropLon = 79.95475497680536;
+
+        findViewById(R.id.location_heading).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+//                Log.e("loc", "update");
+//                LocationUpdates locationUpdates = new LocationUpdates(6.758254739995794, 79.9313956735707, "new");
+//                locationRef.setValue(locationUpdates);
+//                onBackPressed();
+//                java.util.Map messageMap = new HashMap();
+//                messageMap.put("latitude",6.948010842741238);
+//                messageMap.put("longitude", 79.87266712016485);
+//
+////
+//                locationRef.updateChildren(messageMap, new DatabaseReference.CompletionListener() {
+//                    @Override
+//                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+//                        if (databaseError != null) {
+//                            Log.e("Error", databaseError.getMessage());
+//                        }
+//                    }
+//                });
             }
         });
 
-        locationListener = new LocationListener() {
+        if (tinyDB.getBoolean("isStaffAccount"))
+            getLocationDetailsOfUser();
+        else
+            getLocationDetailsOfChild();
+        valueEventListener = new ValueEventListener() {
             @Override
-            public void onLocationChanged(Location location) {
-
-                locationRef.child("Latitude").setValue(location.getLatitude());
-                locationRef.child("Longitude").setValue(location.getLongitude());
-                // pushId++;
-                java.util.Map messageMap = new HashMap();
-                messageMap.put("Latitude", location.getLatitude());
-                messageMap.put("Longitude", location.getLongitude());
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                LocationUpdates locationUpdates = snapshot.getValue(LocationUpdates.class);
+//                driverLat = snapshot.child("latitude").getValue(Double.class);
+//                driverLon = snapshot.child("longitude").getValue(Double.class);
 
 
-                locationRef.updateChildren(messageMap, new DatabaseReference.CompletionListener() {
-                    @Override
-                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                        if (databaseError != null) {
-                            Log.e("Error", databaseError.getMessage());
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-
-            }
-
-            @Override
-            public void onProviderEnabled(String provider) {
-
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) {
-
-            }
+                driverLat = locationUpdates.getLatitude();
+                driverLon = locationUpdates.getLongitude();
 
 
-        };
-
-        locationManagerSender = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-
-        //noinspection MissingPermission
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        locationManagerSender.requestLocationUpdates(LocationManager.GPS_PROVIDER, 120000, 0, locationListener);
-
-
-        locationRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                try {
-                    LocationUpdates locationUpdates = snapshot.getValue(LocationUpdates.class);
-                    dropLat = locationUpdates.getLatitude();
-                    dropLon = locationUpdates.getLongitude();
+                if (googleMap != null)
                     googleMap.clear();
+                if (locationUpdates.getStatus().equals("End Trip")&& dropLat!=null)
                     drawMapPolyline();
-                } catch (Exception e) {
-                }
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
             }
 
@@ -227,7 +199,36 @@ public class LiveLocation extends GetSafeBase {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        });
+        };
+
+        locationRef.addValueEventListener(valueEventListener);
+
+//        locationRef.addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//
+//            }
+//
+//            @Override
+//            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
 
 
         try {
@@ -252,6 +253,11 @@ public class LiveLocation extends GetSafeBase {
         mapView.onResume();
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        locationRef.removeEventListener(valueEventListener);
+    }
 
     public void loadMap() {
 
@@ -301,7 +307,7 @@ public class LiveLocation extends GetSafeBase {
                         @Override
                         public void onFinish() {
 
-                            drawMapPolyline();
+//                            drawMapPolyline();
                         }
                     }.start();
 
@@ -372,27 +378,32 @@ public class LiveLocation extends GetSafeBase {
     public void drawMapPolyline() {
 
 //        LatLng origin = new LatLng(pickUpLat, pickUpLon);
-        LatLng origin = new LatLng(6.965495959761049, 79.95475497680536);
+        LatLng origin = new LatLng(driverLat, driverLon);
 //        LatLng dest = new LatLng(drpickUpLat, pickUpLon);
         LatLng dest = new LatLng(dropLat, dropLon);
 
 
         googleMap.addMarker(new MarkerOptions()
-                .position(origin).icon(BitmapDescriptorFactory.fromBitmap(originMarker)).title("Marker at home"));
+                .position(origin).icon(BitmapDescriptorFactory.fromBitmap(originMarker)).title("Vehicle location"));
 
-        googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(finalMarker)).position(dest).title("Live location"));
+        googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(finalMarker)).position(dest).title("Destination"));
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         builder.include(origin);
         builder.include(dest);
 
         LatLngBounds bounds = builder.build();
+        if (isFirstTime) {
+            Log.e("inside", "id");
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 75));
 
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 75));
+            CameraPosition camPos = new CameraPosition.Builder(googleMap.getCameraPosition()).target(bounds.getCenter()).tilt(40).build();
 
-        CameraPosition camPos = new CameraPosition.Builder(googleMap.getCameraPosition()).target(bounds.getCenter()).tilt(40).build();
-        googleMap.animateCamera(CameraUpdateFactory
-                .newCameraPosition(camPos));
+            googleMap.animateCamera(CameraUpdateFactory
+                    .newCameraPosition(camPos));
+            isFirstTime = false;
+        }
+
 //
 //        int padding = 1;
 //
@@ -426,11 +437,11 @@ public class LiveLocation extends GetSafeBase {
         String avoidList = "&avoid=highways";
 
         //drop off locations
-        String wayPoints = "&waypoints=via:7.008079020850186,79.96081405184961";
+//        String wayPoints = "&waypoints=via:7.008079020850186,79.96081405184961";
 
 
         // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest + wayPoints + avoidList + "&key=" + getString(R.string.API_KEY);
+        String parameters = str_origin + "&" + str_dest + avoidList + "&key=" + getString(R.string.API_KEY);
 
         // Output format
         String output = "json";
@@ -547,6 +558,8 @@ public class LiveLocation extends GetSafeBase {
             ArrayList<LatLng> points = null;
             PolylineOptions lineOptions = null;
             MarkerOptions markerOptions = new MarkerOptions();
+            time.setText("Time Remaining "+timeS);
+            distance.setText("Distance "+distanceS);
 
 //            Log.e("POLY - results ", result + "");
 
@@ -571,8 +584,8 @@ public class LiveLocation extends GetSafeBase {
 
                 // Adding all the points in the route to LineOptions
                 lineOptions.addAll(points);
-                lineOptions.width(8);
-                lineOptions.color(getResources().getColor(R.color.sec_color));
+                lineOptions.width(14);
+                lineOptions.color(getResources().getColor(R.color.button_blue));
             }
 
             // Drawing polyline in the Google Map for the i-th route
@@ -602,6 +615,137 @@ public class LiveLocation extends GetSafeBase {
                 Math.round(bitmapIn.getHeight() * scall_zero_to_one_f), false);
 
         return bitmapOut;
+    }
+
+    private void getLocationDetailsOfChild() {
+        HashMap<String, String> param = new HashMap<>();
+        showLoading();
+        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_KID_LOCATION_BY_ID) + "?id=" + tinyDB.getString("selectedChildId"), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+                    hideLoading();
+
+                    Log.e("child loc", result + "");
+                    if (result.getBoolean("status")) {
+
+                        if (timeOfDay >= 0 && timeOfDay < 12) {
+                            dropLon = Double.parseDouble(result.getJSONObject("location").getString("pick_up_longitude"));
+                            dropLat = Double.parseDouble(result.getJSONObject("location").getString("pick_up_latitude"));
+                        } else if (timeOfDay >= 12) {
+                            dropLat = Double.parseDouble(result.getJSONObject("location").getString("drop_off_latitude"));
+                            dropLon = Double.parseDouble(result.getJSONObject("location").getString("drop_off_longitude"));
+                        }
+
+
+                        locationRef.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot snapshot) {
+
+
+//                                LocationUpdates locationUpdates= new LocationUpdates(6.984740181205069, 79.92702719350984,"");
+//                                locationRef.setValue(locationUpdates);
+
+                                LocationUpdates locationUpdates = snapshot.getValue(LocationUpdates.class);
+                                driverLat = locationUpdates.getLatitude();
+                                driverLon = locationUpdates.getLongitude();
+                                if (googleMap != null)
+                                    googleMap.clear();
+                                if (locationUpdates.getStatus().equals("End Trip"))
+                                    drawMapPolyline();
+                                else
+                                    showToast(dialog, "Driver didn't start the trip", 0);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                            }
+                        });
+
+
+                    }
+
+                } catch (Exception e) {
+
+                    e.printStackTrace();
+                    hideLoading();
+                }
+
+            }
+        });
+    }
+
+    private void getLocationDetailsOfUser() {
+
+        HashMap<String, String> tempParam = new HashMap<>();
+
+
+        getSafeServices.networkJsonRequest(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.USER_LOCATION), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+                    hideLoading();
+                    if (result.getBoolean("status")) {
+
+
+                        if (timeOfDay >= 0 && timeOfDay < 12) {
+
+                            dropLon = result.getJSONObject("location").getDouble("pick_up_longitude");
+                            dropLat = result.getJSONObject("location").getDouble("pick_up_latitude");
+                        } else if (timeOfDay >= 12) {
+                            dropLat = result.getJSONObject("location").getDouble("drop_off_latitude");
+                            dropLon = result.getJSONObject("location").getDouble("drop_off_longitude");
+                        }
+
+                        locationRef.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot snapshot) {
+                                LocationUpdates locationUpdates = snapshot.getValue(LocationUpdates.class);
+                                driverLat = locationUpdates.getLatitude();
+                                driverLon = locationUpdates.getLongitude();
+                                if (googleMap != null)
+                                    googleMap.clear();
+                                if (locationUpdates.getStatus().equals("End Trip"))
+                                    drawMapPolyline();
+                                else
+                                    showToast(dialog, "Driver didn't start the trip", 0);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                            }
+                        });
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    hideLoading();
+
+                }
+
+            }
+        });
+
+    }
+
+    void showLoading() {
+
+        view.setVisibility(View.VISIBLE);
+        loading.setVisibility(View.VISIBLE);
+        loading.playAnimation();
+
+
+    }
+
+    void hideLoading() {
+
+
+        loading.setVisibility(View.GONE);
+        view.setVisibility(View.GONE);
+
     }
 
 }

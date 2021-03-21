@@ -1,10 +1,17 @@
 package lk.hd192.project.pojo;
 
 public class LocationUpdates {
-
-    private Double Latitude,Longitude;
+    private Double Latitude, Longitude;
+    String Status;
 
     public LocationUpdates() {
+    }
+
+    public LocationUpdates(Double latitude, Double longitude, String status) {
+
+        Latitude = latitude;
+        Longitude = longitude;
+        Status = status;
     }
 
     public Double getLatitude() {
@@ -15,16 +22,19 @@ public class LocationUpdates {
         Latitude = latitude;
     }
 
-    public LocationUpdates(Double latitude, Double longitude) {
-        Latitude = latitude;
-        Longitude = longitude;
-    }
-
     public Double getLongitude() {
         return Longitude;
     }
 
     public void setLongitude(Double longitude) {
         Longitude = longitude;
+    }
+
+    public String getStatus() {
+        return Status;
+    }
+
+    public void setStatus(String status) {
+        Status = status;
     }
 }

@@ -129,6 +129,13 @@ public class AlternativeRoutes extends GetSafeBase implements DatePickerDialog.O
                 showDate(year, month, day, R.style.DatePickerSpinner);
             }
         });
+        findViewById(R.id.btn_alternate_back).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override

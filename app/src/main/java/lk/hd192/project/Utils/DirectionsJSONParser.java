@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import lk.hd192.project.LiveLocation;
+
 public class DirectionsJSONParser {
 
     public List<List<HashMap<String,String>>> parse(JSONObject jObject){
@@ -30,6 +32,8 @@ public class DirectionsJSONParser {
 
                 /** Traversing all legs */
                 for(int j=0;j<jLegs.length();j++){
+                    LiveLocation.timeS=( (JSONObject)jLegs.get(j)).getJSONObject("duration").getString("text");
+                    LiveLocation.distanceS=( (JSONObject)jLegs.get(j)).getJSONObject("distance").getString("text");
                     jSteps = ( (JSONObject)jLegs.get(j)).getJSONArray("steps");
 
                     /** Traversing all steps */

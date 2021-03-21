@@ -23,7 +23,7 @@
         android:layout_gravity="right"
         android:padding="7dp"
         android:src="@drawable/icon_close"
-        android:visibility="visible" />
+        />
 
     <LinearLayout
         android:layout_width="match_parent"

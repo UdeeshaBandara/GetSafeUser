@@ -58,7 +58,7 @@ public class Home extends GetSafeBase {
     String imageUrl;
     int currentPosition = 0;
     NavigationView navigationView;
-    RelativeLayout drawerSideMenuHeading, drawerSelectChildLyt, drawerAlternativeLyt, drawerTransportLyt, drawerLocationLyt, drawerStatsLyt, drawerExpensesLyt, drawerSwapLyt, drawerLogoutLyt;
+    RelativeLayout drawerSideMenuHeading, drawerSelectChildLyt, drawerAlternativeLyt, drawerTransportLyt, drawerLocationLyt, drawerStatsLyt,  drawerSwapLyt, drawerLogoutLyt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +75,7 @@ public class Home extends GetSafeBase {
         threeOption = new JSONObject();
         fourOption = new JSONObject();
         fiveOption = new JSONObject();
-        tinyDB.putString("token", "6|55S7VZBUkgLX2pTEHonOr9cTswp6nbCKTGA4MFYW");
+        tinyDB.putString("token", "8|JRbIj3wfuQRWDB7z3GKl7L6x6AM9bCATpZYc0IBA");
         tinyDB.putString("user_name", "Udeesha Induras");
         try {
 
@@ -119,7 +119,7 @@ public class Home extends GetSafeBase {
 
 
         drawerStatsLyt = navigationView.findViewById(R.id.rlt_stats);
-        drawerExpensesLyt = navigationView.findViewById(R.id.rlt_expenses);
+
         drawerSwapLyt = navigationView.findViewById(R.id.rlt_swap);
         drawerLogoutLyt = navigationView.findViewById(R.id.rlt_logout);
         drawerSelectChildLyt = navigationView.findViewById(R.id.rlt_select_child);
@@ -292,21 +292,8 @@ public class Home extends GetSafeBase {
             }
         });
 
-        drawerExpensesLyt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isDeviceLocationTurnedOn(dialog);
-                if (ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-//                    askForPermission(android.Manifest.permission.ACCESS_FINE_LOCATION, 100);
-                    askForPermission();
-                    return;
-                } else if (isEnable)
 
-                    startActivity(new Intent(getApplicationContext(), JourneyDetails.class));
-
-            }
-        });
         drawerSwapLyt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

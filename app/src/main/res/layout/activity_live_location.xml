@@ -57,20 +57,25 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/btn_location_back"
             android:layout_marginLeft="15dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:fontFamily="@font/nunito_bold"
-            android:text="Live Location and Live Footage \nof Vehicle"
+            android:text="Live Location of the Vehicle"
             android:textColor="@color/dark_blue"
             android:textSize="20sp" />
 
-        <ImageView
+        <TextView
+            android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/location_heading"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/toggle_icon" />
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+
+            android:fontFamily="@font/nunito_bold"
+
+            android:textColor="@color/dark_blue"
+            android:textSize="16sp" />
+
 
     </RelativeLayout>
 
@@ -91,5 +96,22 @@
 
     </RelativeLayout>
 
+    <View
+        android:id="@+id/disable_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#92292828"
+        android:visibility="gone" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/loading"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/loading" />
 
 </RelativeLayout>
