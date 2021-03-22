@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/one_driver"
     android:layout_width="match_parent"
-android:id="@+id/one_driver"
-    android:layout_height="175dp"
+    android:layout_height="145dp"
     android:layout_marginTop="15dp">
 
 
@@ -41,6 +41,7 @@ android:id="@+id/one_driver"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
+
                     android:paddingHorizontal="10dp">
 
 
@@ -106,6 +107,7 @@ android:id="@+id/one_driver"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
                         android:orientation="horizontal">
 
 
@@ -124,37 +126,7 @@ android:id="@+id/one_driver"
                             android:layout_height="wrap_content"
                             android:layout_weight="7"
                             android:fontFamily="@font/nunito_bold"
-                            android:text=": Museaus College,\n  Colombo 07"
-                            android:textColor="@color/white"
-                            android:textSize="12sp" />
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:orientation="horizontal">
-
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="3"
-                            android:fontFamily="@font/nunito_bold"
-                            android:text="Rating :"
-                            android:textColor="@color/white"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:id="@+id/txt_rate"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="7"
-                            android:fontFamily="@font/nunito_bold"
-                            android:text="Rating  "
+                            android:text=": Musaeus College,\n  Colombo 07"
                             android:textColor="@color/white"
                             android:textSize="12sp" />
 

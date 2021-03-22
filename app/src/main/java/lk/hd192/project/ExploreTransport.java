@@ -600,7 +600,7 @@ public class ExploreTransport extends GetSafeBase {
             txt_driver_name = itemView.findViewById(R.id.txt_driver_name);
             txt_start = itemView.findViewById(R.id.txt_start);
             txt_end = itemView.findViewById(R.id.txt_end);
-            txt_rate = itemView.findViewById(R.id.txt_rate);
+
         }
     }
 

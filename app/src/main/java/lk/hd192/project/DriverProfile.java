@@ -98,7 +98,9 @@ public class DriverProfile extends GetSafeBase {
         btn_driver_route.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), DriverRoute.class));
+                Intent intent=new Intent(getApplicationContext(), DriverRoute.class);
+                intent.putExtra("driver_id",driverId);
+                startActivity(intent);
             }
         });
         btn_send_request.setOnClickListener(new View.OnClickListener() {
@@ -202,7 +204,7 @@ Log.e("driver",result+"");
                         if (driverDetails.getJSONArray("vehicle").getJSONObject(0).getInt("camera") == 1)
                             txt_facilities.setText(" Camera");
                         txt_vehicle_reg_no.setText(driverDetails.getJSONArray("vehicle").getJSONObject(0).getString("registration_no"));
-                        txt_seating.setText("Max Capacity " + driverDetails.getJSONArray("vehicle").getJSONObject(0).getString("seating_capacity"));
+                        txt_seating.setText("Vacant Capacity " + driverDetails.getJSONArray("vehicle").getJSONObject(0).getString("seating_capacity"));
                         driver_photo.setImageBitmap(populateImage(driverDetails.getJSONObject("driver_image").getString("image").substring(21)));
 
                         if (driverDetails.getJSONArray("vehicle_images").length() == 1) {

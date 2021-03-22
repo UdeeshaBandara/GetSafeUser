@@ -77,8 +77,10 @@ public class Home extends GetSafeBase {
         threeOption = new JSONObject();
         fourOption = new JSONObject();
         fiveOption = new JSONObject();
-        tinyDB.putString("token", "16|wvZV1Zcwrhhl1hkNEXxADlp9n0LlQ9FwV0t6Vk7s");
-//        tinyDB.putString("user_name", "Udeesha Induras");
+        dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
+
+        tinyDB.putString("token", "6|tTddTwC8Qf4mJIYwJrcJ3ejwa9tkqSGyiFOeWdvW");
+        tinyDB.putString("user_name", "Udeesha Induras");
         try {
 
             oneOption.put("heading", "Current Journey");

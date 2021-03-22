@@ -67,6 +67,7 @@ public class DriverRoute extends GetSafeBase {
     String locationProvider = LocationManager.GPS_PROVIDER, wayPoints;
     CameraPosition cameraPosition;
     Dialog dialog;
+    String driver_id_route;
     ArrayList<DriverLatLong> driverLatLongs = new ArrayList<>();
 
     GetSafeServices getSafeServices;
@@ -83,8 +84,12 @@ public class DriverRoute extends GetSafeBase {
         driverRoute = new JSONObject();
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        originMarker = bitmapSizeByScale(BitmapFactory.decodeResource(getResources(), R.drawable.van_map_marker), 1);
+        originMarker = bitmapSizeByScale(BitmapFactory.decodeResource(getResources(), R.drawable.marker_end), 1);
         try {
+
+            driver_id_route = getIntent().getStringExtra("driver_id");
+            Log.e("driver id", driver_id_route);
+
             MapsInitializer.initialize(getApplicationContext());
             loadMap();
         } catch (Exception e) {
@@ -167,13 +172,12 @@ public class DriverRoute extends GetSafeBase {
         HashMap<String, String> param = new HashMap<>();
 
 
-
-        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_DRIVER_ROUTE)+"?id=7 ", 1, tinyDB.getString("token"), new VolleyJsonCallback() {
+        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_DRIVER_ROUTE) + "?id=" + driver_id_route, 1, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 
                 try {
-
+                    Log.e("route", result + "");
 
                     if (result.getBoolean("status")) {
 

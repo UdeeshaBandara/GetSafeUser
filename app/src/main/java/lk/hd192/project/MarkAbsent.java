@@ -516,10 +516,11 @@ public class MarkAbsent extends GetSafeBaseFragment {
                         subHeadingAbsence.setVisibility(View.INVISIBLE);
                         isNewAbsentAdded = true;
                     } else
-                        showToast(dialog, "Please try again.", 0);
+                        showToast(dialog, result.getString("validation_errors"), 0);
 
 
                 } catch (Exception e) {
+                    e.printStackTrace();
 
                 }
 
@@ -558,11 +559,11 @@ public class MarkAbsent extends GetSafeBaseFragment {
                         subHeadingAbsence.setVisibility(View.INVISIBLE);
                         isNewAbsentAdded = true;
                     } else
-                        showToast(dialog, "Please try again.", 0);
+                        showToast(dialog, result.getString("validation_errors"), 0);
 
 
                 } catch (Exception e) {
-
+                    e.printStackTrace();
                 }
 
             }
