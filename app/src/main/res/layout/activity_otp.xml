@@ -10,7 +10,7 @@
     <ImageView
         android:id="@+id/bg_main_top"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="250dp"
         android:layout_alignParentTop="true"
         android:scaleType="centerCrop"
         android:src="@drawable/bg_main_top" />
@@ -143,78 +143,78 @@ your mobile \n (+94 76 272 5395)"
                     android:textColor="@color/white"
                     android:textSize="15sp" />
 
-                <RelativeLayout
-                    android:id="@+id/btn_otp_resend"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:layout_below="@id/btn_otp_next"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginHorizontal="30dp"
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/bg_btn_resend">
+<!--                <RelativeLayout-->
+<!--                    android:id="@+id/btn_otp_resend"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="60dp"-->
+<!--                    android:layout_below="@id/btn_otp_next"-->
+<!--                    android:layout_centerHorizontal="true"-->
+<!--                    android:layout_marginHorizontal="30dp"-->
+<!--                    android:layout_marginTop="20dp"-->
+<!--                    android:background="@drawable/bg_btn_resend">-->
 
 
-                    <TextView
-                        android:id="@+id/resend_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="5dp"
-                        android:fontFamily="@font/nunito_semibold"
-                        android:text="Resend verification code"
-                        android:textColor="@color/white"
-                        android:textSize="19sp" />
+<!--                    <TextView-->
+<!--                        android:id="@+id/resend_text"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_centerHorizontal="true"-->
+<!--                        android:layout_marginTop="5dp"-->
+<!--                        android:fontFamily="@font/nunito_semibold"-->
+<!--                        android:text="Resend verification code"-->
+<!--                        android:textColor="@color/white"-->
+<!--                        android:textSize="19sp" />-->
 
-                    <LinearLayout
-                        android:id="@+id/lnr_resend_countdown"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/resend_text"
-                        android:layout_centerHorizontal="true"
-                        android:orientation="horizontal">
+<!--                    <LinearLayout-->
+<!--                        android:id="@+id/lnr_resend_countdown"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_below="@id/resend_text"-->
+<!--                        android:layout_centerHorizontal="true"-->
+<!--                        android:orientation="horizontal">-->
 
-                        <TextView
-                            android:id="@+id/resend_countdown_title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/resend_text"
-                            android:layout_centerHorizontal="true"
-                            android:fontFamily="@font/nunito_semibold"
-                            android:text=" ( You can request new verification code in "
-                            android:textColor="@color/white"
-                            android:textSize="12sp" />
+<!--                        <TextView-->
+<!--                            android:id="@+id/resend_countdown_title"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_below="@id/resend_text"-->
+<!--                            android:layout_centerHorizontal="true"-->
+<!--                            android:fontFamily="@font/nunito_semibold"-->
+<!--                            android:text=" ( You can request new verification code in "-->
+<!--                            android:textColor="@color/white"-->
+<!--                            android:textSize="12sp" />-->
 
-                        <TextView
-                            android:id="@+id/resend_countdown"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/resend_text"
-                            android:layout_centerHorizontal="true"
-                            android:fontFamily="@font/nunito_semibold"
-                            android:text="200s )"
-                            android:textColor="@color/white"
-                            android:textSize="12sp" />
+<!--                        <TextView-->
+<!--                            android:id="@+id/resend_countdown"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_below="@id/resend_text"-->
+<!--                            android:layout_centerHorizontal="true"-->
+<!--                            android:fontFamily="@font/nunito_semibold"-->
+<!--                            android:text="200s )"-->
+<!--                            android:textColor="@color/white"-->
+<!--                            android:textSize="12sp" />-->
 
-                    </LinearLayout>
-
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_toRightOf="@id/lnr_resend_countdown"
-                        android:padding="5dp"
-                        android:src="@drawable/icon_resend" />
+<!--                    </LinearLayout>-->
 
 
-                </RelativeLayout>
+<!--                    <ImageView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_alignParentRight="true"-->
+<!--                        android:layout_centerVertical="true"-->
+<!--                        android:layout_toRightOf="@id/lnr_resend_countdown"-->
+<!--                        android:padding="5dp"-->
+<!--                        android:src="@drawable/icon_resend" />-->
+
+
+<!--                </RelativeLayout>-->
 
                 <Button
                     android:id="@+id/btn_otp_back"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:layout_below="@id/btn_otp_resend"
+                    android:layout_below="@id/btn_otp_next"
                     android:layout_centerHorizontal="true"
                     android:layout_marginHorizontal="100dp"
                     android:layout_marginTop="20dp"

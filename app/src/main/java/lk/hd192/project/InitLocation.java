@@ -79,6 +79,7 @@ public class InitLocation extends GetSafeBase {
         tinyDB = new TinyDB(getApplicationContext());
 
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         txtAddOne = findViewById(R.id.txt_address_one);
         txtAddTwo = findViewById(R.id.txt_address_two);
@@ -94,7 +95,7 @@ public class InitLocation extends GetSafeBase {
         getSafeServices = new GetSafeServices();
 
 
-        if ( tinyDB.getBoolean("isStaffAccount"))
+        if ( !tinyDB.getBoolean("isStaffAccount"))
             lnrDropLocation.setVisibility(View.VISIBLE);
         else
             lnrDropLocation.setVisibility(View.GONE);

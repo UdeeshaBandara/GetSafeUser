@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -63,8 +64,10 @@ public class OTP extends GetSafeBase {
         confirmOTP_3 = findViewById(R.id.otp_three);
         confirmOTP_4 = findViewById(R.id.otp_four);
         otpHeading = findViewById(R.id.otp_heading);
-        resendCountdown = findViewById(R.id.resend_countdown);
-        resendCountdownTitle = findViewById(R.id.resend_countdown_title);
+//        resendCountdown = findViewById(R.id.resend_countdown);
+//        resendCountdownTitle = findViewById(R.id.resend_countdown_title);
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         mAuth = FirebaseAuth.getInstance();
         loading = findViewById(R.id.loading);
@@ -78,21 +81,21 @@ public class OTP extends GetSafeBase {
 
         otpHeading.setText("A verification code has been sent to your mobile \n (+94 " + tinyDB.getString("phone_no") + ")");
 
-        new CountDownTimer(60000, 1000) {
-
-            public void onTick(long millisUntilFinished) {
-                if ((floor(millisUntilFinished / 1000) % 60) < 10)
-                    resendCountdown.setText("0 " + floor(millisUntilFinished / 60 * 1000) + ": 0" + ((millisUntilFinished / 1000) % 60));
-                else
-                    resendCountdown.setText("0 " + floor(millisUntilFinished / 60 * 1000) + ": " + ((millisUntilFinished / 1000) % 60));
-//Log.e("millisec",floor(millisUntilFinished / 1000)+"");
-            }
-
-            public void onFinish() {
-
-            }
-
-        }.start();
+//        new CountDownTimer(60000, 1000) {
+//
+//            public void onTick(long millisUntilFinished) {
+//                if ((floor(millisUntilFinished / 1000) % 60) < 10)
+//                    resendCountdown.setText("0 " + floor(millisUntilFinished / 60 * 1000) + ": 0" + ((millisUntilFinished / 1000) % 60));
+//                else
+//                    resendCountdown.setText("0 " + floor(millisUntilFinished / 60 * 1000) + ": " + ((millisUntilFinished / 1000) % 60));
+////Log.e("millisec",floor(millisUntilFinished / 1000)+"");
+//            }
+//
+//            public void onFinish() {
+//
+//            }
+//
+//        }.start();
 
 
         findViewById(R.id.btn_otp_next).setOnClickListener(new View.OnClickListener() {

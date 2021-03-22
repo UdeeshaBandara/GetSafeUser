@@ -4,9 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_main"
+
     tools:context=".Register">
 
+    <ImageView
+        android:id="@+id/bg_main_top"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_main_top" />
+    <ImageView
+        android:id="@+id/bg_main_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_main_bottom" />
 
     <ImageView
         android:id="@+id/main_logo"
@@ -191,8 +205,8 @@
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:alpha="0.2"
                             android:layout_marginTop="32dp"
+                            android:alpha="0.2"
                             android:background="@color/black" />
 
                         <TextView

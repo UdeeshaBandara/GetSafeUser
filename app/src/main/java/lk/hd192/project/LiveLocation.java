@@ -180,20 +180,25 @@ public class LiveLocation extends GetSafeBase {
         valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                LocationUpdates locationUpdates = snapshot.getValue(LocationUpdates.class);
+
+                if(snapshot.exists()) {
+                    LocationUpdates locationUpdates = snapshot.getValue(LocationUpdates.class);
 //                driverLat = snapshot.child("latitude").getValue(Double.class);
 //                driverLon = snapshot.child("longitude").getValue(Double.class);
 
 
-                driverLat = locationUpdates.getLatitude();
-                driverLon = locationUpdates.getLongitude();
+                    driverLat = locationUpdates.getLatitude();
+                    driverLon = locationUpdates.getLongitude();
 
 
-                if (googleMap != null)
-                    googleMap.clear();
-                if (locationUpdates.getStatus().equals("End Trip")&& dropLat!=null)
-                    drawMapPolyline();
-
+                    if (googleMap != null)
+                        googleMap.clear();
+                    if (locationUpdates.getStatus().equals("End Trip") && dropLat != null)
+                        drawMapPolyline();
+                }
+                else{
+                    Log.e("snap","else");
+                }
             }
 
             @Override
@@ -644,19 +649,17 @@ public class LiveLocation extends GetSafeBase {
                             @Override
                             public void onDataChange(DataSnapshot snapshot) {
 
-
-//                                LocationUpdates locationUpdates= new LocationUpdates(6.984740181205069, 79.92702719350984,"");
-//                                locationRef.setValue(locationUpdates);
-
-                                LocationUpdates locationUpdates = snapshot.getValue(LocationUpdates.class);
-                                driverLat = locationUpdates.getLatitude();
-                                driverLon = locationUpdates.getLongitude();
-                                if (googleMap != null)
-                                    googleMap.clear();
-                                if (locationUpdates.getStatus().equals("End Trip"))
-                                    drawMapPolyline();
-                                else
-                                    showToast(dialog, "Driver didn't start the trip", 0);
+                                if(snapshot.exists()) {
+                                    LocationUpdates locationUpdates = snapshot.getValue(LocationUpdates.class);
+                                    driverLat = locationUpdates.getLatitude();
+                                    driverLon = locationUpdates.getLongitude();
+                                    if (googleMap != null)
+                                        googleMap.clear();
+                                    if (locationUpdates.getStatus().equals("End Trip"))
+                                        drawMapPolyline();
+                                    else
+                                        showToast(dialog, "Driver didn't start the trip", 0);
+                                }
                             }
 
                             @Override
@@ -703,15 +706,17 @@ public class LiveLocation extends GetSafeBase {
                         locationRef.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot snapshot) {
-                                LocationUpdates locationUpdates = snapshot.getValue(LocationUpdates.class);
-                                driverLat = locationUpdates.getLatitude();
-                                driverLon = locationUpdates.getLongitude();
-                                if (googleMap != null)
-                                    googleMap.clear();
-                                if (locationUpdates.getStatus().equals("End Trip"))
-                                    drawMapPolyline();
-                                else
-                                    showToast(dialog, "Driver didn't start the trip", 0);
+                                if(snapshot.exists()) {
+                                    LocationUpdates locationUpdates = snapshot.getValue(LocationUpdates.class);
+                                    driverLat = locationUpdates.getLatitude();
+                                    driverLon = locationUpdates.getLongitude();
+                                    if (googleMap != null)
+                                        googleMap.clear();
+                                    if (locationUpdates.getStatus().equals("End Trip"))
+                                        drawMapPolyline();
+                                    else
+                                        showToast(dialog, "Driver didn't start the trip", 0);
+                                }
                             }
 
                             @Override

@@ -64,7 +64,7 @@ public class Messaging extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messaging);
-        Log.e("android id", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+
         tinyDB = new TinyDB(getApplicationContext());
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
