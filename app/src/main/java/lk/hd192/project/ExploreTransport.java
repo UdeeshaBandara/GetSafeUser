@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -14,6 +16,7 @@ import android.text.Editable;
 import android.text.Spannable;
 import android.text.TextWatcher;
 
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.otaliastudios.autocomplete.Autocomplete;
 import com.otaliastudios.autocomplete.AutocompleteCallback;
 import com.otaliastudios.autocomplete.AutocompletePolicy;
@@ -53,6 +57,8 @@ public class ExploreTransport extends GetSafeBase {
     View view;
     LottieAnimationView loading;
     Button pickupMap, dropMap;
+    Bitmap image;
+
     //    ImageView imgAc, imgNonAc;
     Double pickLat = 0.0, pickLng = 0.0;
     Double dropLat = 0.0, dropLng = 0.0;
@@ -261,7 +267,6 @@ public class ExploreTransport extends GetSafeBase {
                 hideLoading();
             }
         });
-
 
 
     }
@@ -592,7 +597,8 @@ public class ExploreTransport extends GetSafeBase {
     class DriverViewHolder extends RecyclerView.ViewHolder {
 
         RelativeLayout oneDriver;
-        TextView txt_driver_name, txt_start, txt_end, txt_rate;
+        TextView txt_driver_name, txt_start, txt_end;
+     RoundedImageView driver_image;
 
         public DriverViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -600,6 +606,7 @@ public class ExploreTransport extends GetSafeBase {
             txt_driver_name = itemView.findViewById(R.id.txt_driver_name);
             txt_start = itemView.findViewById(R.id.txt_start);
             txt_end = itemView.findViewById(R.id.txt_end);
+            driver_image = itemView.findViewById(R.id.driver_image);
 
         }
     }
@@ -621,7 +628,7 @@ public class ExploreTransport extends GetSafeBase {
                 holder.txt_driver_name.setText(" : " + driverList.getJSONObject(position).getString("name"));
                 holder.txt_start.setText(" : " + driverList.getJSONObject(position).getString("phone_no"));
                 holder.txt_end.setText(" : " + driverList.getJSONObject(position).getString("email"));
-
+                getDriverImage(driverList.getJSONObject(position).getString("id"),holder.driver_image);
                 holder.oneDriver.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -645,6 +652,44 @@ public class ExploreTransport extends GetSafeBase {
         public int getItemCount() {
             return driverList.length();
         }
+    }
+
+    private Bitmap populateImage(String encodedImage) {
+        byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+    }
+
+    private Bitmap getDriverImage(String driverIdImage, final RoundedImageView roundedImageView) {
+        HashMap<String, String> param = new HashMap<>();
+
+        showLoading();
+        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.DRIVER_PIC) + "?id=" + driverIdImage, 1, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+
+                    Log.e("driver", result + "");
+                    if (result.getBoolean("status")) {
+                        Log.e("image", result.getJSONObject("data").getString("image").substring(26));
+                        roundedImageView.setImageBitmap(populateImage(result.getJSONObject("data").getString("image").substring(22)));
+
+
+                    }
+
+
+                } catch (
+                        Exception e) {
+                    e.printStackTrace();
+                    Log.e("ex from loc", e.getMessage());
+
+                }
+                hideLoading();
+            }
+        });
+        return image;
+
     }
 
     void showLoading() {

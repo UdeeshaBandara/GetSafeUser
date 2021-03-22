@@ -569,19 +569,9 @@ public class Home extends GetSafeBase {
                             drawerLayout.closeDrawers();
                             break;
                         case 4:
+                            getDriverDetails();
 
-                            if (tinyDB.getBoolean("isStaffAccount")) {
-                                startActivity(new Intent(getApplicationContext(), Absence.class));
-                                drawerLayout.closeDrawers();
-                            } else {
-                                if (isEmptyKidList) {
-                                    showToast(dialog, "Please add kid to add absents", 0);
 
-                                } else {
-                                    startActivity(new Intent(getApplicationContext(), Absence.class));
-                                    drawerLayout.closeDrawers();
-                                }
-                            }
 
                             break;
 
@@ -661,7 +651,51 @@ public class Home extends GetSafeBase {
             }
         }
     }
+    private void getDriverDetails() {
+        HashMap<String, String> param = new HashMap<>();
 
+
+        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_DRIVER_DETAILS) + "?id=" + tinyDB.getString("driver_id"), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+
+                    Log.e("driver",result+"");
+                    if (result.getBoolean("status")) {
+                        if (tinyDB.getBoolean("isStaffAccount")) {
+                            Intent intent=new Intent(getApplicationContext(), Absence.class);
+                            intent.putExtra("driver_name",result.getJSONObject("data").getString("name"));
+                            startActivity(intent);
+                            drawerLayout.closeDrawers();
+                        } else {
+                            if (isEmptyKidList) {
+                                showToast(dialog, "Please add kid to add absents", 0);
+
+                            } else {
+                                Intent intent=new Intent(getApplicationContext(), Absence.class);
+                                intent.putExtra("driver_name",result.getJSONObject("data").getString("name"));
+                                startActivity(intent);
+                                drawerLayout.closeDrawers();
+                            }
+                        }
+
+
+
+                    }
+
+
+                } catch (
+                        Exception e) {
+                    e.printStackTrace();
+                    Log.e("ex from loc", e.getMessage());
+
+                }
+
+            }
+        });
+
+    }
 
     private void askForPermission() {
 

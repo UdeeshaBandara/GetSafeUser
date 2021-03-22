@@ -49,7 +49,7 @@ public class Messaging extends AppCompatActivity {
 
 
     private ImageView btnSend;
-
+TextView txt_driver_name;
 
     private LinearLayoutManager mLinearLayout;
     private MessageAdapter mAdapter;
@@ -66,7 +66,17 @@ public class Messaging extends AppCompatActivity {
         setContentView(R.layout.activity_messaging);
 
         tinyDB = new TinyDB(getApplicationContext());
+        txt_driver_name=findViewById(R.id.txt_driver_name);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+
+        try{
+            txt_driver_name.setText("Driver "+getIntent().getStringExtra("driver_name"));
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
 
         mRootRef = FirebaseDatabase.getInstance().getReference();
         if (tinyDB.getBoolean("isStaffAccount"))

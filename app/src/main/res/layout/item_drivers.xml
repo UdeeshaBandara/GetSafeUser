@@ -41,7 +41,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-
+android:paddingVertical="10dp"
                     android:paddingHorizontal="10dp">
 
 
@@ -124,9 +124,10 @@
                             android:id="@+id/txt_end"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="7"
+                            android:layout_weight="5"
+                            android:layout_marginEnd="65dp"
                             android:fontFamily="@font/nunito_bold"
-                            android:text=": Musaeus College,\n  Colombo 07"
+                            android:text=": Musaeus College,ksjhdfjshdColombo 07"
                             android:textColor="@color/white"
                             android:textSize="12sp" />
 
@@ -150,14 +151,18 @@
                 android:src="@drawable/icon_home_next" />
 
             <com.makeramen.roundedimageview.RoundedImageView
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:id="@+id/driver_image"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="14dp"
                 android:layout_toStartOf="@id/img_next"
-                android:layout_toLeftOf="@id/img_next"
-                android:src="@drawable/driver_profile_pic" />
+                app:riv_border_color="@color/white"
+                app:riv_border_width="2dp"
+                app:riv_corner_radius="80dp"
+               android:scaleType="centerCrop"
+                android:layout_toLeftOf="@id/img_next" />
 
         </RelativeLayout>
 

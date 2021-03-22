@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ViewAbsent">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_below="@id/status_bar"
         android:layout_height="match_parent"
+        android:layout_below="@id/status_bar"
         android:layout_marginTop="-40dp"
         android:overScrollMode="never"
         android:scrollbars="none">
@@ -36,12 +36,11 @@
                 android:id="@+id/txt_month"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/nunito_regular"
                 android:text="March 2021"
                 android:textColor="@color/black"
-                android:fontFamily="@font/nunito_regular"
-                android:textSize="15sp"
-                android:layout_gravity="center"
-                />
+                android:textSize="15sp" />
 
 
             <androidx.cardview.widget.CardView
@@ -61,11 +60,11 @@
                     android:id="@+id/txt_no_date"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
+                    android:layout_gravity="center"
                     android:layout_weight="5"
                     android:fontFamily="@font/nunito_semibold"
-                    android:text="Select date to view details"
-                    android:layout_gravity="center"
                     android:gravity="center"
+                    android:text="Select date to view details"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -74,8 +73,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone"
-                    android:padding="10dp">
+                    android:padding="10dp"
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -149,20 +148,17 @@
                 android:padding="5dp">
 
 
-
                 <Button
                     android:id="@+id/btn_delete_absent"
                     android:layout_width="0dp"
                     android:layout_height="45dp"
-android:visibility="gone"
                     android:layout_weight="5"
                     android:background="@drawable/bg_singout"
                     android:fontFamily="@font/nunito_regular"
                     android:text="Delete from absent"
                     android:textAllCaps="false"
-                    android:textColor="@color/black" />
-
-
+                    android:textColor="@color/black"
+                    android:visibility="gone" />
 
 
             </LinearLayout>
