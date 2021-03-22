@@ -65,7 +65,7 @@
                     android:layout_centerInParent="true"
                     android:layout_marginBottom="222dp"
                     android:fontFamily="@font/nunito_bold"
-                    android:text="2"
+
                     android:textColor="@color/white" />
 
 

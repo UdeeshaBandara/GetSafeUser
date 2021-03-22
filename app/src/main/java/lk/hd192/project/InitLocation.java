@@ -244,6 +244,7 @@ public class InitLocation extends GetSafeBase {
                             Log.e("loc response", result + "");
 
                             if (result.getBoolean("location_saved_status")) {
+                                tinyDB.putBoolean("isLogged", true);
                                 if (! tinyDB.getBoolean("isStaffAccount")) {
                                     startActivity(new Intent(getApplicationContext(), Home.class));
                                     finishAffinity();

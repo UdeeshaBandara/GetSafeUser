@@ -57,7 +57,7 @@ public class ExploreTransport extends GetSafeBase {
     View view;
     LottieAnimationView loading;
     Button pickupMap, dropMap;
-    Bitmap image;
+
 
     //    ImageView imgAc, imgNonAc;
     Double pickLat = 0.0, pickLng = 0.0;
@@ -660,7 +660,7 @@ public class ExploreTransport extends GetSafeBase {
 
     }
 
-    private Bitmap getDriverImage(String driverIdImage, final RoundedImageView roundedImageView) {
+    private void getDriverImage(String driverIdImage, final RoundedImageView roundedImageView) {
         HashMap<String, String> param = new HashMap<>();
 
         showLoading();
@@ -688,7 +688,7 @@ public class ExploreTransport extends GetSafeBase {
                 hideLoading();
             }
         });
-        return image;
+
 
     }
 

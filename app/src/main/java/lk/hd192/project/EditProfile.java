@@ -64,6 +64,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.makeramen.roundedimageview.RoundedImageView;
 //import com.theartofdev.edmodo.cropper.CropImage;
 
 import org.json.JSONArray;
@@ -808,10 +809,47 @@ public class EditProfile extends GetSafeBase {
         editTxtParentName.onEditorAction(EditorInfo.IME_ACTION_DONE);
     }
 
+    private Bitmap populateImage(String encodedImage) {
+        byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
+    }
+
+    private void getKidImage(String driverIdImage, final RoundedImageView roundedImageView) {
+        HashMap<String, String> param = new HashMap<>();
+
+
+        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.KID_PIC) + "?id=" + driverIdImage, 1, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+
+                    Log.e("driver", result + "");
+                    if (result.getBoolean("status")) {
+                        Log.e("image", result.getJSONObject("data").getString("image").substring(26));
+                        roundedImageView.setImageBitmap(populateImage(result.getJSONObject("data").getString("image").substring(22)));
+
+
+                    }
+
+
+                } catch (
+                        Exception e) {
+                    e.printStackTrace();
+                    Log.e("ex from loc", e.getMessage());
+
+                }
+
+            }
+        });
+
+
+    }
     class StudentViewHolder extends RecyclerView.ViewHolder {
         CardView rltKidEdit;
         TextView txtKidName, txtKidSchool;
+        RoundedImageView img_kid;
 
         public StudentViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -819,6 +857,7 @@ public class EditProfile extends GetSafeBase {
             txtKidName = itemView.findViewById(R.id.txt_kid_name);
 
             txtKidSchool = itemView.findViewById(R.id.txt_kid_school);
+            img_kid = itemView.findViewById(R.id.img_kid);
         }
     }
 
@@ -839,6 +878,7 @@ public class EditProfile extends GetSafeBase {
                 holder.txtKidName.setText(kidList.getJSONObject(position).getString("name"));
 
                 holder.txtKidSchool.setText(kidList.getJSONObject(position).getString("school_name"));
+                getKidImage(kidList.getJSONObject(position).getString("id"),holder.img_kid);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

@@ -104,7 +104,7 @@ public class Login extends GetSafeBase {
                 eight.getText().toString() +
                 nine.getText().toString());
         //    tempParam.put("fcm_token", token);
-        Log.e("inside", "ok");
+        tinyDB.putString("phone_no",tempParam.get(0));
 
         getSafeServices.networkJsonRequestWithoutHeader(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.USER_SEND_OTP), 2, new VolleyJsonCallback() {
             @Override
@@ -117,7 +117,7 @@ public class Login extends GetSafeBase {
                     if (result.getBoolean("otp_sent_status")) {
 
                         OTP.otpToken = result.getString("otp_token");
-
+                        OTP.optType = 0;
                         startActivity(new Intent(getApplicationContext(), OTP.class));
 
                     } else

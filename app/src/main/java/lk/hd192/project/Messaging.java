@@ -122,6 +122,13 @@ TextView txt_driver_name;
             }
         });
 
+        findViewById(R.id.btn_message_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
     }
 
     private void sendMessage() {

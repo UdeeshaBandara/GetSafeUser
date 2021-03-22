@@ -236,7 +236,7 @@ public class OTP extends GetSafeBase {
                     Log.e("response", result + "");
 
                     if (result.getBoolean("otp_token_validity")) {
-                        tinyDB.putBoolean("isLogged", true);
+
                         tinyDB.putString("token", result.getString("access_token"));
 //                        registerFirebaseUser();
                         getDeviceFcmToken();

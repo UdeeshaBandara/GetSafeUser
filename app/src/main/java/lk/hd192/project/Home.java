@@ -5,10 +5,13 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -57,6 +60,7 @@ public class Home extends GetSafeBase {
     ImageView sideMenuListener, selectChildDownArrow, selectChildUpArrow, btnNotification;
     DrawerLayout drawerLayout;
     String imageUrl;
+    RoundedImageView icon_user;
     int currentPosition = 0;
     Boolean isEmptyKidList = false;
     NavigationView navigationView;
@@ -79,8 +83,8 @@ public class Home extends GetSafeBase {
         fiveOption = new JSONObject();
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
 
-        tinyDB.putString("token", "6|tTddTwC8Qf4mJIYwJrcJ3ejwa9tkqSGyiFOeWdvW");
-        tinyDB.putString("user_name", "Udeesha Induras");
+//        tinyDB.putString("token", "6|tTddTwC8Qf4mJIYwJrcJ3ejwa9tkqSGyiFOeWdvW");
+//        tinyDB.putString("user_name", "Udeesha Induras");
         try {
 
             oneOption.put("heading", "Current Journey");
@@ -100,12 +104,15 @@ public class Home extends GetSafeBase {
             fiveOption.put("subHeading", "View and add absent days");
             homeOptions.put(fiveOption);
 
-        } catch (Exception e) {
+//tinyDB.putString("kid_driver_id","5");
+            Log.e("driver id", tinyDB.getString("kid_driver_id"));
 
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
 
-
+        icon_user = findViewById(R.id.icon_user);
         sideMenuListener = findViewById(R.id.btn_side_menu);
         drawerLayout = findViewById(R.id.main_drawer_layout);
         txt_account_type = findViewById(R.id.txt_account_type);
@@ -191,6 +198,8 @@ public class Home extends GetSafeBase {
 
     private void setupStaffAccount() {
 
+        getKidImage(tinyDB.getString("driver_id"), icon_user);
+
         drawerSelectChildLyt.setVisibility(View.GONE);
         fabAddKid.setVisibility(View.GONE);
         if (recyclerSelectChild.getVisibility() != View.GONE)
@@ -209,6 +218,7 @@ public class Home extends GetSafeBase {
 
     private void setupChildAccount() {
         getAllChildren();
+        getKidImage(tinyDB.getString("kid_driver_id"), icon_user);
         drawerSelectChildLyt.setVisibility(View.VISIBLE);
         fabAddKid.setVisibility(View.VISIBLE
         );
@@ -310,13 +320,18 @@ public class Home extends GetSafeBase {
                     return;
                 } else if (isEnable) {
 
-                    if (tinyDB.getBoolean("isStaffAccount"))
-                        startActivity(new Intent(getApplicationContext(), AlternativeRoutes.class));
-                    else {
+                    if (tinyDB.getBoolean("isStaffAccount")) {
+                        if (tinyDB.getBoolean("isStaffDriverAssigned"))
+                            startActivity(new Intent(getApplicationContext(), AlternativeRoutes.class));
+                        else
+                            showToast(dialog, "No driver assigned", 0);
+                    } else {
                         if (isEmptyKidList)
                             showToast(dialog, "Please add kid to set alternate pickup", 0);
-                        else
+                        else if (tinyDB.getBoolean("isKidDriverAssigned"))
                             startActivity(new Intent(getApplicationContext(), AlternativeRoutes.class));
+                        else
+                            showToast(dialog, "No driver assigned", 0);
                     }
 
 
@@ -334,13 +349,18 @@ public class Home extends GetSafeBase {
                     askForPermission();
                     return;
                 } else if (isEnable)
-                    if (tinyDB.getBoolean("isStaffAccount"))
-                        startActivity(new Intent(getApplicationContext(), Journey.class));
-                    else {
+                    if (tinyDB.getBoolean("isStaffAccount")) {
+                        if (tinyDB.getBoolean("isStaffDriverAssigned"))
+                            startActivity(new Intent(getApplicationContext(), Journey.class));
+                        else
+                            showToast(dialog, "No driver assigned", 0);
+                    } else {
                         if (isEmptyKidList)
                             showToast(dialog, "Please add kid to set view journey details", 0);
-                        else
+                        else if (tinyDB.getBoolean("isKidDriverAssigned"))
                             startActivity(new Intent(getApplicationContext(), Journey.class));
+                        else
+                            showToast(dialog, "No driver assigned", 0);
                     }
 
 
@@ -375,9 +395,47 @@ public class Home extends GetSafeBase {
 
     }
 
+    private Bitmap populateImage(String encodedImage) {
+        byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+    }
+
+    private void getKidImage(String driverIdImage, final RoundedImageView roundedImageView) {
+        HashMap<String, String> param = new HashMap<>();
+
+
+        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.KID_PIC) + "?id=" + driverIdImage, 1, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+
+                    Log.e("getKidImage", result + "");
+
+                    if (result.getBoolean("status")) {
+
+                        roundedImageView.setImageBitmap(populateImage(result.getJSONObject("data").getString("image").substring(22)));
+
+
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                }
+
+            }
+        });
+
+
+    }
+
     class StudentViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout rltItemStudent, kidSelector;
         TextView studentName, studentSchool;
+        RoundedImageView child_image;
 
         public StudentViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -385,6 +443,7 @@ public class Home extends GetSafeBase {
             kidSelector = itemView.findViewById(R.id.kid_selector);
             studentName = itemView.findViewById(R.id.student_name);
             studentSchool = itemView.findViewById(R.id.student_school);
+            child_image = itemView.findViewById(R.id.child_image);
         }
     }
 
@@ -412,6 +471,9 @@ public class Home extends GetSafeBase {
                 holder.studentName.setText(kidList.getJSONArray("children").getJSONObject(position).getString("name"));
                 holder.studentSchool.setText(kidList.getJSONArray("children").getJSONObject(position).getString("school_name"));
 
+
+                getKidImage(kidList.getJSONArray("children").getJSONObject(position).getString("id"), holder.child_image);
+
                 holder.rltItemStudent.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -425,6 +487,8 @@ public class Home extends GetSafeBase {
                                 tinyDB.putString("selectedChildId", kidList.getJSONArray("children").getJSONObject(position).getString("id"));
                                 tinyDB.putString("selectedChildName", kidList.getJSONArray("children").getJSONObject(position).getString("name"));
                                 tinyDB.putString("kid_driver_id", kidList.getJSONArray("children").getJSONObject(position).getString("driver_id"));
+                                tinyDB.putBoolean("isKidDriverAssigned", !kidList.getJSONArray("children").getJSONObject(0).getString("driver_id").equals("null"));
+
                                 notifyDataSetChanged();
                                 showToast(dialog, "Profile changed to " + tinyDB.getString("selectedChildName"), 2);
 
@@ -504,6 +568,7 @@ public class Home extends GetSafeBase {
                 public void onClick(View v) {
                     switch (position) {
                         case 0:
+                            Log.e("love loc", "ok");
 
                             isDeviceLocationTurnedOn(dialog);
                             if (ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Home.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -512,54 +577,61 @@ public class Home extends GetSafeBase {
                                 askForPermission();
                                 return;
                             } else if (isEnable) {
-
-
                                 if (tinyDB.getBoolean("isStaffAccount")) {
-                                    startActivity(new Intent(getApplicationContext(), LiveLocation.class));
-                                    drawerLayout.closeDrawers();
+                                    if (tinyDB.getBoolean("isStaffDriverAssigned")) {
+                                        startActivity(new Intent(getApplicationContext(), LiveLocation.class));
+                                        drawerLayout.closeDrawers();
+                                    } else
+                                        showToast(dialog, "No driver assigned", 0);
                                 } else {
+
                                     if (isEmptyKidList) {
                                         showToast(dialog, "Please add kid to view location", 0);
 
-                                    } else {
+
+                                    } else if (tinyDB.getBoolean("isKidDriverAssigned")) {
+
                                         startActivity(new Intent(getApplicationContext(), LiveLocation.class));
                                         drawerLayout.closeDrawers();
-                                    }
+                                    } else
+                                        showToast(dialog, "No driver assigned", 0);
                                 }
+
+                            } else {
+
                             }
+
 
                             break;
                         case 1:
 
                             if (tinyDB.getBoolean("isStaffAccount")) {
-                                startActivity(new Intent(getApplicationContext(), Journey.class));
-                                drawerLayout.closeDrawers();
+                                if (tinyDB.getBoolean("isStaffDriverAssigned")) {
+                                    startActivity(new Intent(getApplicationContext(), Journey.class));
+                                    drawerLayout.closeDrawers();
+                                } else
+                                    showToast(dialog, "No driver assigned", 0);
+
+
                             } else {
                                 if (isEmptyKidList) {
                                     showToast(dialog, "Please add kid to view journey details", 0);
 
-                                } else {
+                                } else if (tinyDB.getBoolean("isKidDriverAssigned")) {
                                     startActivity(new Intent(getApplicationContext(), Journey.class));
                                     drawerLayout.closeDrawers();
-                                }
+                                } else
+                                    showToast(dialog, "No driver assigned", 0);
                             }
 
 
                             break;
                         case 2:
+                            if (isEmptyKidList & !tinyDB.getBoolean("isStaffAccount"))
+                                showToast(dialog, "No driver assigned", 0);
+                            else
 
-                            if (tinyDB.getBoolean("isStaffAccount")) {
-                                startActivity(new Intent(getApplicationContext(), Messaging.class));
-                                drawerLayout.closeDrawers();
-                            } else {
-                                if (isEmptyKidList) {
-                                    showToast(dialog, "No driver assigned", 0);
-
-                                } else {
-                                    startActivity(new Intent(getApplicationContext(), Messaging.class));
-                                    drawerLayout.closeDrawers();
-                                }
-                            }
+                                getDriverDetails();
 
 
                             break;
@@ -569,9 +641,29 @@ public class Home extends GetSafeBase {
                             drawerLayout.closeDrawers();
                             break;
                         case 4:
-                            getDriverDetails();
+
+                            if (tinyDB.getBoolean("isStaffAccount")) {
 
 
+                                if (tinyDB.getBoolean("isStaffDriverAssigned")) {
+                                    startActivity(new Intent(getApplicationContext(), Absence.class));
+                                    drawerLayout.closeDrawers();
+                                } else
+                                    showToast(dialog, "No driver assigned", 0);
+
+
+                            } else {
+                                if (isEmptyKidList) {
+                                    showToast(dialog, "Please add kid to add absents", 0);
+
+                                } else if (tinyDB.getBoolean("isKidDriverAssigned")) {
+                                    Intent intent = new Intent(getApplicationContext(), Absence.class);
+                                    startActivity(intent);
+                                    drawerLayout.closeDrawers();
+                                } else
+                                    showToast(dialog, "No driver assigned", 0);
+
+                            }
 
                             break;
 
@@ -651,36 +743,48 @@ public class Home extends GetSafeBase {
             }
         }
     }
+
     private void getDriverDetails() {
         HashMap<String, String> param = new HashMap<>();
 
-
-        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_DRIVER_DETAILS) + "?id=" + tinyDB.getString("driver_id"), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
+        Log.e("getDriverDetails", "exe");
+        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_DRIVER_DETAILS) + "?id=" + tinyDB.getString("kid_driver_id"), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 
                 try {
 
-                    Log.e("driver",result+"");
+                    Log.e("driver", result + "");
                     if (result.getBoolean("status")) {
-                        if (tinyDB.getBoolean("isStaffAccount")) {
-                            Intent intent=new Intent(getApplicationContext(), Absence.class);
-                            intent.putExtra("driver_name",result.getJSONObject("data").getString("name"));
-                            startActivity(intent);
-                            drawerLayout.closeDrawers();
-                        } else {
-                            if (isEmptyKidList) {
-                                showToast(dialog, "Please add kid to add absents", 0);
 
-                            } else {
-                                Intent intent=new Intent(getApplicationContext(), Absence.class);
-                                intent.putExtra("driver_name",result.getJSONObject("data").getString("name"));
+                        if (tinyDB.getBoolean("isStaffAccount")) {
+
+
+                            if (tinyDB.getBoolean("isStaffDriverAssigned")) {
+                                Intent intent = new Intent(getApplicationContext(), Messaging.class);
+                                intent.putExtra("driver_name", result.getJSONObject("data").getString("name"));
                                 startActivity(intent);
                                 drawerLayout.closeDrawers();
-                            }
+                            } else
+                                showToast(dialog, "No driver assigned", 0);
+
+                        } else {
+                            if (isEmptyKidList) {
+                                showToast(dialog, "Please add kids", 0);
+
+                            } else if (tinyDB.getBoolean("isKidDriverAssigned")) {
+                                Intent intent = new Intent(getApplicationContext(), Messaging.class);
+
+
+                                intent.putExtra("driver_name", result.getJSONObject("data").getString("name"));
+                                startActivity(intent);
+                                drawerLayout.closeDrawers();
+                            } else
+                                showToast(dialog, "No driver assigned", 0);
                         }
 
-
+                    } else if (result.getString("validation_errors").equals("The id must be an integer.")) {
+                        showToast(dialog, "No driver assigned", 0);
 
                     }
 
@@ -753,6 +857,7 @@ public class Home extends GetSafeBase {
                         tinyDB.putString("selectedChildId", kidList.getJSONArray("children").getJSONObject(0).getString("id"));
                         tinyDB.putString("selectedChildName", kidList.getJSONArray("children").getJSONObject(0).getString("name"));
                         tinyDB.putString("kid_driver_id", kidList.getJSONArray("children").getJSONObject(0).getString("driver_id"));
+                        tinyDB.putBoolean("isKidDriverAssigned", !kidList.getJSONArray("children").getJSONObject(0).getString("driver_id").equals("null"));
                         isEmptyKidList = false;
                         empty_message.setVisibility(View.GONE);
                         recyclerSelectChild.getAdapter().notifyDataSetChanged();

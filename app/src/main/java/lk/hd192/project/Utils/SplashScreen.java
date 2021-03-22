@@ -61,21 +61,24 @@ public class SplashScreen extends GetSafeBase {
                 try { //startActivity(new Intent(SplashScreen.this, Home.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
 
                     if (result.getBoolean("logged-in-status")) {
-                        tinyDB.putBoolean("isLogged",true);
+                        tinyDB.putBoolean("isLogged", true);
                         tinyDB.putString("user_id", result.getJSONObject("user").getString("id"));
                         tinyDB.putString("driver_id", result.getJSONObject("user").getString("driver_id"));
-                        tinyDB.putString("user_name",result.getJSONObject("user").getString("name"));
+                        tinyDB.putString("user_name", result.getJSONObject("user").getString("name"));
+
+                        tinyDB.putBoolean("isStaffDriverAssigned", !result.getJSONObject("user").getString("driver_id").equals("null"));
+                        Log.e("isStaffDriverAssigned",  tinyDB.getBoolean("isStaffDriverAssigned")+ "");
                         startActivity(new Intent(SplashScreen.this, Home.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
                     } else {
                         OTP.optType = 0;
                         startActivity(new Intent(SplashScreen.this, Login.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
                     }
-                    Log.e("token", tinyDB.getString("token"));
 
                     finish();
 
 
                 } catch (Exception e) {
+                    e.printStackTrace();
 
                 }
 

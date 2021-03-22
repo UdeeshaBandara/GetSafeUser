@@ -29,6 +29,7 @@
     <string name="CHILD_REQUEST_DRIVER">/search/child/request/send</string>
     <string name="GET_ABSENT_USER">/absent/user/get</string>
     <string name="DRIVER_PIC">/search/details/profilepic</string>
+    <string name="KID_PIC">/admin/user/single/profilepic</string>
 
 
     <string name="ADD_NEW_KID">/child/addchild</string>
