@@ -84,7 +84,7 @@ public class LiveLocation extends GetSafeBase {
 
     LocationManager locationManager;
     GetSafeServices getSafeServices;
-    private DatabaseReference mRootRef, locationRef;
+    private DatabaseReference mRootRef, locationRef,driverIdRef;
     String locationProvider = LocationManager.GPS_PROVIDER;
     CameraPosition cameraPosition;
 
@@ -129,10 +129,15 @@ public class LiveLocation extends GetSafeBase {
 //        database = FirebaseDatabase.getInstance();
 //        myRef = database.getReference("message");
 //        Query lastQuery = myRef.orderByKey().limitToLast(1);
-        if (tinyDB.getBoolean("isStaffAccount"))
-            locationRef = mRootRef.child("Staff_Drivers").child(tinyDB.getString("kid_driver_id")).child(tinyDB.getString("kid_driver_id")).child("Location");
-        else
-            locationRef = mRootRef.child("School_Drivers").child(tinyDB.getString("kid_driver_id")).child(tinyDB.getString("kid_driver_id")).child("Location");
+        if (tinyDB.getBoolean("isStaffAccount")) {
+            locationRef = mRootRef.child("Staff_Drivers").child(tinyDB.getString("kid_driver_id")).child("Location");
+
+        }
+        else{
+            locationRef = mRootRef.child("School_Drivers").child(tinyDB.getString("kid_driver_id")).child("Location");
+
+        }
+
 
 
         if (ActivityCompat.checkSelfPermission(LiveLocation.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(LiveLocation.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -382,7 +387,7 @@ public class LiveLocation extends GetSafeBase {
     }
 
     public void drawMapPolyline() {
-
+Log.e("drawMapPolyline","exe");
 //        LatLng origin = new LatLng(pickUpLat, pickUpLon);
         LatLng origin = new LatLng(driverLat, driverLon);
 //        LatLng dest = new LatLng(drpickUpLat, pickUpLon);

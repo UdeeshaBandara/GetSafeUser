@@ -87,7 +87,7 @@ public class Register extends GetSafeBase {
                     txtFullName.setSelection(result.length());
 
                 }
-                String result2=s.toString().replaceAll("\\d", "");
+                String result2 = s.toString().replaceAll("\\d", "");
                 if (!s.toString().equals(result2)) {
                     txtFullName.setText(result2);
                     txtFullName.setSelection(result2.length());
@@ -122,10 +122,9 @@ public class Register extends GetSafeBase {
 
                         if (cs.equals("")) {
                             return cs;
-                        }
-                        else if (cs.toString().matches("[a-zA-Z ]+")) {
+                        } else if (cs.toString().matches("[a-zA-Z ]+")) {
                             return cs;
-                        }else return "";
+                        } else return "";
 
 
                     }
@@ -202,11 +201,11 @@ public class Register extends GetSafeBase {
                         newUserSendOtp();
 
                     } else
-                        showToast(dialog, "Something went wrong. Please try again", 0);
+                        showToast(dialog, result.getString("validation_errors"), 0);
 
 
                 } catch (Exception e) {
-
+                    e.printStackTrace();
                 }
 
             }
@@ -222,7 +221,7 @@ public class Register extends GetSafeBase {
         tempParam.put("phone", tinyDB.getString("phone_no"));
         showLoading();
 
-        getSafeServices.networkJsonRequestWithoutHeader(this, tempParam, getString(R.string.BASE_URL)+getString(R.string.REGISTER_SEND_OTP), 2, new VolleyJsonCallback() {
+        getSafeServices.networkJsonRequestWithoutHeader(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.REGISTER_SEND_OTP), 2, new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 
@@ -238,14 +237,15 @@ public class Register extends GetSafeBase {
 
 
                         startActivity(new Intent(getApplicationContext(), OTP.class));
-                                        finishAffinity();
+                        finishAffinity();
 
 
                     } else
-                        showToast(dialog, "Something went wrong. Please try again", 0);
+                        showToast(dialog, result.getString("validation_errors"), 0);
 
 
                 } catch (Exception e) {
+                    e.printStackTrace();
 
                 }
 

@@ -41,7 +41,7 @@ public class ViewAbsent extends GetSafeBaseFragment {
     Dialog dialog;
     Button btn_delete_absent;
     JSONObject absentDetails;
-    TextView txt_date, txt_session, txt_month,txt_no_date;
+    TextView txt_date, txt_session, txt_month, txt_no_date;
     static String months[];
     String selectedDateID;
     LinearLayout lnr_absent_details;
@@ -217,7 +217,7 @@ public class ViewAbsent extends GetSafeBaseFragment {
 
     private void showDateDetails(DateData date) {
         try {
-           boolean isAvailable=false;
+            boolean isAvailable = false;
             String dtStart;
             if (String.valueOf(date.getMonth()).length() == 1 & String.valueOf(date.getDay()).length() == 1)
 
@@ -236,7 +236,7 @@ public class ViewAbsent extends GetSafeBaseFragment {
                     txt_no_date.setVisibility(View.GONE);
                     lnr_absent_details.setVisibility(View.VISIBLE);
                     btn_delete_absent.setVisibility(View.VISIBLE);
-                    isAvailable=true;
+                    isAvailable = true;
                     selectedDateID = absentDetails.getJSONArray("models").getJSONObject(i).getString("id");
                     if ((Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(i).getString("date").substring(8, 10)) + 1) == 4) {
                         Log.e("session", absentDetails.getJSONArray("models").getJSONObject(i).getString("type"));
@@ -253,7 +253,7 @@ public class ViewAbsent extends GetSafeBaseFragment {
 
             }
 
-            if(!isAvailable){
+            if (!isAvailable) {
                 txt_no_date.setText("Absent not available on selected date");
                 txt_no_date.setVisibility(View.VISIBLE);
                 lnr_absent_details.setVisibility(View.GONE);

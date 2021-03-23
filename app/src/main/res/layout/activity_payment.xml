@@ -59,208 +59,334 @@
         android:layout_below="@+id/imgBanner">
 
 
-        <LinearLayout
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_notification"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
 
-            android:layout_marginVertical="15dp"
-            android:orientation="vertical">
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="15dp"
-                android:layout_marginTop="15dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="4"
-                    android:fontFamily="@font/nunito_regular"
-                    android:text="Subscription status"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="6"
-                    android:fontFamily="@font/nunito_semibold"
-                    android:gravity="right"
-                    android:text="Expired"
-
-                    android:textColor="@color/quantum_googred"
-                    android:textSize="16sp" />
-            </LinearLayout>
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/white"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="15dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="15dp"
-                android:layout_marginTop="15dp"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+
+                android:layout_marginVertical="15dp"
+                android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:id="@+id/txt_month"
+
+
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="4"
+                    android:fontFamily="@font/nunito_bold"
+                    android:gravity="center"
+                    android:text="Month"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <TextView
+
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="15dp"
                     android:layout_weight="4"
                     android:fontFamily="@font/nunito_regular"
-                    android:text="Valid Until"
+                    android:gravity="right"
+                    android:text="LKR"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
-                <TextView
-                    android:layout_width="0dp"
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#6F9C9999" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="6"
-                    android:fontFamily="@font/nunito_semibold"
-                    android:gravity="right"
-                    android:text="January 13th, 2021"
-                    android:textColor="@color/quantum_googred"
-                    android:textSize="16sp" />
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        android:fontFamily="@font/nunito_regular"
+                        android:text="Driver amount"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/txt_driver_amount"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="6"
+                        android:fontFamily="@font/nunito_semibold"
+                        android:gravity="right"
+
+
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        android:fontFamily="@font/nunito_regular"
+                        android:text="Service fee"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/txt_service"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="6"
+                        android:fontFamily="@font/nunito_semibold"
+                        android:gravity="right"
+
+
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        android:fontFamily="@font/nunito_regular"
+                        android:text="Late payment fee"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/txt_late"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="6"
+                        android:fontFamily="@font/nunito_semibold"
+                        android:gravity="right"
+
+
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        android:fontFamily="@font/nunito_regular"
+                        android:text="Net amount"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/txt_net"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="6"
+                        android:fontFamily="@font/nunito_semibold"
+                        android:gravity="right"
+
+
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        android:fontFamily="@font/nunito_regular"
+                        android:text="Deadline"
+
+                        android:textColor="@color/quantum_googred"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/txt_deadline"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="6"
+                        android:fontFamily="@font/nunito_semibold"
+                        android:gravity="right"
+
+                        android:textColor="@color/quantum_googred"
+
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_pay"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_marginTop="25dp"
+                    android:background="@drawable/bg_btn_ok"
+                    android:text="Pay"
+                    android:textAllCaps="false" />
+
+
             </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginHorizontal="15dp"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/bg_singout"
-                android:text="View payment History"
-                android:textAllCaps="false" />
+        <!--            <TextView-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_gravity="center"-->
+        <!--                android:layout_marginTop="15dp"-->
+        <!--                android:gravity="center"-->
+        <!--                android:text="Choose a suitable package to extend \nyour subscription"-->
+        <!--                android:textColor="@color/black"-->
+        <!--                android:textSize="18sp" />-->
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="15dp"
-
-                android:background="#6F9C9999" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="15dp"
-                android:gravity="center"
-                android:text="Choose a suitable package to extend \nyour subscription"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/card_month"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+        <!--            <androidx.cardview.widget.CardView-->
+        <!--                android:id="@+id/card_month"-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="wrap_content"-->
 
 
-                android:layout_marginHorizontal="15dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="5dp"
+        <!--                android:layout_marginHorizontal="15dp"-->
+        <!--                android:layout_marginTop="15dp"-->
+        <!--                android:layout_marginBottom="5dp"-->
 
-                android:background="@drawable/bg_payment_selected"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="15dp">
+        <!--                android:background="@drawable/bg_payment_selected"-->
+        <!--                app:cardBackgroundColor="@color/white"-->
+        <!--                app:cardCornerRadius="15dp">-->
 
-                <LinearLayout
-                    android:id="@+id/lnr_month"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+        <!--                <LinearLayout-->
+        <!--                    android:id="@+id/lnr_month"-->
+        <!--                    android:layout_width="match_parent"-->
+        <!--                    android:layout_height="match_parent"-->
 
-                    android:background="@drawable/bg_payment_selected"
-                    android:orientation="horizontal"
-                    android:padding="20dp">
+        <!--                    android:background="@drawable/bg_payment_selected"-->
+        <!--                    android:orientation="horizontal"-->
+        <!--                    android:padding="20dp">-->
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="5"
-                        android:text="30 Days"
-                        android:textColor="@color/black" />
+        <!--                    <TextView-->
+        <!--                        android:layout_width="0dp"-->
+        <!--                        android:layout_height="wrap_content"-->
+        <!--                        android:layout_weight="5"-->
+        <!--                        android:text="30 Days"-->
+        <!--                        android:textColor="@color/black" />-->
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="5"
-                        android:gravity="right"
-                        android:text="LKR 100.00"
-                        android:textColor="@color/black" />
-
-
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/card_year"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+        <!--                    <TextView-->
+        <!--                        android:layout_width="0dp"-->
+        <!--                        android:layout_height="wrap_content"-->
+        <!--                        android:layout_weight="5"-->
+        <!--                        android:gravity="right"-->
+        <!--                        android:text="LKR 100.00"-->
+        <!--                        android:textColor="@color/black" />-->
 
 
-                android:layout_marginHorizontal="15dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="5dp"
+        <!--                </LinearLayout>-->
+        <!--            </androidx.cardview.widget.CardView>-->
 
-                android:background="@drawable/bg_payment_selected"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="15dp">
-
-
-                <LinearLayout
-                    android:id="@+id/lnr_year"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+        <!--            <androidx.cardview.widget.CardView-->
+        <!--                android:id="@+id/card_year"-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="wrap_content"-->
 
 
-                    android:orientation="horizontal"
-                    android:padding="20dp">
+        <!--                android:layout_marginHorizontal="15dp"-->
+        <!--                android:layout_marginTop="15dp"-->
+        <!--                android:layout_marginBottom="5dp"-->
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="5"
-                        android:text="One year"
-                        android:textColor="@color/black" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="5"
-                        android:gravity="right"
-                        android:text="LKR 1100.00"
-                        android:textColor="@color/black" />
-
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <Button
-                android:id="@+id/btn_pay"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_marginHorizontal="15dp"
-                android:layout_marginTop="25dp"
-                android:background="@drawable/bg_btn_ok"
-                android:text="Pay"
-                android:textAllCaps="false" />
+        <!--                android:background="@drawable/bg_payment_selected"-->
+        <!--                app:cardBackgroundColor="@color/white"-->
+        <!--                app:cardCornerRadius="15dp">-->
 
 
-        </LinearLayout>
+        <!--                <LinearLayout-->
+        <!--                    android:id="@+id/lnr_year"-->
+        <!--                    android:layout_width="match_parent"-->
+        <!--                    android:layout_height="match_parent"-->
+
+
+        <!--                    android:orientation="horizontal"-->
+        <!--                    android:padding="20dp">-->
+
+        <!--                    <TextView-->
+        <!--                        android:layout_width="0dp"-->
+        <!--                        android:layout_height="wrap_content"-->
+        <!--                        android:layout_weight="5"-->
+        <!--                        android:text="One year"-->
+        <!--                        android:textColor="@color/black" />-->
+
+        <!--                    <TextView-->
+        <!--                        android:layout_width="0dp"-->
+        <!--                        android:layout_height="wrap_content"-->
+        <!--                        android:layout_weight="5"-->
+        <!--                        android:gravity="right"-->
+        <!--                        android:text="LKR 1100.00"-->
+        <!--                        android:textColor="@color/black" />-->
+
+        <!--                </LinearLayout>-->
+        <!--            </androidx.cardview.widget.CardView>-->
+
+
     </ScrollView>
+
     <View
         android:id="@+id/disable_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#92292828"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
+
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/loading"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_centerInParent="true"
         android:layout_gravity="center"
         android:visibility="gone"
-        android:layout_centerInParent="true"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/loading" />

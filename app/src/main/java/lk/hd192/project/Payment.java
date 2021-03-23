@@ -13,11 +13,19 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONObject;
+
+import java.util.HashMap;
+
 import lk.hd192.project.Utils.GetSafeBase;
+import lk.hd192.project.Utils.GetSafeServices;
+import lk.hd192.project.Utils.TinyDB;
+import lk.hd192.project.Utils.VolleyJsonCallback;
 import lk.payhere.androidsdk.PHConfigs;
 import lk.payhere.androidsdk.PHConstants;
 import lk.payhere.androidsdk.PHMainActivity;
@@ -28,24 +36,39 @@ import lk.payhere.androidsdk.model.StatusResponse;
 
 public class Payment extends GetSafeBase {
 
-    LinearLayout lnr_year, lnr_month;
+    //    LinearLayout lnr_year, lnr_month;
     final static int PAYHERE_REQUEST = 11010;
     ImageView imgBanner;
-    CardView card_month, card_year;
-    Double selectedAmount=100.0;
+    //    CardView card_month, card_year;
+    Double selectedAmount = 100.0;
     View view;
     LottieAnimationView loading;
+    GetSafeServices getSafeServices;
+    TinyDB tinyDB;
+    JSONObject payment;
+    TextView txt_month, txt_driver_amount, txt_service, txt_late, txt_net, txt_deadline;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
 
+        getSafeServices = new GetSafeServices();
+        tinyDB = new TinyDB(getApplicationContext());
+        payment = new JSONObject();
+
+
         imgBanner = findViewById(R.id.imgBanner);
-        card_year = findViewById(R.id.card_year);
-        card_month = findViewById(R.id.card_month);
-        lnr_year = findViewById(R.id.lnr_year);
-        lnr_month = findViewById(R.id.lnr_month);
+        txt_month = findViewById(R.id.txt_month);
+        txt_driver_amount = findViewById(R.id.txt_driver_amount);
+        txt_service = findViewById(R.id.txt_service);
+        txt_late = findViewById(R.id.txt_late);
+        txt_net = findViewById(R.id.txt_net);
+        txt_deadline = findViewById(R.id.txt_deadline);
+//        card_year = findViewById(R.id.card_year);
+//        card_month = findViewById(R.id.card_month);
+//        lnr_year = findViewById(R.id.lnr_year);
+//        lnr_month = findViewById(R.id.lnr_month);
         loading = findViewById(R.id.loading);
         view = findViewById(R.id.disable_layout);
 
@@ -66,22 +89,28 @@ public class Payment extends GetSafeBase {
                 .load("https://www.payhere.lk/downloads/images/payhere_square_banner_dark.png").placeholder(R.drawable.payhere).fit().centerInside()
                 .into(imgBanner);
 
-        card_month.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                lnr_year.setBackgroundResource(0);
-                lnr_month.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg_payment_selected));
-                selectedAmount = 100.0;
-            }
-        });
-        card_year.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                lnr_month.setBackgroundResource(0);
-                lnr_year.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg_payment_selected));
-                selectedAmount = 1100.0;
-            }
-        });
+
+        if (tinyDB.getBoolean("isStaffAccount"))
+            getPaymentDetails();
+        else
+            getPaymentDetailsChild();
+
+//        card_month.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                lnr_year.setBackgroundResource(0);
+//                lnr_month.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg_payment_selected));
+//                selectedAmount = 100.0;
+//            }
+//        });
+//        card_year.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                lnr_month.setBackgroundResource(0);
+//                lnr_year.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg_payment_selected));
+//                selectedAmount = 1100.0;
+//            }
+//        });
 
 
     }
@@ -124,9 +153,15 @@ public class Payment extends GetSafeBase {
             if (resultCode == Activity.RESULT_OK) {
                 String msg;
                 if (response != null)
-                    if (response.isSuccess())
+                    if (response.isSuccess()) {
                         msg = "Activity result:" + response.getData().toString();
-                    else
+
+                        if (tinyDB.getBoolean("isStaffAccount"))
+                            makePayment();
+                        else
+                            makePaymentChild();
+
+                    } else
                         msg = "Result:" + response.toString();
                 else
                     msg = "Result: no response";
@@ -138,6 +173,153 @@ public class Payment extends GetSafeBase {
 //                else
 //                    textView.setText("User canceled the request");
             }
+        }
+    }
+
+    private void getPaymentDetails() {
+        HashMap<String, String> tempParam = new HashMap<>();
+
+
+        getSafeServices.networkJsonRequest(getApplicationContext(), tempParam, getString(R.string.BASE_URL) + getString(R.string.PAYMENT), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+
+                    Log.e("res payment", result + "");
+
+                    if (result.getBoolean("status")) {
+
+
+                        payment = result;
+
+                        setValues();
+
+                    } else {
+
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                }
+
+            }
+        });
+
+
+    }
+
+    private void getPaymentDetailsChild() {
+
+        HashMap<String, String> tempParam = new HashMap<>();
+
+
+        getSafeServices.networkJsonRequest(getApplicationContext(), tempParam, getString(R.string.BASE_URL) + getString(R.string.PAYMENT_CHILD) + "?child_id=" + tinyDB.getString("selectedChildId"), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+
+                    Log.e("res payment", result + "");
+
+                    if (result.getBoolean("status")) {
+
+
+                        payment = result;
+
+                        setValues();
+
+                    } else {
+
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                }
+
+            }
+        });
+
+    }
+
+    private void makePayment() {
+        HashMap<String, String> tempParam = new HashMap<>();
+
+
+        getSafeServices.networkJsonRequest(getApplicationContext(), tempParam, getString(R.string.BASE_URL) + getString(R.string.MAKE_PAYMENT), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+
+                    Log.e("res payment", result + "");
+
+                    if (result.getBoolean("status")) {
+
+
+                        payment = result;
+
+                        setValues();
+
+                    } else {
+
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                }
+
+            }
+        });
+
+    }
+
+    private void makePaymentChild() {
+        HashMap<String, String> tempParam = new HashMap<>();
+
+
+        getSafeServices.networkJsonRequest(getApplicationContext(), tempParam, getString(R.string.BASE_URL) + getString(R.string.MAKE_PAYMENT_CHILD) + "?child_id=" + tinyDB.getString("selectedChildId"), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+
+                    Log.e("res payment", result + "");
+
+                    if (result.getBoolean("status")) {
+
+
+                        payment = result;
+
+                        setValues();
+
+                    } else {
+
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                }
+
+            }
+        });
+    }
+
+    private void setValues() {
+        try {
+            txt_month.setText(payment.getJSONObject("model").getString("payment_for_month"));
+            txt_driver_amount.setText(payment.getJSONObject("model").getString("driver_fee"));
+            txt_service.setText(payment.getJSONObject("model").getString("service_fee"));
+            txt_late.setText(payment.getJSONObject("model").getString("late_payment_fee"));
+            txt_net.setText(payment.getJSONObject("model").getString("net_monthly_total"));
+            txt_deadline.setText(payment.getJSONObject("model").getString("payment_deadline").substring(0, 10));
+            selectedAmount = payment.getJSONObject("model").getDouble("net_monthly_total");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

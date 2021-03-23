@@ -29,6 +29,7 @@ import com.tsongkha.spinnerdatepicker.DatePicker;
 import com.tsongkha.spinnerdatepicker.DatePickerDialog;
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -62,7 +63,8 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
     RadioGroup rbnGrpGender;
     TinyDB tinyDB;
     AddNewKid addNewKid;
-    JSONObject schools;
+
+    JSONArray schoolList,originalSchoolList;
     public AddKidFirstFragment() {
         // Required empty public constructor
     }
@@ -81,7 +83,9 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
         rbnGrpGender = view.findViewById(R.id.rbn_grp_gender);
         getSafeServices = new GetSafeServices();
         tinyDB = new TinyDB(getActivity());
-        schools= new JSONObject();
+        schoolList= new JSONArray();
+        originalSchoolList= new JSONArray();
+
 
         try {
 //            schools = new JSONObject(readFile());
@@ -118,6 +122,7 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
             @Override
             public void onClick(View v) {
                 openBottomSheet();
+                getSchoolList();
             }
         });
 
@@ -182,21 +187,7 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
 
         }
     }
-//    public String readFile() throws IOException
-//    {
-//        BufferedReader reader = null;
-//        reader = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.schools), "UTF-8"));
-//
-//        String content = "";
-//        String line;
-//        while ((line = reader.readLine()) != null)
-//        {
-//            content = content + line;
-//        }
-//
-//        return content;
-//
-//    }
+
 
     public void addKidBasicDetails() {
         HashMap<String, String> tempParam = new HashMap<>();
@@ -241,6 +232,41 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
                 });
 
     }
+    public void getSchoolList() {
+        HashMap<String, String> tempParam = new HashMap<>();
+
+//        ((AddNewKid) Objects.requireNonNull(getActivity())).showLoading();
+        getSafeServices.networkJsonRequest(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.SCHOOL_LIST), 1, tinyDB.getString("token"),
+                new VolleyJsonCallback() {
+
+                    @Override
+                    public void onSuccessResponse(JSONObject result) {
+                        ((AddNewKid) Objects.requireNonNull(getActivity())).hideLoading();
+                        try {
+
+
+                            if (!result.getBoolean("status")) {
+
+                              schoolList=result.getJSONArray("model");
+                                originalSchoolList=result.getJSONArray("model");
+                              bottomSheetRecycler.getAdapter().notifyDataSetChanged();
+
+                            } else
+                                showWarningToast(dialog, "Schoolist"+ result.getString("validation_errors"), 0);
+
+
+                        } catch (Exception e) {
+
+                            Log.e("ex loc", e.getMessage());
+
+                            showWarningToast(dialog, "Something went wrong. Please try again", 0);
+
+                        }
+
+                    }
+                });
+
+    }
 
     @VisibleForTesting
     void showDate(int year, int monthOfYear, int dayOfMonth, int spinnerTheme) {
@@ -274,8 +300,6 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
         @Override
         protected void onStart() {
             super.onStart();
-            getBehavior().setPeekHeight((GetSafeBase.device_height / 3) * 2, false);
-            getBehavior().setDraggable(false);
 
 
         }
@@ -354,18 +378,22 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
         }
 
         @Override
-        public void onBindViewHolder(@NonNull SchoolNameViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull SchoolNameViewHolder holder, final int position) {
 
             try {
-                holder.textSchoolName.setText(schools.getJSONArray("Schools").getJSONObject(position).getString("School Name"));
+                holder.textSchoolName.setText(schoolList.getJSONObject(position).getString("school_name"));
             } catch (Exception e) {
                 e.printStackTrace();
             }
             holder.rltSchool.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    txtSchoolName.setText("Mahanama College");
-                    txtSchoolName.setHint("Mahanama College");
+                    try {
+                        txtSchoolName.setText(schoolList.getJSONObject(position).getString("school_name"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
                     schoolBottomSheet.dismiss();
                 }
             });
@@ -373,32 +401,32 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
 
         @Override
         public int getItemCount() {
-            return schools.length()-1;
+            return schoolList.length();
         }
 
         @Override
         public Filter getFilter() {
-            return null;
+            return filter;
         }
 
         //Home screen search - filter stories by story name or category name  #Udeesha
         Filter filter = new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-                //   schoolsArr = new JSONArray();
+                   schoolList = new JSONArray();
                 int put = 0;
 
                 try {
-//                    for (int i = 0; i < originalResult.length(); i++) {
-//                        if (originalResult.getJSONObject(i).getString("name_en").toLowerCase().contains(constraint.toString().toLowerCase()) ||
-//                                originalResult.getJSONObject(i).getString("category_name").toLowerCase().contains(constraint.toString().toLowerCase())) {
-//
-//                            schoolsArr.put(put++, originalResult.getJSONObject(i));
-//                        }
-//
-//                    }
+                    for (int i = 0; i < originalSchoolList.length(); i++) {
+                        if (originalSchoolList.getJSONObject(i).getString("school_name").toLowerCase().contains(constraint.toString().toLowerCase())) {
+
+                            schoolList.put(put++, originalSchoolList.getJSONObject(i));
+                        }
+
+                    }
 
                 } catch (Exception e) {
+                    e.printStackTrace();
 
                 }
 

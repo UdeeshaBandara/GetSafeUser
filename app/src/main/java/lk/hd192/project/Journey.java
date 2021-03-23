@@ -264,7 +264,7 @@ public class Journey extends GetSafeBase {
             public void onSuccessResponse(JSONObject result) {
 
                 try {
-                    Log.e("jor nw",result+"");
+                    Log.e("jor nw", result + "");
 
                     if (result.getBoolean("status")) {
                         tripDetails = result.getJSONArray("models");
@@ -292,7 +292,7 @@ public class Journey extends GetSafeBase {
             public void onSuccessResponse(JSONObject result) {
 
                 try {
-                    Log.e("jor nw",result+"");
+                    Log.e("jor nw", result + "");
 
                     if (result.getBoolean("status")) {
                         tripDetails = result.getJSONArray("models");
@@ -306,7 +306,6 @@ public class Journey extends GetSafeBase {
                 hideLoading();
             }
         });
-
 
 
     }
@@ -322,7 +321,7 @@ public class Journey extends GetSafeBase {
             public void onSuccessResponse(JSONObject result) {
 
                 try {
-                    Log.e("jor nw",result+"");
+                    Log.e("jor nw", result + "");
                     if (result.getBoolean("status")) {
                         tripDetails = result.getJSONArray("models");
                         recycleJourney.getAdapter().notifyDataSetChanged();
@@ -335,7 +334,6 @@ public class Journey extends GetSafeBase {
                 hideLoading();
             }
         });
-
 
 
     }
@@ -351,7 +349,7 @@ public class Journey extends GetSafeBase {
             public void onSuccessResponse(JSONObject result) {
 
                 try {
-Log.e("jor nw",result+"");
+                    Log.e("jor nw", result + "");
 
                     if (result.getBoolean("status")) {
                         tripDetails = result.getJSONArray("models");

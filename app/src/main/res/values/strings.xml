@@ -7,7 +7,7 @@
     <string name="REVERSE_GEO">https://maps.googleapis.com/maps/api/geocode/json</string>
 
 
-    <string name="BASE_URL">http://192.168.1.3:8000/v1/getsafe/api</string>
+    <string name="BASE_URL">http://192.168.8.103:8000/v1/getsafe/api</string>
     <string name="SAVE_USER">/register/saveuser</string>
     <string name="REGISTER_SEND_OTP">/register/sendotp</string>
     <string name="REGISTER_VALIDATE_OTP">/register/validateotp</string>
@@ -63,6 +63,14 @@
      <string name="GET_ALL_JOURNEY_DETAILS_CHILD">/child/journey/alltrips</string>
      <string name="GET_SINGLE_JOURNEY_DETAILS">/user/journey/details/byid</string>
      <string name="GET_SINGLE_JOURNEY_DETAILS_CHILD">/child/journey/details/byid</string>
+
+
+     <string name="GET_ALL_NOTIFICATIONS">/notifications/all</string>
+     <string name="SCHOOL_LIST">/child/schoolist</string>
+     <string name="PAYMENT_CHILD">/payment/child/make</string>
+     <string name="PAYMENT">/payment/user/slip</string>
+     <string name="MAKE_PAYMENT">/payment/user/make</string>
+     <string name="MAKE_PAYMENT_CHILD">/payment/child/make</string>
 
 
 
