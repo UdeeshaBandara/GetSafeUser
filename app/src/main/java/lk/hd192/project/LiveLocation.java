@@ -84,13 +84,13 @@ public class LiveLocation extends GetSafeBase {
 
     LocationManager locationManager;
     GetSafeServices getSafeServices;
-    private DatabaseReference mRootRef, locationRef,driverIdRef;
+    private DatabaseReference mRootRef, locationRef, driverIdRef;
     String locationProvider = LocationManager.GPS_PROVIDER;
     CameraPosition cameraPosition;
 
     String pushId = "";
 
-    TextView time,distance;
+    TextView time, distance;
     Polyline polyline;
     LocationListener locationListener;
     LocationManager locationManagerSender;
@@ -100,7 +100,7 @@ public class LiveLocation extends GetSafeBase {
     int timeOfDay;
     Double driverLat, dropLat, driverLon, dropLon, currentLat, currentLon;
     Dialog dialog;
-    public static String timeS,distanceS;
+    public static String timeS, distanceS;
     ValueEventListener valueEventListener;
 
     @Override
@@ -132,12 +132,10 @@ public class LiveLocation extends GetSafeBase {
         if (tinyDB.getBoolean("isStaffAccount")) {
             locationRef = mRootRef.child("Staff_Drivers").child(tinyDB.getString("kid_driver_id")).child("Location");
 
-        }
-        else{
+        } else {
             locationRef = mRootRef.child("School_Drivers").child(tinyDB.getString("kid_driver_id")).child("Location");
 
         }
-
 
 
         if (ActivityCompat.checkSelfPermission(LiveLocation.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(LiveLocation.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -186,7 +184,7 @@ public class LiveLocation extends GetSafeBase {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                if(snapshot.exists()) {
+                if (snapshot.exists()) {
                     LocationUpdates locationUpdates = snapshot.getValue(LocationUpdates.class);
 //                driverLat = snapshot.child("latitude").getValue(Double.class);
 //                driverLon = snapshot.child("longitude").getValue(Double.class);
@@ -200,9 +198,8 @@ public class LiveLocation extends GetSafeBase {
                         googleMap.clear();
                     if (locationUpdates.getStatus().equals("End Trip") && dropLat != null)
                         drawMapPolyline();
-                }
-                else{
-                    Log.e("snap","else");
+                } else {
+                    Log.e("snap", "else");
                 }
             }
 
@@ -387,33 +384,34 @@ public class LiveLocation extends GetSafeBase {
     }
 
     public void drawMapPolyline() {
-Log.e("drawMapPolyline","exe");
+        try {
+            Log.e("drawMapPolyline", "exe");
 //        LatLng origin = new LatLng(pickUpLat, pickUpLon);
-        LatLng origin = new LatLng(driverLat, driverLon);
+            LatLng origin = new LatLng(driverLat, driverLon);
 //        LatLng dest = new LatLng(drpickUpLat, pickUpLon);
-        LatLng dest = new LatLng(dropLat, dropLon);
+            LatLng dest = new LatLng(dropLat, dropLon);
 
 
-        googleMap.addMarker(new MarkerOptions()
-                .position(origin).icon(BitmapDescriptorFactory.fromBitmap(originMarker)).title("Vehicle location"));
+            googleMap.addMarker(new MarkerOptions()
+                    .position(origin).icon(BitmapDescriptorFactory.fromBitmap(originMarker)).title("Vehicle location"));
 
-        googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(finalMarker)).position(dest).title("Destination"));
+            googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(finalMarker)).position(dest).title("Destination"));
 
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        builder.include(origin);
-        builder.include(dest);
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            builder.include(origin);
+            builder.include(dest);
 
-        LatLngBounds bounds = builder.build();
-        if (isFirstTime) {
-            Log.e("inside", "id");
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 75));
+            LatLngBounds bounds = builder.build();
+            if (isFirstTime) {
+                Log.e("inside", "id");
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 75));
 
-            CameraPosition camPos = new CameraPosition.Builder(googleMap.getCameraPosition()).target(bounds.getCenter()).tilt(40).build();
+                CameraPosition camPos = new CameraPosition.Builder(googleMap.getCameraPosition()).target(bounds.getCenter()).tilt(40).build();
 
-            googleMap.animateCamera(CameraUpdateFactory
-                    .newCameraPosition(camPos));
-            isFirstTime = false;
-        }
+                googleMap.animateCamera(CameraUpdateFactory
+                        .newCameraPosition(camPos));
+                isFirstTime = false;
+            }
 
 //
 //        int padding = 1;
@@ -424,15 +422,17 @@ Log.e("drawMapPolyline","exe");
 //        googleMap.animateCamera(cu);
 
 
-        String url = getDirectionsUrl(origin, dest);
+            String url = getDirectionsUrl(origin, dest);
 
 
-        DownloadTask downloadTask = new DownloadTask();
+            DownloadTask downloadTask = new DownloadTask();
 
 
-        downloadTask.execute(url);
+            downloadTask.execute(url);
 
-
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 
@@ -569,8 +569,8 @@ Log.e("drawMapPolyline","exe");
             ArrayList<LatLng> points = null;
             PolylineOptions lineOptions = null;
             MarkerOptions markerOptions = new MarkerOptions();
-            time.setText("Time Remaining "+timeS);
-            distance.setText("Distance "+distanceS);
+            time.setText("Time Remaining " + timeS);
+            distance.setText("Distance " + distanceS);
 
 //            Log.e("POLY - results ", result + "");
 
@@ -654,16 +654,22 @@ Log.e("drawMapPolyline","exe");
                             @Override
                             public void onDataChange(DataSnapshot snapshot) {
 
-                                if(snapshot.exists()) {
-                                    LocationUpdates locationUpdates = snapshot.getValue(LocationUpdates.class);
-                                    driverLat = locationUpdates.getLatitude();
-                                    driverLon = locationUpdates.getLongitude();
-                                    if (googleMap != null)
-                                        googleMap.clear();
-                                    if (locationUpdates.getStatus().equals("End Trip"))
-                                        drawMapPolyline();
-                                    else
-                                        showToast(dialog, "Driver didn't start the trip", 0);
+
+                                try {
+
+                                    if (snapshot.exists()) {
+                                        LocationUpdates locationUpdates = snapshot.getValue(LocationUpdates.class);
+                                        driverLat = locationUpdates.getLatitude();
+                                        driverLon = locationUpdates.getLongitude();
+                                        if (googleMap != null)
+                                            googleMap.clear();
+                                        if (locationUpdates.getStatus().equals("End Trip"))
+                                            drawMapPolyline();
+                                        else
+                                            showToast(dialog, "Driver didn't start the trip", 0);
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
                             }
 
@@ -711,16 +717,20 @@ Log.e("drawMapPolyline","exe");
                         locationRef.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot snapshot) {
-                                if(snapshot.exists()) {
-                                    LocationUpdates locationUpdates = snapshot.getValue(LocationUpdates.class);
-                                    driverLat = locationUpdates.getLatitude();
-                                    driverLon = locationUpdates.getLongitude();
-                                    if (googleMap != null)
-                                        googleMap.clear();
-                                    if (locationUpdates.getStatus().equals("End Trip"))
-                                        drawMapPolyline();
-                                    else
-                                        showToast(dialog, "Driver didn't start the trip", 0);
+                                try {
+                                    if (snapshot.exists()) {
+                                        LocationUpdates locationUpdates = snapshot.getValue(LocationUpdates.class);
+                                        driverLat = locationUpdates.getLatitude();
+                                        driverLon = locationUpdates.getLongitude();
+                                        if (googleMap != null)
+                                            googleMap.clear();
+                                        if (locationUpdates.getStatus().equals("End Trip"))
+                                            drawMapPolyline();
+                                        else
+                                            showToast(dialog, "Driver didn't start the trip", 0);
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
                             }
 

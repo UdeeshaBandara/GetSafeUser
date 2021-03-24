@@ -50,6 +50,7 @@ public class OTP extends GetSafeBase {
     public static String otpToken = "";
     LottieAnimationView loading;
     private DatabaseReference firebaseDatabase;
+    public static String number;
 
     View view;
 
@@ -78,6 +79,10 @@ public class OTP extends GetSafeBase {
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
 
         Log.e("otp token", OTP.otpToken);
+
+//        if(OTP.optType == 0)
+//            otpHeading.setText("A verification code has been sent to your mobile \n (+94 " ++ ")");
+//            else
 
         otpHeading.setText("A verification code has been sent to your mobile \n (+94 " + tinyDB.getString("phone_no") + ")");
 
@@ -238,6 +243,9 @@ public class OTP extends GetSafeBase {
                     if (result.getBoolean("otp_token_validity")) {
 
                         tinyDB.putString("token", result.getString("access_token"));
+
+                        tinyDB.putString("user_id", result.getJSONObject("user").getString("id"));
+                        tinyDB.putString("user_name", result.getJSONObject("user").getString("name"));
 //                        registerFirebaseUser();
                         getDeviceFcmToken();
 //                        firebaseLogin();

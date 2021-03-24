@@ -186,14 +186,19 @@ public class Payment extends GetSafeBase {
 
                 try {
 
-                    Log.e("res payment", result + "");
+                    Log.e("getPaymentDetails", result + "");
 
                     if (result.getBoolean("status")) {
 
 
-                        payment = result;
+                        txt_month.setText(result.getJSONObject("model").getString("payment_for_month"));
+                        txt_driver_amount.setText(result.getJSONObject("model").getString("driver_fee"));
+                        txt_service.setText(result.getJSONObject("model").getString("service_fee"));
+                        txt_late.setText(result.getJSONObject("model").getString("late_payment_fee"));
+                        selectedAmount = Math.round( result.getJSONObject("model").getDouble("net_monthly_total")* 100.0) / 100.0;
+                        txt_net.setText(String.valueOf(selectedAmount));
+                        txt_deadline.setText(result.getJSONObject("model").getString("payment_deadline").substring(0, 10));
 
-                        setValues();
 
                     } else {
 
@@ -221,14 +226,21 @@ public class Payment extends GetSafeBase {
 
                 try {
 
-                    Log.e("res payment", result + "");
+                    Log.e("getPaymentDetailsChild", result + "");
 
                     if (result.getBoolean("status")) {
 
 
-                        payment = result;
+                        txt_month.setText(result.getJSONObject("model").getString("payment_for_month"));
+                        txt_driver_amount.setText(result.getJSONObject("model").getString("driver_fee"));
+                        txt_service.setText(result.getJSONObject("model").getString("service_fee"));
+                        selectedAmount = Math.round( result.getJSONObject("model").getDouble("net_monthly_total")* 100.0) / 100.0;
+                        txt_net.setText(String.valueOf(selectedAmount));
+                        Log.e("selec amt",selectedAmount+"");
+                        txt_late.setText(result.getJSONObject("model").getString("late_payment_fee"));
 
-                        setValues();
+                        txt_deadline.setText(result.getJSONObject("model").getString("payment_deadline").substring(0, 10));
+
 
                     } else {
 
@@ -254,14 +266,11 @@ public class Payment extends GetSafeBase {
 
                 try {
 
-                    Log.e("res payment", result + "");
+                    Log.e("makePayment", result + "");
 
                     if (result.getBoolean("status")) {
 
 
-                        payment = result;
-
-                        setValues();
 
                     } else {
 
@@ -287,14 +296,12 @@ public class Payment extends GetSafeBase {
 
                 try {
 
-                    Log.e("res payment", result + "");
+                    Log.e("makePaymentChild", result + "");
 
                     if (result.getBoolean("status")) {
 
 
-                        payment = result;
 
-                        setValues();
 
                     } else {
 
@@ -311,13 +318,7 @@ public class Payment extends GetSafeBase {
 
     private void setValues() {
         try {
-            txt_month.setText(payment.getJSONObject("model").getString("payment_for_month"));
-            txt_driver_amount.setText(payment.getJSONObject("model").getString("driver_fee"));
-            txt_service.setText(payment.getJSONObject("model").getString("service_fee"));
-            txt_late.setText(payment.getJSONObject("model").getString("late_payment_fee"));
-            txt_net.setText(payment.getJSONObject("model").getString("net_monthly_total"));
-            txt_deadline.setText(payment.getJSONObject("model").getString("payment_deadline").substring(0, 10));
-            selectedAmount = payment.getJSONObject("model").getDouble("net_monthly_total");
+
         } catch (Exception e) {
             e.printStackTrace();
         }

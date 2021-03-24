@@ -74,7 +74,7 @@
 
                 android:fontFamily="@font/nunito_regular"
                 android:gravity="center"
-                android:text="School Namme"
+                android:text="School Name"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:textSize="14sp"

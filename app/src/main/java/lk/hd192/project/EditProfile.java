@@ -323,19 +323,19 @@ public class EditProfile extends GetSafeBase {
         imgParent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (btnEditDone.getText().toString().equals("Done")) {
-//                    selectImage(EditProfile.this);
-                    Intent gallery = new Intent();
-                    gallery.setType("image/*");
-                    gallery.setAction(Intent.ACTION_GET_CONTENT);
-                    startActivityForResult(Intent.createChooser(gallery, "SELECT IMAGE"), 1);
-                    View view = EditProfile.this.getCurrentFocus();
-
-                    if (view != null) {
-                        InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                    }
-                }
+//                if (btnEditDone.getText().toString().equals("Done")) {
+////                    selectImage(EditProfile.this);
+//                    Intent gallery = new Intent();
+//                    gallery.setType("image/*");
+//                    gallery.setAction(Intent.ACTION_GET_CONTENT);
+//                    startActivityForResult(Intent.createChooser(gallery, "SELECT IMAGE"), 1);
+//                    View view = EditProfile.this.getCurrentFocus();
+//
+//                    if (view != null) {
+//                        InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+//                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+//                    }
+//                }
 
             }
         });
@@ -425,6 +425,9 @@ public class EditProfile extends GetSafeBase {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==2){
+            getAllChildren();
+        }
 //        Log.e("onactivityResult", data + "");
 //
 //        if ((requestCode == 1 | requestCode == 0) & resultCode == RESULT_OK & null != data) {
@@ -890,7 +893,7 @@ public class EditProfile extends GetSafeBase {
                         Intent intent = new Intent(getApplicationContext(), EditKidProfile.class);
 
                         intent.putExtra("kid_id", kidList.getJSONObject(position).getString("id"));
-                        startActivity(intent);
+                        startActivityForResult(intent,2);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -904,6 +907,8 @@ public class EditProfile extends GetSafeBase {
             return kidList.length();
         }
     }
+
+
 
     public void getAllChildren() {
         HashMap<String, String> tempParam = new HashMap<>();

@@ -85,7 +85,7 @@ public class AddNewKid extends GetSafeBase {
                         addKidFirstFragment.addKidBasicDetails();
 
                         nonSwappableViewPager.setCurrentItem(1);
-                        txtSubHeading.setText("Location Details");
+                        txtSubHeading.setText("Pickup Location Details");
                         kidAnimation.setVisibility(View.GONE);
                         doneAnimation.setVisibility(View.GONE);
                         locationAnimation.setVisibility(View.VISIBLE);

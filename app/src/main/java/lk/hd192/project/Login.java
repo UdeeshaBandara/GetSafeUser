@@ -14,6 +14,7 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -37,6 +38,8 @@ public class Login extends GetSafeBase {
     GetSafeServices getSafeServices;
     TinyDB tinyDB;
 
+    View view;
+    LottieAnimationView loading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,14 +52,15 @@ public class Login extends GetSafeBase {
         four = findViewById(R.id.txt_number_four);
         five = findViewById(R.id.txt_number_five);
         six = findViewById(R.id.txt_number_six);
-
+        loading = findViewById(R.id.loading);
+        view = findViewById(R.id.disable_layout);
         seven = findViewById(R.id.txt_number_seven);
         eight = findViewById(R.id.txt_number_eight);
         nine = findViewById(R.id.txt_number_nine);
 
         tinyDB = new TinyDB(getApplicationContext());
         getSafeServices = new GetSafeServices();
-        tinyDB.putString("email","mccbcpl@gmail.com");
+        tinyDB.putString("email", "mccbcpl@gmail.com");
         requestFocus();
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
         findViewById(R.id.btn_login_next).setOnClickListener(new View.OnClickListener() {
@@ -104,15 +108,23 @@ public class Login extends GetSafeBase {
                 eight.getText().toString() +
                 nine.getText().toString());
         //    tempParam.put("fcm_token", token);
-        tinyDB.putString("phone_no",tempParam.get(0));
-
+        tinyDB.putString("phone_no", one.getText().toString() +
+                two.getText().toString() +
+                three.getText().toString() +
+                four.getText().toString() +
+                five.getText().toString() +
+                six.getText().toString() +
+                seven.getText().toString() +
+                eight.getText().toString() +
+                nine.getText().toString());
+        showLoading();
         getSafeServices.networkJsonRequestWithoutHeader(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.USER_SEND_OTP), 2, new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 
                 try {
                     Log.e("success", "ok");
-                    Log.e("result", result+"");
+                    Log.e("result", result + "");
 
                     if (result.getBoolean("otp_sent_status")) {
 
@@ -120,20 +132,21 @@ public class Login extends GetSafeBase {
                         OTP.optType = 0;
                         startActivity(new Intent(getApplicationContext(), OTP.class));
 
-                    } else
-                        showToast(dialog, "Something went wrong. Please try again", 0);
+                    } else if (!result.getString("validation_errors").equals("null"))
+                        showToast(dialog, result.getString("validation_errors"), 0);
+                    else
+                        showToast(dialog, "Failed to send OTP", 0);
 
 
+                    hideLoading();
                 } catch (Exception e) {
-
+                    e.printStackTrace();
                 }
 
             }
         });
 
     }
-
-
 
 
     private void requestFocus() {
@@ -336,6 +349,23 @@ public class Login extends GetSafeBase {
             }
         });
 
+
+    }
+
+    void showLoading() {
+
+        view.setVisibility(View.VISIBLE);
+        loading.setVisibility(View.VISIBLE);
+        loading.playAnimation();
+
+
+    }
+
+    void hideLoading() {
+
+
+        loading.setVisibility(View.GONE);
+        view.setVisibility(View.GONE);
 
     }
 }

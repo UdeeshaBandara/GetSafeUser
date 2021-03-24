@@ -30,6 +30,7 @@ public class Notification extends GetSafeBase {
     Button btnNotificationBack;
     JSONArray notifications;
     GetSafeServices getSafeServices;
+    TextView notification_empty_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,7 @@ public class Notification extends GetSafeBase {
         getSafeServices= new GetSafeServices();
 
         recyclerNotification=findViewById(R.id.recycler_notification);
+        notification_empty_text=findViewById(R.id.notification_empty_text);
         recyclerNotification.setAdapter(new NotificationAdapter());
         recyclerNotification.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
 
@@ -128,7 +130,13 @@ Log.e("noti",result+"");
                     if (result.getBoolean("status")) {
 
                         notifications= result.getJSONArray("model");
-                        recyclerNotification.getAdapter().notifyDataSetChanged();
+                        if(notifications.length()!=0){
+                            notification_empty_text.setVisibility(View.GONE);
+                            recyclerNotification.getAdapter().notifyDataSetChanged();
+                        }
+
+                        else
+                            notification_empty_text.setVisibility(View.VISIBLE);
                     } else {
 
 

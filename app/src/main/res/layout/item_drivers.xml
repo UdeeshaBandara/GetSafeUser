@@ -86,7 +86,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="3"
                             android:fontFamily="@font/nunito_bold"
-                            android:text="Journey Start"
+                            android:text="Telephone"
                             android:textColor="@color/white"
                             android:textSize="12sp" />
 
@@ -96,7 +96,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="7"
                             android:fontFamily="@font/nunito_bold"
-                            android:text=": Kottawa "
+                            android:text=":  "
                             android:textColor="@color/white"
                             android:textSize="12sp" />
 
@@ -116,7 +116,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="3"
                             android:fontFamily="@font/nunito_bold"
-                            android:text="Journey end"
+                            android:text="Email"
                             android:textColor="@color/white"
                             android:textSize="12sp" />
 
@@ -127,7 +127,7 @@
                             android:layout_marginEnd="65dp"
                             android:layout_weight="5"
                             android:fontFamily="@font/nunito_bold"
-                            android:text=": Musaeus College,ksjhdfjshdColombo 07"
+                            android:text=": "
                             android:textColor="@color/white"
                             android:textSize="12sp" />
 

@@ -419,8 +419,8 @@ public class DriverRoute extends GetSafeBase {
 
                 // Adding all the points in the route to LineOptions
                 lineOptions.addAll(points);
-                lineOptions.width(8);
-                lineOptions.color(getResources().getColor(R.color.sec_color));
+                lineOptions.width(14);
+                lineOptions.color(getResources().getColor(R.color.button_blue));
             }
 
             // Drawing polyline in the Google Map for the i-th route

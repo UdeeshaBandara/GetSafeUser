@@ -64,7 +64,8 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
     TinyDB tinyDB;
     AddNewKid addNewKid;
 
-    JSONArray schoolList,originalSchoolList;
+    JSONArray schoolList, originalSchoolList;
+
     public AddKidFirstFragment() {
         // Required empty public constructor
     }
@@ -83,8 +84,8 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
         rbnGrpGender = view.findViewById(R.id.rbn_grp_gender);
         getSafeServices = new GetSafeServices();
         tinyDB = new TinyDB(getActivity());
-        schoolList= new JSONArray();
-        originalSchoolList= new JSONArray();
+        schoolList = new JSONArray();
+        originalSchoolList = new JSONArray();
 
 
         try {
@@ -232,6 +233,7 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
                 });
 
     }
+
     public void getSchoolList() {
         HashMap<String, String> tempParam = new HashMap<>();
 
@@ -247,12 +249,12 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
 
                             if (!result.getBoolean("status")) {
 
-                              schoolList=result.getJSONArray("model");
-                                originalSchoolList=result.getJSONArray("model");
-                              bottomSheetRecycler.getAdapter().notifyDataSetChanged();
+                                schoolList = result.getJSONArray("model");
+                                originalSchoolList = result.getJSONArray("model");
+                                bottomSheetRecycler.getAdapter().notifyDataSetChanged();
 
                             } else
-                                showWarningToast(dialog, "Schoolist"+ result.getString("validation_errors"), 0);
+                                showWarningToast(dialog, "Schoolist" + result.getString("validation_errors"), 0);
 
 
                         } catch (Exception e) {
@@ -413,7 +415,7 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
         Filter filter = new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-                   schoolList = new JSONArray();
+                schoolList = new JSONArray();
                 int put = 0;
 
                 try {

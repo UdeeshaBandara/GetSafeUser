@@ -61,7 +61,7 @@
             android:fontFamily="@font/nunito_regular"
             android:text="No Notifications"
             android:textColor="@color/black"
-            android:textSize="12sp"
+            android:textSize="16sp"
             android:visibility="gone" />
 
 

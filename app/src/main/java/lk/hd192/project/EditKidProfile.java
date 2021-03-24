@@ -63,6 +63,8 @@ import com.tsongkha.spinnerdatepicker.DatePicker;
 import com.tsongkha.spinnerdatepicker.DatePickerDialog;
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -73,6 +75,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import lk.hd192.project.Utils.GetSafeBase;
 import lk.hd192.project.Utils.GetSafeServices;
@@ -104,8 +107,8 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
     Button btnEditDone;
     private ProgressDialog progressDialog;
     Double latitude, longitude;
-
-    String originalName = "", kid_id, originalSchool = "", originalLocation = "", originalBirthday = "", originalAddressTwo, originalAddressOne,originalGender,originalGuardian;
+    JSONArray originalSchoolList, schoolList;
+    String originalName = "", kid_id, originalSchool = "", originalLocation = "", originalBirthday = "", originalAddressTwo, originalAddressOne, originalGender, originalGuardian;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -115,6 +118,8 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
 
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
 
+        schoolList = new JSONArray();
+        originalSchoolList = new JSONArray();
         txtSchoolName = findViewById(R.id.txt_edit__school_name);
         txtBirthday = findViewById(R.id.txt_birthday);
         txtPickupAddress = findViewById(R.id.txt_pickup_address);
@@ -155,18 +160,18 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
         imgKid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (btnEditDone.getText().toString().equals("Done")) {
-                    Intent gallery = new Intent();
-                    gallery.setType("image/*");
-                    gallery.setAction(Intent.ACTION_GET_CONTENT);
-                    startActivityForResult(Intent.createChooser(gallery, "SELECT IMAGE"), 1);
-                    View view = EditKidProfile.this.getCurrentFocus();
-
-                    if (view != null) {
-                        InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                    }
-                }
+//                if (btnEditDone.getText().toString().equals("Done")) {
+//                    Intent gallery = new Intent();
+//                    gallery.setType("image/*");
+//                    gallery.setAction(Intent.ACTION_GET_CONTENT);
+//                    startActivityForResult(Intent.createChooser(gallery, "SELECT IMAGE"), 1);
+//                    View view = EditKidProfile.this.getCurrentFocus();
+//
+//                    if (view != null) {
+//                        InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+//                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+//                    }
+//                }
 
             }
         });
@@ -177,6 +182,8 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
 
                 if (btnEditDone.getText().toString().equals("Done")) {
                     openBottomSheet();
+
+                    getSchoolList();
                     View view = EditKidProfile.this.getCurrentFocus();
 
                     if (view != null) {
@@ -315,10 +322,10 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
                 }
             }
         });
-        if(EditProfile.needToEnableEditMode){
+        if (EditProfile.needToEnableEditMode) {
 //            btnEditDone.setText("Done");
             btnEditDone.performClick();
-            EditProfile.needToEnableEditMode=false;
+            EditProfile.needToEnableEditMode = false;
         }
 
 
@@ -423,7 +430,7 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
 //        param.put("id", kid_id);
 
         showLoading();
-        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_KID_BY_ID)+"?id="+kid_id, 1, tinyDB.getString("token"), new VolleyJsonCallback() {
+        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_KID_BY_ID) + "?id=" + kid_id, 1, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 
@@ -462,7 +469,7 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
     private void getLocationDetails() {
         HashMap<String, String> param = new HashMap<>();
 
-        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_KID_LOCATION_BY_ID)+"?id="+kid_id, 1, tinyDB.getString("token"), new VolleyJsonCallback() {
+        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_KID_LOCATION_BY_ID) + "?id=" + kid_id, 1, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 
@@ -685,10 +692,9 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
                     hideLoading();
 
 
-
                     if (result.getBoolean("updated_status")) {
 
-                     updateChildPickupLocations();
+                        updateChildPickupLocations();
 
                     }
 
@@ -710,14 +716,12 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
         param.put("add2", originalAddressTwo);
 
 
-
         getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.UPDATE_KID_LOCATION), 3, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 
                 try {
                     hideLoading();
-
 
 
                     if (result.getBoolean("location_saved_status")) {
@@ -747,8 +751,7 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
         @Override
         protected void onStart() {
             super.onStart();
-            getBehavior().setPeekHeight((GetSafeBase.device_height / 3) * 2, false);
-            getBehavior().setDraggable(false);
+
 
 
         }
@@ -806,10 +809,12 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
     public class SchoolNameViewHolder extends RecyclerView.ViewHolder {
 
         RelativeLayout rltSchool;
+        TextView textSchoolName;
 
         public SchoolNameViewHolder(@NonNull View itemView) {
             super(itemView);
             rltSchool = itemView.findViewById(R.id.rlt_school);
+            textSchoolName = itemView.findViewById(R.id.text_school_name);
         }
     }
 
@@ -825,13 +830,22 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
         }
 
         @Override
-        public void onBindViewHolder(@NonNull SchoolNameViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull SchoolNameViewHolder holder, final int position) {
 
+            try {
+                holder.textSchoolName.setText(schoolList.getJSONObject(position).getString("school_name"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             holder.rltSchool.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    txtSchoolName.setText("Mahanama College");
-                    txtSchoolName.setHint("Mahanama College");
+                    try {
+                        txtSchoolName.setText(schoolList.getJSONObject(position).getString("school_name"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
                     schoolBottomSheet.dismiss();
                 }
             });
@@ -840,32 +854,32 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
 
         @Override
         public int getItemCount() {
-            return 20;
+            return schoolList.length();
         }
 
         @Override
         public Filter getFilter() {
-            return null;
+            return filter;
         }
 
         //Home screen search - filter stories by story name or category name  #Udeesha
         Filter filter = new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-                //   schoolsArr = new JSONArray();
+                schoolList = new JSONArray();
                 int put = 0;
 
                 try {
-//                    for (int i = 0; i < originalResult.length(); i++) {
-//                        if (originalResult.getJSONObject(i).getString("name_en").toLowerCase().contains(constraint.toString().toLowerCase()) ||
-//                                originalResult.getJSONObject(i).getString("category_name").toLowerCase().contains(constraint.toString().toLowerCase())) {
-//
-//                            schoolsArr.put(put++, originalResult.getJSONObject(i));
-//                        }
-//
-//                    }
+                    for (int i = 0; i < originalSchoolList.length(); i++) {
+                        if (originalSchoolList.getJSONObject(i).getString("school_name").toLowerCase().contains(constraint.toString().toLowerCase())) {
+
+                            schoolList.put(put++, originalSchoolList.getJSONObject(i));
+                        }
+
+                    }
 
                 } catch (Exception e) {
+                    e.printStackTrace();
 
                 }
 
@@ -880,6 +894,42 @@ public class EditKidProfile extends GetSafeBase implements DatePickerDialog.OnDa
 
             }
         };
+
+    }
+
+    public void getSchoolList() {
+        HashMap<String, String> tempParam = new HashMap<>();
+
+//        ((AddNewKid) Objects.requireNonNull(getActivity())).showLoading();
+        getSafeServices.networkJsonRequest(getApplicationContext(), tempParam, getString(R.string.BASE_URL) + getString(R.string.SCHOOL_LIST), 1, tinyDB.getString("token"),
+                new VolleyJsonCallback() {
+
+                    @Override
+                    public void onSuccessResponse(JSONObject result) {
+
+                        try {
+
+
+                            if (!result.getBoolean("status")) {
+
+                                schoolList = result.getJSONArray("model");
+                                originalSchoolList = result.getJSONArray("model");
+                                bottomSheetRecycler.getAdapter().notifyDataSetChanged();
+
+                            } else
+                                showToast(dialog, "Schoolist" + result.getString("validation_errors"), 0);
+
+
+                        } catch (Exception e) {
+
+                            Log.e("ex loc", e.getMessage());
+
+                            showToast(dialog, "Something went wrong. Please try again", 0);
+
+                        }
+
+                    }
+                });
 
     }
 
