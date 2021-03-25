@@ -31,6 +31,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.navigation.NavigationView;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
@@ -53,7 +54,8 @@ public class Home extends GetSafeBase {
 
     RoundedImageView fabAddKid;
     JSONArray homeOptions;
-
+    View view;
+    LottieAnimationView loading;
     JSONObject oneOption, twoOption, threeOption, fourOption, fiveOption, kidList;
     TextView account_type, txt_greeting, txt_account_type, txt_user_name, empty_message;
     Dialog dialog;
@@ -73,6 +75,8 @@ public class Home extends GetSafeBase {
         setContentView(R.layout.activity_home);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        loading = findViewById(R.id.loading);
+        view = findViewById(R.id.disable_layout);
         getSafeServices = new GetSafeServices();
         tinyDB = new TinyDB(getApplicationContext());
         kidList = new JSONObject();
@@ -84,8 +88,8 @@ public class Home extends GetSafeBase {
         fiveOption = new JSONObject();
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
 
-        tinyDB.putString("token", "7|YD5xDYvDTxaPopXIyHm1UwKpct7jI2kR9nxWY1qS");
-        tinyDB.putString("user_name", "Udeesha Induras");
+//        tinyDB.putString("token", "7|YD5xDYvDTxaPopXIyHm1UwKpct7jI2kR9nxWY1qS");
+//        tinyDB.putString("user_name", "Udeesha Induras");
         try {
 
             oneOption.put("heading", "Current Journey");
@@ -849,7 +853,7 @@ public class Home extends GetSafeBase {
 
 
         HashMap<String, String> tempParam = new HashMap<>();
-
+        showLoading();
 
         getSafeServices.networkJsonRequest(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.VALIDATE_TOKEN), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
@@ -884,21 +888,41 @@ public class Home extends GetSafeBase {
                                     break;
 
                             }
+                            hideLoading();
                         } else {
                             showToast(dialog, "No driver assigned", 0);
+                            hideLoading();
                         }
-
+                        hideLoading();
                     } else {
+                        hideLoading();
                     }
 
 
                 } catch (Exception e) {
+                    hideLoading();
                     e.printStackTrace();
 
                 }
 
             }
         });
+
+    }
+    void showLoading() {
+
+        view.setVisibility(View.VISIBLE);
+        loading.setVisibility(View.VISIBLE);
+        loading.playAnimation();
+
+
+    }
+
+    void hideLoading() {
+
+
+        loading.setVisibility(View.GONE);
+        view.setVisibility(View.GONE);
 
     }
 

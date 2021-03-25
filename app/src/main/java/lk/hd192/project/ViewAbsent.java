@@ -8,9 +8,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,6 +22,9 @@ import android.widget.Toast;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -31,6 +37,7 @@ import sun.bob.mcalendarview.MarkStyle;
 import sun.bob.mcalendarview.listeners.OnDateClickListener;
 import sun.bob.mcalendarview.listeners.OnMonthChangeListener;
 import sun.bob.mcalendarview.vo.DateData;
+import sun.bob.mcalendarview.vo.MarkedDates;
 
 
 public class ViewAbsent extends GetSafeBaseFragment {
@@ -44,6 +51,8 @@ public class ViewAbsent extends GetSafeBaseFragment {
     TextView txt_date, txt_session, txt_month, txt_no_date;
     static String months[];
     String selectedDateID;
+    int selectedIndex;
+    public static boolean isApprovedToDelete = false;
     LinearLayout lnr_absent_details;
 
     public ViewAbsent() {
@@ -91,9 +100,8 @@ public class ViewAbsent extends GetSafeBaseFragment {
         btn_delete_absent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                deleteConfirmation(dialog, "Do you want to delete absent date?");
 
-
-                deleteAbsent();
             }
         });
         mCalendarView.setOnDateClickListener(new OnDateClickListener() {
@@ -183,14 +191,24 @@ public class ViewAbsent extends GetSafeBaseFragment {
 
     public void removeDates() {
         try {
-
-            Log.e("UNmark", "exe");
-            for (int i = 0; i < absentDetails.getJSONArray("models").length(); i++) {
-
-                mCalendarView.unMarkDate(new DateData(Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(i).getString("date").substring(0, 4)), Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(i).getString("date").substring(5, 7)), Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(i).getString("date").substring(8, 10))));//mark multiple dates with this code.
-                Log.e("unmark", "dates");
-
+            MarkedDates markedDates = mCalendarView.getMarkedDates();
+            ArrayList markData = markedDates.getAll();
+            for (int k = 0; k < markData.size(); k++) {
+                mCalendarView.unMarkDate((DateData) markData.get(k));
             }
+            MarkedDates markedDates1 = mCalendarView.getMarkedDates();
+            ArrayList markData1 = markedDates1.getAll();
+            for (int k = 0; k < markData1.size(); k++) {
+                mCalendarView.unMarkDate((DateData) markData1.get(k));
+            }
+
+//            Log.e("UNmark", "exe");
+//            for (int i = 0; i < absentDetails.getJSONArray("models").length(); i++) {
+//
+//                mCalendarView.unMarkDate(new DateData(Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(i).getString("date").substring(0, 4)), Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(i).getString("date").substring(5, 7)), (Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(i).getString("date").substring(8, 10)))+1));//mark multiple dates with this code.
+//                Log.e("unmark", "dates");
+//
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -204,7 +222,7 @@ public class ViewAbsent extends GetSafeBaseFragment {
 
             Log.e("mark", absentDetails.getJSONArray("models").getJSONObject(0).getString("date"));
             for (int i = 0; i < absentDetails.getJSONArray("models").length(); i++) {
-                mCalendarView.markDate(new DateData(Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(i).getString("date").substring(0, 4)), Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(i).getString("date").substring(5, 7)), (Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(i).getString("date").substring(8, 10)))).setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, R.color.button_blue)));//mark multiple dates with this code.
+                mCalendarView.markDate(new DateData(Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(i).getString("date").substring(0, 4)), Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(i).getString("date").substring(5, 7)), ((Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(i).getString("date").substring(8, 10))) + 1)).setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, R.color.button_blue)));//mark multiple dates with this code.
 
 
             }
@@ -215,22 +233,33 @@ public class ViewAbsent extends GetSafeBaseFragment {
 
     }
 
+
     private void showDateDetails(DateData date) {
         try {
             boolean isAvailable = false;
             String dtStart;
-            if (String.valueOf(date.getMonth()).length() == 1 & String.valueOf(date.getDay()).length() == 1)
+            String dateOriginal;
+            if (String.valueOf(date.getMonth()).length() == 1 & String.valueOf((date.getDay() - 1)).length() == 1) {
 
-                dtStart = date.getYear() + "-0" + date.getMonth() + "-0" + date.getDay();
-            else if (String.valueOf(date.getMonth()).length() == 1 & String.valueOf(date.getDay()).length() == 2)
-                dtStart = date.getYear() + "-0" + date.getMonth() + "-" + date.getDay();
-            else if (String.valueOf(date.getMonth()).length() == 2 & String.valueOf(date.getDay()).length() == 1)
+                dtStart = date.getYear() + "-0" + date.getMonth() + "-0" + (date.getDay() - 1);
+                dateOriginal = date.getYear() + "-0" + date.getMonth() + "-0" + date.getDay();
+            } else if (String.valueOf(date.getMonth()).length() == 1 & String.valueOf(date.getDay()).length() == 2) {
+                dtStart = date.getYear() + "-0" + date.getMonth() + "-" + (date.getDay() - 1);
+                dateOriginal = date.getYear() + "-0" + date.getMonth() + "-" + date.getDay();
+            } else if (String.valueOf(date.getMonth()).length() == 2 & String.valueOf(date.getDay()).length() == 1) {
                 dtStart = date.getYear() + "-" + date.getMonth() + "-0" + date.getDay();
-            else
-                dtStart = date.getYear() + "-" + date.getMonth() + "-" + date.getDay();
+                dateOriginal = date.getYear() + "-" + date.getMonth() + "-0" + date.getDay();
+            } else {
+                dtStart = date.getYear() + "-" + date.getMonth() + "-" + (date.getDay() - 1);
+                dateOriginal = date.getYear() + "-" + date.getMonth() + "-" + date.getDay();
 
+            }
+
+            Log.e("shode date", dtStart);
 
             for (int i = 0; i < absentDetails.getJSONArray("models").length(); i++) {
+
+
 //                mCalendarView.markDate(new DateData(Integer.parseInt(), Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(i).getString("date").substring(5, 7)), Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(i).getString("date").substring(8, 10))).setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, R.color.button_blue)));//mark multiple dates with this code.
                 if (absentDetails.getJSONArray("models").getJSONObject(i).getString("date").substring(0, 10).equals(dtStart)) {
                     txt_no_date.setVisibility(View.GONE);
@@ -238,16 +267,17 @@ public class ViewAbsent extends GetSafeBaseFragment {
                     btn_delete_absent.setVisibility(View.VISIBLE);
                     isAvailable = true;
                     selectedDateID = absentDetails.getJSONArray("models").getJSONObject(i).getString("id");
-                    if ((Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(i).getString("date").substring(8, 10)) + 1) == 4) {
-                        Log.e("session", absentDetails.getJSONArray("models").getJSONObject(i).getString("type"));
-                    }
+                    selectedIndex = i;
+//                    if ((Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(i).getString("date").substring(8, 10)) + 1) == 4) {
+//                        Log.e("session", absentDetails.getJSONArray("models").getJSONObject(i).getString("type"));
+//                    }
                     if (absentDetails.getJSONArray("models").getJSONObject(i).getInt("type") == 3)
                         txt_session.setText("Morning & Evening");
                     else if (absentDetails.getJSONArray("models").getJSONObject(i).getInt("type") == 2)
                         txt_session.setText("Evening");
                     else if (absentDetails.getJSONArray("models").getJSONObject(i).getInt("type") == 1)
                         txt_session.setText("Morning");
-                    txt_date.setText(dtStart);
+                    txt_date.setText(dateOriginal);
 
                 }
 
@@ -267,9 +297,9 @@ public class ViewAbsent extends GetSafeBaseFragment {
         }
     }
 
-    private void deleteAbsent() {
+    public void deleteAbsent() {
 
-
+        Log.e("delete ", "exe");
         HashMap<String, String> tempParam = new HashMap<>();
 
 
@@ -283,7 +313,13 @@ public class ViewAbsent extends GetSafeBaseFragment {
 
                         showToast(dialog, "Failed to delete. Please try again.", 0);
                     else {
-
+//                        mCalendarView.unMarkDate(new DateData(Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(selectedIndex).getString("date").substring(0, 4)), Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(selectedIndex).getString("date").substring(5, 7)), (Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(selectedIndex).getString("date").substring(8, 10)))+1));//mark multiple dates with this code.
+                        txt_no_date.setVisibility(View.GONE);
+                        lnr_absent_details.setVisibility(View.VISIBLE);
+                        btn_delete_absent.setVisibility(View.VISIBLE);
+                        absentDetails.getJSONArray("models").remove(selectedIndex);
+                        removeDates();
+                        markDates();
                         showToast(dialog, "Deleted successfully.", 2);
                     }
 
@@ -296,5 +332,48 @@ public class ViewAbsent extends GetSafeBaseFragment {
         });
 
 
+    }
+
+    public void deleteConfirmation(final Dialog dialog, String msg) {
+
+
+        // Setting dialogview
+        Window window = dialog.getWindow();
+        window.setGravity(Gravity.BOTTOM);
+
+
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.setTitle(null);
+
+        dialog.setContentView(R.layout.delete_confirmation);
+
+
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(true);
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        TextView msgToShow = dialog.findViewById(R.id.toast_message);
+        Button btnOk = dialog.findViewById(R.id.btn_ok);
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+
+        Button delete = dialog.findViewById(R.id.btn_delete);
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteAbsent();
+            }
+        });
+
+
+        msgToShow.setText(msg);
+
+        dialog.show();
     }
 }

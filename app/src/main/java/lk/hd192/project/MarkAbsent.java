@@ -240,9 +240,20 @@ public class MarkAbsent extends GetSafeBaseFragment {
                             absenceDateList.put(absenceDate);
                         else {
                             for (int i = 0; i < absenceDateList.length(); i++) {
-                                if (absenceDateList.getJSONObject(i).getString("month").equals(absenceDate.getString("month")) & absenceDateList.getJSONObject(i).getString("year").equals(absenceDate.getString("year")) & absenceDateList.getJSONObject(i).getString("date").equals(absenceDate.getString("date")) & absenceDateList.getJSONObject(i).getString("session").equals(absenceDate.getString("session"))) {
+                                if (absenceDateList.getJSONObject(i).getString("month").equals(absenceDate.getString("month")) & absenceDateList.getJSONObject(i).getString("year").equals(absenceDate.getString("year")) & absenceDateList.getJSONObject(i).getString("date").equals(absenceDate.getString("date"))) {
+                                    if(absenceDate.getString("session").equals("Both")&!absenceDateList.getJSONObject(i).getString("session").equals("Both")){
+                                        showToast(dialog,  absenceDateList.getJSONObject(i).getString("session") +" session is ", 0);
+                                        absenceDateList.remove(i);
+                                        absenceDateList.put(absenceDate);
 
-                                    showToast(dialog, "Date already added", 0);
+                                    }else if(absenceDate.getString("session").equals("Evening")||absenceDate.getString("session").equals("Morning")){
+
+                                        absenceDateList.getJSONObject(i).put("session","Both");
+                                    }
+
+//if ( absenceDateList.getJSONObject(i).getString("session").equals(absenceDate.getString("session"))
+
+//                                    showToast(dialog, "Date already added", 0);
                                     isAdded = true;
                                 }
 

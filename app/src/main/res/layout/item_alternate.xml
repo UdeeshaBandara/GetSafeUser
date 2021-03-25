@@ -44,7 +44,7 @@
                 android:fontFamily="@font/nunito_regular"
                 android:text="Morning alternate pickup"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -68,7 +68,7 @@
                     android:fontFamily="@font/nunito_regular"
                     android:text="05-03-2021"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -96,7 +96,7 @@
                 android:fontFamily="@font/nunito_regular"
                 android:text="337/2, Makola north, Makola."
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
 
         </LinearLayout>

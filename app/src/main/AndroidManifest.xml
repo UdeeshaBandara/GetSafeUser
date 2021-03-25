@@ -100,11 +100,7 @@
         <activity
             android:name=".Home"
             android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".Utils.SplashScreen"
@@ -112,7 +108,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
 
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 <!--        <activity-->
 <!--            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"-->

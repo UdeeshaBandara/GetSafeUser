@@ -19,6 +19,7 @@ import com.kaopiz.kprogresshud.KProgressHUD;
 
 import lk.hd192.project.Login;
 import lk.hd192.project.R;
+import lk.hd192.project.ViewAbsent;
 
 public class GetSafeBaseFragment extends Fragment {
     static KProgressHUD hud;
@@ -26,7 +27,7 @@ public class GetSafeBaseFragment extends Fragment {
     public TinyDB tinyDB;
 
 
-    public static  boolean isEnable;
+    public static boolean isEnable;
 
 
     @Override
@@ -56,7 +57,7 @@ public class GetSafeBaseFragment extends Fragment {
         window.setGravity(Gravity.BOTTOM);
 
 
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,  WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         dialog.setTitle(null);
         switch (type) {
             case 0:
@@ -110,6 +111,9 @@ public class GetSafeBaseFragment extends Fragment {
             case 3:
                 dialog.setContentView(R.layout.logout_popup);
                 break;
+            case 4:
+                dialog.setContentView(R.layout.delete_confirmation);
+                break;
 
 
         }
@@ -126,6 +130,20 @@ public class GetSafeBaseFragment extends Fragment {
                 dialog.dismiss();
             }
         });
+
+        if(type==4){
+            Button delete = dialog.findViewById(R.id.btn_delete);
+            btnOk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ViewAbsent.isApprovedToDelete=true;
+                    ViewAbsent viewAbsent = new ViewAbsent();
+                    viewAbsent.deleteAbsent();
+                }
+            });
+
+
+        }
 
         msgToShow.setText(msg);
 

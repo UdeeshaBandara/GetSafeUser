@@ -268,22 +268,23 @@ public class AlternativeRoutes extends GetSafeBase implements DatePickerDialog.O
             @Override
             public void onSuccessResponse(JSONObject result) {
 
-                try {
+                try {   Log.e("resPONSE", result + "");
 
                     if (result.getBoolean("status")) {
-                        Log.e("resPONSE", result + "");
+
 
                     } else {
                         showToast(dialog, result.getString("validation_errors"), 0);
 
                     }
-
+                    hideLoading();
 
                 } catch (Exception e) {
+                    hideLoading();
                     e.printStackTrace();
 
                 }
-                hideLoading();
+
             }
         });
 
@@ -306,7 +307,7 @@ public class AlternativeRoutes extends GetSafeBase implements DatePickerDialog.O
             public void onSuccessResponse(JSONObject result) {
 
                 try {
-
+                    Log.e("resPONSE", result + "");
                     if (result.getBoolean("status")) {
                         Log.e("resPONSE", result + "");
 
@@ -314,12 +315,13 @@ public class AlternativeRoutes extends GetSafeBase implements DatePickerDialog.O
                         showToast(dialog, result.getString("validation_errors"), 0);
 
                     }
-
+                    hideLoading();
                 } catch (Exception e) {
+                    hideLoading();
                     e.printStackTrace();
 
                 }
-                hideLoading();
+
             }
         });
 
@@ -353,12 +355,14 @@ public class AlternativeRoutes extends GetSafeBase implements DatePickerDialog.O
 
                     }
 
+                    hideLoading();
+
                 } catch (Exception e) {
+                    hideLoading();
                     e.printStackTrace();
 
                 }
 
-                hideLoading();
 
             }
         });
@@ -390,12 +394,14 @@ public class AlternativeRoutes extends GetSafeBase implements DatePickerDialog.O
                         showToast(dialog, result.getString("validation_errors"), 0);
 
                     }
+                    hideLoading();
 
                 } catch (Exception e) {
+                    hideLoading();
                     e.printStackTrace();
 
                 }
-                hideLoading();
+
             }
         });
 

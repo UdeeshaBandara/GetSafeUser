@@ -130,7 +130,7 @@ public class LiveLocation extends GetSafeBase {
 //        myRef = database.getReference("message");
 //        Query lastQuery = myRef.orderByKey().limitToLast(1);
         if (tinyDB.getBoolean("isStaffAccount")) {
-            locationRef = mRootRef.child("Staff_Drivers").child(tinyDB.getString("kid_driver_id")).child("Location");
+            locationRef = mRootRef.child("Staff_Drivers").child(tinyDB.getString("driver_id")).child("Location");
 
         } else {
             locationRef = mRootRef.child("School_Drivers").child(tinyDB.getString("kid_driver_id")).child("Location");
