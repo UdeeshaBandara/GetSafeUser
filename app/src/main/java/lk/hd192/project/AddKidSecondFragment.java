@@ -343,6 +343,7 @@ public class AddKidSecondFragment extends GetSafeBaseFragment {
                     });
 
                 } catch (Exception e) {
+                    e.printStackTrace();
 
                 }
 

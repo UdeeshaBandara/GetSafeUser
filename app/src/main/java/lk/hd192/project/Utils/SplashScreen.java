@@ -30,7 +30,7 @@ public class SplashScreen extends GetSafeBase {
 
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        Log.e("islogged", tinyDB.getBoolean("isLogged") + "");
+//        Log.e("islogged", tinyDB.getBoolean("isLogged") + "");
 //tinyDB.putString("token","6|S0DtlDtos1tS2YeMthoDOWt4LhvwDp8C4Q3WZKQy");
 
 

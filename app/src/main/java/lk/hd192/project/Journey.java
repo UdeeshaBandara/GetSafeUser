@@ -268,7 +268,10 @@ public class Journey extends GetSafeBase {
 
                     if (result.getBoolean("status")) {
                         tripDetails = result.getJSONArray("models");
-                        recycleJourney.getAdapter().notifyDataSetChanged();
+                        if (tripDetails.length() != 0)
+                            recycleJourney.getAdapter().notifyDataSetChanged();
+                        else
+                            showToast(dialog, "No journey details", 1);
                     }
 
                 } catch (Exception e) {
@@ -296,7 +299,10 @@ public class Journey extends GetSafeBase {
 
                     if (result.getBoolean("status")) {
                         tripDetails = result.getJSONArray("models");
-                        recycleJourney.getAdapter().notifyDataSetChanged();
+                        if (tripDetails.length() != 0)
+                            recycleJourney.getAdapter().notifyDataSetChanged();
+                        else
+                            showToast(dialog, "No journey details", 1);
                     }
 
                 } catch (Exception e) {
@@ -324,7 +330,10 @@ public class Journey extends GetSafeBase {
                     Log.e("jor nw", result + "");
                     if (result.getBoolean("status")) {
                         tripDetails = result.getJSONArray("models");
-                        recycleJourney.getAdapter().notifyDataSetChanged();
+                        if (tripDetails.length() != 0)
+                            recycleJourney.getAdapter().notifyDataSetChanged();
+                        else
+                            showToast(dialog, "No journey details", 1);
                     }
 
                 } catch (Exception e) {
@@ -353,7 +362,10 @@ public class Journey extends GetSafeBase {
 
                     if (result.getBoolean("status")) {
                         tripDetails = result.getJSONArray("models");
-                        recycleJourney.getAdapter().notifyDataSetChanged();
+                        if (tripDetails.length() != 0)
+                            recycleJourney.getAdapter().notifyDataSetChanged();
+                        else
+                            showToast(dialog, "No journey details", 1);
                     }
 
                 } catch (Exception e) {

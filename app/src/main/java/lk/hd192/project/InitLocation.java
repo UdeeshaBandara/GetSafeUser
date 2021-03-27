@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -67,7 +68,7 @@ public class InitLocation extends GetSafeBase {
     LinearLayout lnrDropLocation;
     MapView mPickupLocation;
     GetSafeServices getSafeServices;
-    Double latitude, dropLatitude, longitude, dropLongitude;
+    Double latitude = 6.919014721033969, dropLatitude = 79.8622619101973, longitude = 6.919014721033969, dropLongitude = 79.8622619101973;
     TinyDB tinyDB;
 
     public static LatLng pinnedLocation, dropPinnedLocation;
@@ -95,7 +96,7 @@ public class InitLocation extends GetSafeBase {
         getSafeServices = new GetSafeServices();
 
 
-        if ( !tinyDB.getBoolean("isStaffAccount"))
+        if (tinyDB.getBoolean("isStaffAccount"))
             lnrDropLocation.setVisibility(View.VISIBLE);
         else
             lnrDropLocation.setVisibility(View.GONE);
@@ -106,6 +107,13 @@ public class InitLocation extends GetSafeBase {
             public void onClick(View v) {
                 isDropPicker = false;
                 onCreateMapPopup(v, savedInstanceState);
+                View view = getCurrentFocus();
+
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+
             }
         });
         txtAddressDropPick.setOnClickListener(new View.OnClickListener() {
@@ -113,6 +121,12 @@ public class InitLocation extends GetSafeBase {
             public void onClick(View v) {
                 isDropPicker = true;
                 onCreateMapPopup(v, savedInstanceState);
+                View view = getCurrentFocus();
+
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
             }
         });
 
@@ -135,20 +149,20 @@ public class InitLocation extends GetSafeBase {
                             .playOn(txtAddTwo);
                     txtAddTwo.setError("Please enter your address");
                     txtAddTwo.requestFocus(0);
-                } else if (txtLocation.getText().toString().isEmpty()) {
-
-
-                    YoYo.with(Techniques.Bounce)
-                            .duration(1000)
-                            .playOn(txtAddressPick);
-                    txtAddressPick.requestFocus(0);
+//                } else if (txtLocation.getText().toString().isEmpty()) {
+//
+//
+//                    YoYo.with(Techniques.Bounce)
+//                            .duration(1000)
+//                            .playOn(txtLocation);
+//                    txtLocation.requestFocus(0);
                 } else {
 
                     //add init location save API call
                     saveInitLocation();
 
                 }
-                if ( tinyDB.getBoolean("isStaffAccount")) {
+                if (tinyDB.getBoolean("isStaffAccount")) {
                     if (txtAddressDropOne.getText().toString().isEmpty()) {
 
 
@@ -170,8 +184,8 @@ public class InitLocation extends GetSafeBase {
 
                         YoYo.with(Techniques.Bounce)
                                 .duration(1000)
-                                .playOn(txtAddressDropPick);
-                        txtAddressDropPick.requestFocus(0);
+                                .playOn(txtDropLocation);
+                        txtDropLocation.requestFocus(0);
                     } else {
 
                         //add init location save API call
@@ -245,7 +259,7 @@ public class InitLocation extends GetSafeBase {
 
                             if (result.getBoolean("location_saved_status")) {
                                 tinyDB.putBoolean("isLogged", true);
-                                if (! tinyDB.getBoolean("isStaffAccount")) {
+                                if (!tinyDB.getBoolean("isStaffAccount")) {
                                     startActivity(new Intent(getApplicationContext(), Home.class));
                                     finishAffinity();
                                 }
@@ -392,7 +406,7 @@ public class InitLocation extends GetSafeBase {
                     });
 
                 } catch (Exception e) {
-
+                    e.printStackTrace();
                 }
 
 

@@ -84,6 +84,7 @@ public class AddNewKid extends GetSafeBase {
                     if (firstCompleted & currentPage == 1) {
                         addKidFirstFragment.addKidBasicDetails();
 
+
                         nonSwappableViewPager.setCurrentItem(1);
                         txtSubHeading.setText("Pickup Location Details");
                         kidAnimation.setVisibility(View.GONE);
@@ -97,6 +98,7 @@ public class AddNewKid extends GetSafeBase {
 
                     if (secondCompleted) {
                         addKidSecondFragment.addKidLocationDetails();
+
                         addKidThirdFragment.updateFields();
                         nonSwappableViewPager.setCurrentItem(2);
                         txtSubHeading.setText("Kid's Summary");
@@ -106,6 +108,7 @@ public class AddNewKid extends GetSafeBase {
                         currentPage = 3;
                         btnSave.setVisibility(View.VISIBLE);
                         btnNext.setVisibility(View.GONE);
+                        addKidFirstFragment.addKidDropDetails();
                     }
                 }
 

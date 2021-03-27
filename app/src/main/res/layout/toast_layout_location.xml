@@ -45,7 +45,7 @@
         android:layout_marginBottom="30dp"
         android:background="@drawable/bg_btn_ok_toast"
         android:fontFamily="@font/nunito_regular"
-        android:text="Let me turn on"
+        android:text="Okay"
         android:textAllCaps="false"
         android:textColor="@color/black"
         android:textSize="18sp" />

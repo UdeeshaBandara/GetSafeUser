@@ -73,7 +73,7 @@ public class DriverProfile extends GetSafeBase {
 
         try {
             driverId = getIntent().getStringExtra("driver_id");
-            Log.e("driver id",driverId);
+            Log.e("driver id", driverId);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -98,8 +98,8 @@ public class DriverProfile extends GetSafeBase {
         btn_driver_route.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(), DriverRoute.class);
-                intent.putExtra("driver_id",driverId);
+                Intent intent = new Intent(getApplicationContext(), DriverRoute.class);
+                intent.putExtra("driver_id", driverId);
                 startActivity(intent);
             }
         });
@@ -190,7 +190,7 @@ public class DriverProfile extends GetSafeBase {
 
                 try {
 
-Log.e("driver",result+"");
+                    Log.e("driver", result + "");
                     if (result.getBoolean("status")) {
 
                         driverDetails = result.getJSONObject("data");

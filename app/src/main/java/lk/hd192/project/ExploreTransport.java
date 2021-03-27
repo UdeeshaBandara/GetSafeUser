@@ -1,6 +1,7 @@
 package lk.hd192.project;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,6 +43,7 @@ import java.util.HashMap;
 
 import lk.hd192.project.Utils.GetSafeBase;
 import lk.hd192.project.Utils.GetSafeServices;
+import lk.hd192.project.Utils.TinyDB;
 import lk.hd192.project.Utils.VolleyJsonCallback;
 import lk.hd192.project.pojo.NearestTowns;
 
@@ -58,6 +60,7 @@ public class ExploreTransport extends GetSafeBase {
     LottieAnimationView loading;
     Button pickupMap, dropMap;
 
+    TinyDB tinyDB;
 
     //    ImageView imgAc, imgNonAc;
     Double pickLat = 0.0, pickLng = 0.0;
@@ -79,6 +82,7 @@ public class ExploreTransport extends GetSafeBase {
         dropDropDown = findViewById(R.id.drop_dropdwn);
         dropMap = findViewById(R.id.drop_map);
         pickupMap = findViewById(R.id.pickup_map);
+        tinyDB = new TinyDB(getApplicationContext());
         loading = findViewById(R.id.loading);
         view = findViewById(R.id.disable_layout);
 //        imgAc = findViewById(R.id.img_ac);
@@ -92,8 +96,8 @@ public class ExploreTransport extends GetSafeBase {
         pickLng = GetSafeBase.pickLng;
 
         //call
-        setupUserAutocompleteDrop();
-        setupUserAutocompletePick();
+//        setupUserAutocompleteDrop();
+//        setupUserAutocompletePick();
         pickLatLong();
 //
 //        imgNonAc.setOnClickListener(new View.OnClickListener() {
@@ -176,12 +180,12 @@ public class ExploreTransport extends GetSafeBase {
 
                     Intent intent = new Intent(getApplicationContext(), EditProfile.class);
 //                intent.putExtra("kid_id", tinyDB.getString("selectedChildId"));
-                    startActivity(intent);
+                    startActivityForResult(intent, 1);
 
                 } else {
                     Intent intent = new Intent(getApplicationContext(), EditKidProfile.class);
                     intent.putExtra("kid_id", tinyDB.getString("selectedChildId"));
-                    startActivity(intent);
+                    startActivityForResult(intent, 1);
                 }
 
             }
@@ -198,12 +202,12 @@ public class ExploreTransport extends GetSafeBase {
 
                     Intent intent = new Intent(getApplicationContext(), EditProfile.class);
 //                intent.putExtra("kid_id", tinyDB.getString("selectedChildId"));
-                    startActivity(intent);
+                    startActivityForResult(intent, 1);
 
                 } else {
                     Intent intent = new Intent(getApplicationContext(), EditKidProfile.class);
                     intent.putExtra("kid_id", tinyDB.getString("selectedChildId"));
-                    startActivity(intent);
+                    startActivityForResult(intent, 1);
                 }
             }
         });
@@ -211,6 +215,24 @@ public class ExploreTransport extends GetSafeBase {
             getStaffUserLocationDetails();
         else
             getChildLocationDetails();
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1) {
+            if (tinyDB.getBoolean("isStaffAccount")) {
+                getStaffUserLocationDetails();
+                searchDriverForStaff();
+            } else {
+                getChildLocationDetails();
+                searchDriverForChild();
+
+            }
+
+        }
     }
 
     private void getChildLocationDetails() {
@@ -228,7 +250,9 @@ public class ExploreTransport extends GetSafeBase {
                     if (result.getBoolean("status")) {
 
                         pickDropDown.setText(result.getJSONObject("location").getString("pick_up_add1") + " " + result.getJSONObject("location").getString("pick_up_add2"));
-                        dropDropDown.setText(result.getJSONObject("location").getString("drop_off_add1") + " " + result.getJSONObject("location").getString("drop_off_add2"));
+
+                        getChildById();
+
 
                     }
 
@@ -598,7 +622,7 @@ public class ExploreTransport extends GetSafeBase {
 
         RelativeLayout oneDriver;
         TextView txt_driver_name, txt_start, txt_end;
-     RoundedImageView driver_image;
+        RoundedImageView driver_image;
 
         public DriverViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -628,7 +652,7 @@ public class ExploreTransport extends GetSafeBase {
                 holder.txt_driver_name.setText(" : " + driverList.getJSONObject(position).getString("name"));
                 holder.txt_start.setText(" : " + driverList.getJSONObject(position).getString("phone_no"));
                 holder.txt_end.setText(" : " + driverList.getJSONObject(position).getString("email"));
-                getDriverImage(driverList.getJSONObject(position).getString("id"),holder.driver_image);
+                getDriverImage(driverList.getJSONObject(position).getString("id"), holder.driver_image);
                 holder.oneDriver.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -691,6 +715,40 @@ public class ExploreTransport extends GetSafeBase {
 
 
     }
+
+    public void getChildById() {
+
+        HashMap<String, String> param = new HashMap<>();
+//        param.put("id", kid_id);
+
+        showLoading();
+        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_KID_BY_ID) + "?id=" + tinyDB.getString("selectedChildId"), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+
+
+                    if (result.getBoolean("status")) {
+
+
+                        dropDropDown.setText(result.getJSONObject("child").getString("school_name"));
+
+
+                    } else {
+                        dropDropDown.setText("");
+                    }
+
+                } catch (Exception e) {
+                    hideLoading();
+                }
+
+            }
+        });
+
+
+    }
+
 
     void showLoading() {
 

@@ -315,8 +315,8 @@ public class ViewAbsent extends GetSafeBaseFragment {
                     else {
 //                        mCalendarView.unMarkDate(new DateData(Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(selectedIndex).getString("date").substring(0, 4)), Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(selectedIndex).getString("date").substring(5, 7)), (Integer.parseInt(absentDetails.getJSONArray("models").getJSONObject(selectedIndex).getString("date").substring(8, 10)))+1));//mark multiple dates with this code.
                         txt_no_date.setVisibility(View.GONE);
-                        lnr_absent_details.setVisibility(View.VISIBLE);
-                        btn_delete_absent.setVisibility(View.VISIBLE);
+                        lnr_absent_details.setVisibility(View.INVISIBLE);
+                        btn_delete_absent.setVisibility(View.INVISIBLE);
                         absentDetails.getJSONArray("models").remove(selectedIndex);
                         removeDates();
                         markDates();

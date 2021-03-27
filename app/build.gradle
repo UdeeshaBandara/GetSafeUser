@@ -98,7 +98,7 @@ dependencies {
 
     //payHere payment gateway
     implementation 'lk.payhere.sdk:android-payment-sdk:2.0.31'  // New PayHere 2.0 SDK!
-    implementation 'com.google.code.gson:gson:2.8.5' // ignore if you have already added
+    implementation 'com.google.code.gson:gson:2.8.5'
 
     //multi select calendar view
     implementation 'sun.bob:mcalendarview:1.0.0' // ignore if you have already added

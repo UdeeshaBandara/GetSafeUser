@@ -11,33 +11,33 @@ import android.view.WindowManager;
 import lk.hd192.project.Utils.TinyDB;
 
 
-
 public class Selection extends AppCompatActivity {
-TinyDB tinyDB;
+    TinyDB tinyDB;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selection);
 
-        tinyDB=new TinyDB(getApplicationContext());
+        tinyDB = new TinyDB(getApplicationContext());
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 
         findViewById(R.id.school).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tinyDB.putBoolean("isStaffAccount",false);
+                tinyDB.putBoolean("isStaffAccount", false);
 
 
-                startActivity(new Intent(getApplicationContext(),Register.class));
+                startActivity(new Intent(getApplicationContext(), Register.class));
 
             }
         });
         findViewById(R.id.staff).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tinyDB.putBoolean("isStaffAccount",true);
-                startActivity(new Intent(getApplicationContext(),Register.class));
+                tinyDB.putBoolean("isStaffAccount", true);
+                startActivity(new Intent(getApplicationContext(), Register.class));
 
             }
         });
