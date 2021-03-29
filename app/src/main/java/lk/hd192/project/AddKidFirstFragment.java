@@ -81,7 +81,7 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
     int month;
     int day;
     Dialog dialog;
-    TextView calenderBirthday, txtSchoolName, txtBottomSheetSearch, school_location;
+    TextView calenderBirthday, txtSchoolName, txtBottomSheetSearch;
     EditText txtFirstName, txtLastName;
     SimpleDateFormat simpleDateFormat;
     RecyclerView bottomSheetRecycler;
@@ -114,7 +114,7 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
         calenderBirthday = view.findViewById(R.id.calender_birthday);
         txtSchoolName = view.findViewById(R.id.txt_school_name);
         txtFirstName = view.findViewById(R.id.txt_first_name);
-        school_location = view.findViewById(R.id.school_location);
+
         txtLastName = view.findViewById(R.id.txt_last_name);
         rbnGrpGender = view.findViewById(R.id.rbn_grp_gender);
         getSafeServices = new GetSafeServices();
@@ -161,21 +161,7 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
                 getSchoolList();
             }
         });
-   school_location.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-
-                View view = getActivity().getCurrentFocus();
-
-                if (view != null) {
-                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                }
-
-                onCreateMapPopup(v,savedInstanceState);
-            }
-        });
 
         rbnGrpGender.clearCheck();
         rbnGrpGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -216,13 +202,6 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
                     .duration(1000)
                     .playOn(txtSchoolName);
             txtSchoolName.setError("Please select school name");
-            AddNewKid.firstCompleted = false;
-
-        }else if (school_location.getText().toString().equals("School location on map")) {
-            YoYo.with(Techniques.Bounce)
-                    .duration(1000)
-                    .playOn(school_location);
-            school_location.setError("Select school location on map");
             AddNewKid.firstCompleted = false;
 
         } else if (AddNewKid.Gender.equals("null")) {
@@ -350,7 +329,7 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
         mConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                school_location.setText(GetSafeBase.LOC_ADDRESS);
+
                 popupWindow.dismiss();
             }
         });
@@ -449,45 +428,7 @@ public class AddKidFirstFragment extends GetSafeBaseFragment implements DatePick
         }
     }
 
-    public void addKidDropDetails() {
-        HashMap<String, String> tempParam = new HashMap<>();
-        tempParam.put("id", AddNewKid.kidId);
-        tempParam.put("longitude", longitude.toString());
-        tempParam.put("latitude", latitude.toString());
-        tempParam.put("add1", "");
-        tempParam.put("add2", "");
 
-
-        ((AddNewKid) Objects.requireNonNull(getActivity())).showLoading();
-        getSafeServices.networkJsonRequest(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.ADD_CHILD_DROP_LOCATION), 2, tinyDB.getString("token"),
-                new VolleyJsonCallback() {
-
-                    @Override
-                    public void onSuccessResponse(JSONObject result) {
-                        ((AddNewKid) Objects.requireNonNull(getActivity())).hideLoading();
-                        try {
-                            Log.e("loc response", result + "");
-
-                            if (result.getBoolean("saved_status")) {
-
-
-
-                            } else
-                                showWarningToast(dialog, result.getString("validation_errors"), 0);
-
-
-                        } catch (Exception e) {
-                            ((AddNewKid) Objects.requireNonNull(getActivity())).hideLoading();
-                            Log.e("ex loc", e.getMessage());
-
-                            showWarningToast(dialog, "Something went wrong. Please try again", 0);
-
-                        }
-
-                    }
-                });
-
-    }
 
     public void getSchoolList() {
         HashMap<String, String> tempParam = new HashMap<>();

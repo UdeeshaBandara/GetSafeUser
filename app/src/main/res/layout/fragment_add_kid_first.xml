@@ -80,31 +80,14 @@
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/school_location"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_below="@id/txt_school_name"
 
-                android:layout_marginTop="15dp"
-                android:background="@drawable/custom_edittext"
-                android:ellipsize="end"
-                android:fontFamily="@font/nunito_regular"
-
-                android:gravity="center"
-                android:maxLines="1"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:text="School location on map"
-                android:textSize="14sp"
-                android:textStyle="bold" />
 
 
             <RadioGroup
                 android:id="@+id/rbn_grp_gender"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/school_location"
+                android:layout_below="@+id/txt_school_name"
                 android:layout_marginTop="15dp"
                 android:gravity="center"
                 android:orientation="horizontal"

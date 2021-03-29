@@ -40,7 +40,7 @@ public class DriverProfile extends GetSafeBase {
     LottieAnimationView loading;
     Button btn_send_request;
     ImageView driver_photo, img_vehicle_one, img_vehicle_two, img_vehicle_three, img_vehicle_four;
-    TextView txt_facilities, txt_driver_name, txt_transport_category, txt_vehicle_type, txt_vehicle_model, txt_vehicle_reg_no, txt_seating;
+    TextView txt_facilities, txt_driver_name, txt_vehicle_type, txt_vehicle_model, txt_vehicle_reg_no, txt_seating;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +54,7 @@ public class DriverProfile extends GetSafeBase {
         imgDriver = findViewById(R.id.driver_photo);
         btn_driver_route = findViewById(R.id.btn_driver_route);
         txt_driver_name = findViewById(R.id.txt_driver_name);
-        txt_transport_category = findViewById(R.id.txt_transport_category);
+
         txt_vehicle_type = findViewById(R.id.txt_vehicle_type);
         txt_vehicle_model = findViewById(R.id.txt_vehicle_model);
         txt_vehicle_reg_no = findViewById(R.id.txt_vehicle_reg_no);

@@ -14,6 +14,7 @@
         android:layout_alignParentTop="true"
         android:scaleType="centerCrop"
         android:src="@drawable/bg_main_top" />
+
     <ImageView
         android:id="@+id/bg_main_bottom"
         android:layout_width="match_parent"
@@ -330,4 +331,22 @@
 
         </RelativeLayout>
     </ScrollView>
+
+    <View
+        android:id="@+id/disable_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#92292828"
+        android:visibility="gone" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/loading"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/loading" />
 </RelativeLayout>

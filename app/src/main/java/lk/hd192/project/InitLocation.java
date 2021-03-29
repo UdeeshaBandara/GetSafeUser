@@ -27,6 +27,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -70,6 +71,8 @@ public class InitLocation extends GetSafeBase {
     GetSafeServices getSafeServices;
     Double latitude = 6.919014721033969, dropLatitude = 79.8622619101973, longitude = 6.919014721033969, dropLongitude = 79.8622619101973;
     TinyDB tinyDB;
+    View view;
+    LottieAnimationView loading;
 
     public static LatLng pinnedLocation, dropPinnedLocation;
 
@@ -81,7 +84,8 @@ public class InitLocation extends GetSafeBase {
 
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
+        loading = findViewById(R.id.loading);
+        view = findViewById(R.id.disable_layout);
         txtAddOne = findViewById(R.id.txt_address_one);
         txtAddTwo = findViewById(R.id.txt_address_two);
         txtAddressPick = findViewById(R.id.txt_address_pick);
@@ -96,10 +100,7 @@ public class InitLocation extends GetSafeBase {
         getSafeServices = new GetSafeServices();
 
 
-        if (tinyDB.getBoolean("isStaffAccount"))
-            lnrDropLocation.setVisibility(View.VISIBLE);
-        else
-            lnrDropLocation.setVisibility(View.GONE);
+        lnrDropLocation.setVisibility(View.VISIBLE);
 
 
         txtAddressPick.setOnClickListener(new View.OnClickListener() {
@@ -149,53 +150,53 @@ public class InitLocation extends GetSafeBase {
                             .playOn(txtAddTwo);
                     txtAddTwo.setError("Please enter your address");
                     txtAddTwo.requestFocus(0);
-//                } else if (txtLocation.getText().toString().isEmpty()) {
-//
-//
-//                    YoYo.with(Techniques.Bounce)
-//                            .duration(1000)
-//                            .playOn(txtLocation);
-//                    txtLocation.requestFocus(0);
+                } else if (txtLocation.getText().toString().isEmpty()) {
+
+
+                    YoYo.with(Techniques.Bounce)
+                            .duration(1000)
+                            .playOn(txtLocation);
+                    txtLocation.requestFocus(0);
                 } else {
 
                     //add init location save API call
                     saveInitLocation();
 
                 }
-                if (tinyDB.getBoolean("isStaffAccount")) {
-                    if (txtAddressDropOne.getText().toString().isEmpty()) {
+
+                if (txtAddressDropOne.getText().toString().isEmpty()) {
 
 
-                        YoYo.with(Techniques.Bounce)
-                                .duration(1000)
-                                .playOn(txtAddressDropOne);
-                        txtAddressDropOne.setError("Please enter drop-off address");
-                        txtAddressDropOne.requestFocus(0);
-                    } else if (txtAddressDropTwo.getText().toString().isEmpty()) {
+                    YoYo.with(Techniques.Bounce)
+                            .duration(1000)
+                            .playOn(txtAddressDropOne);
+                    txtAddressDropOne.setError("Please enter drop-off address");
+                    txtAddressDropOne.requestFocus(0);
+                } else if (txtAddressDropTwo.getText().toString().isEmpty()) {
 
 
-                        YoYo.with(Techniques.Bounce)
-                                .duration(1000)
-                                .playOn(txtAddressDropTwo);
-                        txtAddressDropTwo.setError("Please enter drop-off address");
-                        txtAddressDropTwo.requestFocus(0);
-                    } else if (txtDropLocation.getText().toString().isEmpty()) {
+                    YoYo.with(Techniques.Bounce)
+                            .duration(1000)
+                            .playOn(txtAddressDropTwo);
+                    txtAddressDropTwo.setError("Please enter drop-off address");
+                    txtAddressDropTwo.requestFocus(0);
+                } else if (txtDropLocation.getText().toString().isEmpty()) {
 
 
-                        YoYo.with(Techniques.Bounce)
-                                .duration(1000)
-                                .playOn(txtDropLocation);
-                        txtDropLocation.requestFocus(0);
-                    } else {
+                    YoYo.with(Techniques.Bounce)
+                            .duration(1000)
+                            .playOn(txtDropLocation);
+                    txtDropLocation.requestFocus(0);
+                } else {
 
-                        //add init location save API call
-                        saveDropLocation();
-
-                    }
+                    //add init location save API call
 
 
                 }
+
+
             }
+
         });
 
     }
@@ -207,7 +208,7 @@ public class InitLocation extends GetSafeBase {
         tempParam.put("add1", txtAddressDropOne.getText().toString());
         tempParam.put("add2", txtAddressDropTwo.getText().toString());
 
-
+        showLoading();
         getSafeServices.networkJsonRequest(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.ADD_PARENT_DROP_LOCATION), 2, tinyDB.getString("token"),
                 new VolleyJsonCallback() {
 
@@ -218,7 +219,7 @@ public class InitLocation extends GetSafeBase {
                             Log.e("loc response", result + "");
 
                             if (result.getBoolean("location_saved_status")) {
-
+                                tinyDB.putBoolean("isLogged", true);
                                 startActivity(new Intent(getApplicationContext(), Home.class));
                                 finishAffinity();
 
@@ -231,6 +232,7 @@ public class InitLocation extends GetSafeBase {
                             showToast(dialog, "Something went wrong. Please try again", 0);
 
                         }
+                        hideLoading();
 
                     }
                 });
@@ -247,7 +249,7 @@ public class InitLocation extends GetSafeBase {
         tempParam.put("add1", txtAddOne.getText().toString());
         tempParam.put("add2", txtAddTwo.getText().toString());
 
-
+        showLoading();
         getSafeServices.networkJsonRequest(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.ADD_PARENT_LOCATION), 2, tinyDB.getString("token"),
                 new VolleyJsonCallback() {
 
@@ -258,11 +260,12 @@ public class InitLocation extends GetSafeBase {
                             Log.e("loc response", result + "");
 
                             if (result.getBoolean("location_saved_status")) {
-                                tinyDB.putBoolean("isLogged", true);
-                                if (!tinyDB.getBoolean("isStaffAccount")) {
-                                    startActivity(new Intent(getApplicationContext(), Home.class));
-                                    finishAffinity();
-                                }
+                                saveDropLocation();
+
+//                                if (!tinyDB.getBoolean("isStaffAccount")) {
+//                                    startActivity(new Intent(getApplicationContext(), Home.class));
+//                                    finishAffinity();
+//                                }
 
                             } else
                                 showToast(dialog, result.getString("validation_errors"), 0);
@@ -273,6 +276,7 @@ public class InitLocation extends GetSafeBase {
                             showToast(dialog, "Something went wrong. Please try again", 0);
 
                         }
+                        hideLoading();
 
                     }
                 });
@@ -452,4 +456,20 @@ public class InitLocation extends GetSafeBase {
         }
     }
 
+    void showLoading() {
+
+        view.setVisibility(View.VISIBLE);
+        loading.setVisibility(View.VISIBLE);
+        loading.playAnimation();
+
+
+    }
+
+    void hideLoading() {
+
+
+        loading.setVisibility(View.GONE);
+        view.setVisibility(View.GONE);
+
+    }
 }

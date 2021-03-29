@@ -665,8 +665,12 @@ public class LiveLocation extends GetSafeBase {
                                             googleMap.clear();
                                         if (locationUpdates.getStatus().equals("End Trip"))
                                             drawMapPolyline();
-                                        else
+                                        else{
                                             showToast(dialog, "Driver didn't start the trip", 0);
+                                            time.setText("");
+                                            distance.setText("");
+                                        }
+
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -726,8 +730,11 @@ public class LiveLocation extends GetSafeBase {
                                             googleMap.clear();
                                         if (locationUpdates.getStatus().equals("End Trip"))
                                             drawMapPolyline();
-                                        else
+                                        else{
                                             showToast(dialog, "Driver didn't start the trip", 0);
+                                            time.setText("");
+                                            distance.setText("");
+                                        }
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();

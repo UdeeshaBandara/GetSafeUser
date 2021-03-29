@@ -15,8 +15,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginEnd="75dp"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="65dp">
 
             <EditText
                 android:id="@+id/txt_address_one"
@@ -118,41 +118,80 @@
 
             </RelativeLayout>
 
-
-<!--            <LinearLayout-->
-<!--                android:id="@+id/lnr_remember"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="60dp"-->
-<!--                android:layout_below="@+id/pin_location"-->
-<!--                android:layout_marginHorizontal="20dp"-->
-<!--                android:layout_marginTop="15dp"-->
-<!--                android:gravity="center_vertical"-->
-<!--                android:orientation="horizontal">-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/remember_labbel"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="46dp"-->
-<!--                    android:fontFamily="@font/nunito_regular"-->
-
-<!--                    android:gravity="center_vertical"-->
-<!--                    android:hint="Pin your location"-->
-<!--                    android:text="Remember Location"-->
-<!--                    android:textSize="14sp"-->
-<!--                    android:textStyle="bold" />-->
-
-<!--                <com.airbnb.lottie.LottieAnimationView-->
-<!--                    android:id="@+id/remember_location_animation"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="60dp"-->
-<!--                    android:layout_below="@+id/pin_location"-->
-<!--                    android:layout_gravity="center_vertical"-->
-<!--                    android:layout_marginLeft="10dp"-->
-<!--                    app:lottie_autoPlay="true"-->
+            <RelativeLayout
+                android:id="@+id/pin_location_school"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@id/pin_location"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
 
 
-<!--                    app:lottie_rawRes="@raw/remember_toggle" />-->
-<!--            </LinearLayout>-->
+                android:layout_marginRight="20dp"
+                android:background="@drawable/custom_edittext">
+
+                <TextView
+                    android:id="@+id/school_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toStartOf="@id/img_loc1"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/nunito_regular"
+
+                    android:gravity="center_horizontal"
+                    android:hint="Pin School location"
+                    android:maxLines="1"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/img_loc1"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="15dp"
+                    android:src="@drawable/icon_pin_location" />
+
+
+            </RelativeLayout>
+
+
+            <!--            <LinearLayout-->
+            <!--                android:id="@+id/lnr_remember"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="60dp"-->
+            <!--                android:layout_below="@+id/pin_location"-->
+            <!--                android:layout_marginHorizontal="20dp"-->
+            <!--                android:layout_marginTop="15dp"-->
+            <!--                android:gravity="center_vertical"-->
+            <!--                android:orientation="horizontal">-->
+
+            <!--                <TextView-->
+            <!--                    android:id="@+id/remember_labbel"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="46dp"-->
+            <!--                    android:fontFamily="@font/nunito_regular"-->
+
+            <!--                    android:gravity="center_vertical"-->
+            <!--                    android:hint="Pin your location"-->
+            <!--                    android:text="Remember Location"-->
+            <!--                    android:textSize="14sp"-->
+            <!--                    android:textStyle="bold" />-->
+
+            <!--                <com.airbnb.lottie.LottieAnimationView-->
+            <!--                    android:id="@+id/remember_location_animation"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="60dp"-->
+            <!--                    android:layout_below="@+id/pin_location"-->
+            <!--                    android:layout_gravity="center_vertical"-->
+            <!--                    android:layout_marginLeft="10dp"-->
+            <!--                    app:lottie_autoPlay="true"-->
+
+
+            <!--                    app:lottie_rawRes="@raw/remember_toggle" />-->
+            <!--            </LinearLayout>-->
         </RelativeLayout>
     </ScrollView>
 

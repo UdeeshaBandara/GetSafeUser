@@ -90,8 +90,7 @@ public class Home extends GetSafeBase {
         fiveOption = new JSONObject();
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
 
-//        tinyDB.putString("token", "7|YD5xDYvDTxaPopXIyHm1UwKpct7jI2kR9nxWY1qS");
-//        tinyDB.putString("user_name", "Udeesha Induras");
+//
         try {
 
             oneOption.put("heading", "Current Journey");
@@ -111,8 +110,8 @@ public class Home extends GetSafeBase {
             fiveOption.put("subHeading", "View and add absent days");
             homeOptions.put(fiveOption);
 
-//tinyDB.putString("kid_driver_id","5");
-            Log.e("driver id", tinyDB.getString("kid_driver_id"));
+
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -205,7 +204,7 @@ public class Home extends GetSafeBase {
 
     private void setupStaffAccount() {
 
-        getKidImage(tinyDB.getString("driver_id"), icon_user);
+//        getKidImage(tinyDB.getString("driver_id"), icon_user);
 
         drawerSelectChildLyt.setVisibility(View.GONE);
         fabAddKid.setVisibility(View.GONE);
@@ -326,7 +325,7 @@ public class Home extends GetSafeBase {
                     askForPermission();
                     return;
                 } else if (isEnable) {
-
+                    drawerLayout.closeDrawers();
                     if (tinyDB.getBoolean("isStaffAccount")) {
                         validateDriver(5);
                     } else {
@@ -350,6 +349,7 @@ public class Home extends GetSafeBase {
                     askForPermission();
                     return;
                 } else if (isEnable)
+                    drawerLayout.closeDrawers();
                     if (tinyDB.getBoolean("isStaffAccount")) {
                         validateDriver(1);
                     } else {
@@ -477,7 +477,6 @@ public class Home extends GetSafeBase {
 
 
                             if (holder.kidSelector.getVisibility() == View.GONE) {
-
 
                                 tinyDB.putString("selectedChildId", kidList.getJSONArray("children").getJSONObject(position).getString("id"));
                                 tinyDB.putString("selectedChildName", kidList.getJSONArray("children").getJSONObject(position).getString("name"));
@@ -618,7 +617,7 @@ public class Home extends GetSafeBase {
 
                             } else {
                                 if (isEmptyKidList) {
-                                    showToast(dialog, "Please add kid to add absents", 0);
+                                    showToast(dialog, "Please add kid to assign driver", 0);
 
                                 } else {
                                     validateDriverForChild(2);
@@ -636,7 +635,7 @@ public class Home extends GetSafeBase {
 
                             } else {
                                 if (isEmptyKidList) {
-                                    showToast(dialog, "Please add kid to add absents", 0);
+                                    showToast(dialog, "Please add kid to make payments", 0);
 
                                 } else {
                                     validateDriverForChild(3);
@@ -743,18 +742,19 @@ public class Home extends GetSafeBase {
     private void getDriverDetails() {
         HashMap<String, String> param = new HashMap<>();
 
-        Log.e("getDriverDetails", "exe");
+       showLoading();
         String tempDriverId;
         if (tinyDB.getBoolean("isStaffAccount"))
             tempDriverId = tinyDB.getString("driver_id");
         else
-            tempDriverId = tinyDB.getString("selectedChildId");
+            tempDriverId = tinyDB.getString("kid_driver_id");
 
         getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.GET_DRIVER_DETAILS) + "?id=" + tempDriverId, 1, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 
                 try {
+                    hideLoading();
 
                     Log.e("driver", result + "");
                     if (result.getBoolean("status")) {
@@ -862,6 +862,9 @@ public class Home extends GetSafeBase {
                     kidList = result;
 
                     if (kidList.getJSONArray("children").length() != 0) {
+//                        Log.e("rfid", kidList.getJSONArray("children").getJSONObject(0).getString("rfid"));
+
+
                         tinyDB.putString("selectedChildId", kidList.getJSONArray("children").getJSONObject(0).getString("id"));
                         tinyDB.putString("selectedChildName", kidList.getJSONArray("children").getJSONObject(0).getString("name"));
                         tinyDB.putString("kid_driver_id", kidList.getJSONArray("children").getJSONObject(0).getString("driver_id"));
@@ -967,45 +970,43 @@ public class Home extends GetSafeBase {
                     Log.e("driver", result + "");
 
 
+                    if (!result.getJSONObject("child").getString("driver_id").equals("null")) {
+                        switch (select) {
+                            case 0:
+                                Intent intent = new Intent(getApplicationContext(), LiveLocation.class);
+                                startActivity(intent);
+                                drawerLayout.closeDrawers();
+                                break;
+                            case 1:
+                                Intent intent1 = new Intent(getApplicationContext(), Journey.class);
+                                startActivity(intent1);
+                                drawerLayout.closeDrawers();
+                                break;
+                            case 2:
+                                getDriverDetails();
+                                break;
+                            case 3:
+                                Intent intent3 = new Intent(getApplicationContext(), Payment.class);
+                                startActivity(intent3);
+                                drawerLayout.closeDrawers();
+                                break;
+                            case 4:
+                                Intent intent4 = new Intent(getApplicationContext(), Absence.class);
+                                startActivity(intent4);
+                                drawerLayout.closeDrawers();
+                                break;
+                            case 5:
+                                Intent intent5 = new Intent(getApplicationContext(), AlternativeRoutes.class);
+                                startActivity(intent5);
+                                drawerLayout.closeDrawers();
+                                break;
 
-                        if (!result.getJSONObject("child").getString("driver_id").equals("null")) {
-                            switch (select) {
-                                case 0:
-                                    Intent intent = new Intent(getApplicationContext(), LiveLocation.class);
-                                    startActivity(intent);
-                                    drawerLayout.closeDrawers();
-                                    break;
-                                case 1:
-                                    Intent intent1 = new Intent(getApplicationContext(), Journey.class);
-                                    startActivity(intent1);
-                                    drawerLayout.closeDrawers();
-                                    break;
-                                case 2:
-                                    getDriverDetails();
-                                    break;
-                                case 3:
-                                    Intent intent3 = new Intent(getApplicationContext(), Payment.class);
-                                    startActivity(intent3);
-                                    drawerLayout.closeDrawers();
-                                    break;
-                                case 4:
-                                    Intent intent4 = new Intent(getApplicationContext(), Absence.class);
-                                    startActivity(intent4);
-                                    drawerLayout.closeDrawers();
-                                    break;
-                                case 5:
-                                    Intent intent5 = new Intent(getApplicationContext(), AlternativeRoutes.class);
-                                    startActivity(intent5);
-                                    drawerLayout.closeDrawers();
-                                    break;
-
-                            }
-                            tinyDB.putString("selectedChildId", result.getJSONObject("child").getString("driver_id"));
-                        } else {
-                            showToast(dialog, "No driver assigned", 0);
                         }
-                        hideLoading();
-
+                        tinyDB.putString("kid_driver_id", result.getJSONObject("child").getString("driver_id"));
+                    } else {
+                        showToast(dialog, "No driver assigned", 0);
+                    }
+                    hideLoading();
 
 
                 } catch (Exception e) {

@@ -54,6 +54,7 @@
 
 
     <ScrollView
+        android:id="@+id/scroll_payment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/imgBanner">
@@ -276,6 +277,7 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
+
         <!--            <TextView-->
         <!--                android:layout_width="wrap_content"-->
         <!--                android:layout_height="wrap_content"-->
@@ -372,6 +374,20 @@
 
 
     </ScrollView>
+
+    <TextView
+        android:id="@+id/no_payment"
+        android:layout_below="@+id/status_bar"
+        android:layout_width="wrap_content"
+        android:visibility="gone"
+        android:layout_height="wrap_content"
+        android:text="No Pending Payments"
+        android:fontFamily="@font/nunito_semibold"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:layout_gravity="center" />
 
     <View
         android:id="@+id/disable_layout"

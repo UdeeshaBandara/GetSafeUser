@@ -87,7 +87,7 @@ import lk.hd192.project.Utils.VolleyJsonCallback;
 public class EditProfile extends GetSafeBase {
     View popupView;
     RecyclerView recyclerKidList;
-    TextView txtPhoneNumber, txtEmail, txtParentAddress, txtParentDropAddress, txtParentName, txtHeading;
+    TextView txtPhoneNumber, txtEmail, txtParentAddress, txtParentDropAddress, txtParentName, txtHeading, msg;
     EditText editTxtPhoneNumber, editTxtEmail, editTxtParentName;
     LinearLayout lnrLocation, locationDropMain;
     Dialog dialog;
@@ -123,6 +123,7 @@ public class EditProfile extends GetSafeBase {
         kidList = new JSONArray();
         getSafeServices = new GetSafeServices();
         recyclerKidList = findViewById(R.id.recycler_kid_list);
+        msg = findViewById(R.id.msg);
         txtPhoneNumber = findViewById(R.id.txt_phone_number);
         editTxtPhoneNumber = findViewById(R.id.edit_txt_phone_number);
         editTxtEmail = findViewById(R.id.edit_txt_email);
@@ -425,7 +426,7 @@ public class EditProfile extends GetSafeBase {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==2){
+        if (requestCode == 2) {
             getAllChildren();
         }
 //        Log.e("onactivityResult", data + "");
@@ -849,6 +850,7 @@ public class EditProfile extends GetSafeBase {
 
 
     }
+
     class StudentViewHolder extends RecyclerView.ViewHolder {
         CardView rltKidEdit;
         TextView txtKidName, txtKidSchool;
@@ -881,7 +883,7 @@ public class EditProfile extends GetSafeBase {
                 holder.txtKidName.setText(kidList.getJSONObject(position).getString("name"));
 
                 holder.txtKidSchool.setText(kidList.getJSONObject(position).getString("school_name"));
-                getKidImage(kidList.getJSONObject(position).getString("id"),holder.img_kid);
+                getKidImage(kidList.getJSONObject(position).getString("id"), holder.img_kid);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -893,7 +895,7 @@ public class EditProfile extends GetSafeBase {
                         Intent intent = new Intent(getApplicationContext(), EditKidProfile.class);
 
                         intent.putExtra("kid_id", kidList.getJSONObject(position).getString("id"));
-                        startActivityForResult(intent,2);
+                        startActivityForResult(intent, 2);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -909,7 +911,6 @@ public class EditProfile extends GetSafeBase {
     }
 
 
-
     public void getAllChildren() {
         HashMap<String, String> tempParam = new HashMap<>();
 
@@ -923,12 +924,18 @@ public class EditProfile extends GetSafeBase {
 
                     kidList = result.getJSONArray("children");
                     Log.e("kids from edit", kidList + "");
-
-                    recyclerKidList.getAdapter().notifyDataSetChanged();
+                    if (kidList.length() != 0) {
+                        recyclerKidList.getAdapter().notifyDataSetChanged();
+                        msg.setVisibility(View.GONE);
+                        recyclerKidList.setVisibility(View.VISIBLE);
+                    } else {
+                        msg.setVisibility(View.VISIBLE);
+                        recyclerKidList.setVisibility(View.GONE);
+                    }
 
 
                 } catch (Exception e) {
-
+                    e.printStackTrace();
                 }
 
             }
@@ -963,6 +970,7 @@ public class EditProfile extends GetSafeBase {
 
                 } catch (Exception e) {
                     hideLoading();
+                    e.printStackTrace();
                 }
 
             }
@@ -993,6 +1001,7 @@ public class EditProfile extends GetSafeBase {
 
                 } catch (Exception e) {
                     hideLoading();
+                    e.printStackTrace();
                 }
 
             }
@@ -1020,7 +1029,7 @@ public class EditProfile extends GetSafeBase {
                     loadUserLocationDetails();
 
                 } catch (Exception e) {
-
+                    e.printStackTrace();
 
                 }
 
@@ -1060,6 +1069,7 @@ public class EditProfile extends GetSafeBase {
 
                 } catch (Exception e) {
                     hideLoading();
+                    e.printStackTrace();
 
                 }
 

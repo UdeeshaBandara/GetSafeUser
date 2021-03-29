@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -45,8 +46,9 @@ public class Payment extends GetSafeBase {
     LottieAnimationView loading;
     GetSafeServices getSafeServices;
     TinyDB tinyDB;
+    ScrollView scroll_payment;
     JSONObject payment;
-    TextView txt_month, txt_driver_amount, txt_service, txt_late, txt_net, txt_deadline;
+    TextView txt_month, txt_driver_amount, txt_service, txt_late, txt_net, txt_deadline,no_payment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +66,9 @@ public class Payment extends GetSafeBase {
         txt_service = findViewById(R.id.txt_service);
         txt_late = findViewById(R.id.txt_late);
         txt_net = findViewById(R.id.txt_net);
+        scroll_payment = findViewById(R.id.scroll_payment);
         txt_deadline = findViewById(R.id.txt_deadline);
+        no_payment = findViewById(R.id.no_payment);
 //        card_year = findViewById(R.id.card_year);
 //        card_month = findViewById(R.id.card_month);
 //        lnr_year = findViewById(R.id.lnr_year);
@@ -133,10 +137,10 @@ public class Payment extends GetSafeBase {
         req.getCustomer().getAddress().setCountry("Sri Lanka");
 
 //Optional Params
-        req.getCustomer().getDeliveryAddress().setAddress("No.2, Kandy Road");
-        req.getCustomer().getDeliveryAddress().setCity("Kadawatha");
-        req.getCustomer().getDeliveryAddress().setCountry("Sri Lanka");
-        req.getItems().add(new Item(null, "Door bell wireless", 1, 1000.0));
+//        req.getCustomer().getDeliveryAddress().setAddress("No.2, Kandy Road");
+//        req.getCustomer().getDeliveryAddress().setCity("Kadawatha");
+//        req.getCustomer().getDeliveryAddress().setCountry("Sri Lanka");
+//        req.getItems().add(new Item(null, "Door bell wireless", 1, 1000.0));
 
         Intent intent = new Intent(this, PHMainActivity.class);
         intent.putExtra(PHConstants.INTENT_EXTRA_DATA, req);
@@ -155,11 +159,14 @@ public class Payment extends GetSafeBase {
                 if (response != null)
                     if (response.isSuccess()) {
                         msg = "Activity result:" + response.getData().toString();
-
+                        Log.e("on payment","ok");
                         if (tinyDB.getBoolean("isStaffAccount"))
                             makePayment();
                         else
                             makePaymentChild();
+
+                        no_payment.setVisibility(View.VISIBLE);
+                        scroll_payment.setVisibility(View.GONE);
 
                     } else
                         msg = "Result:" + response.toString();

@@ -241,15 +241,27 @@ public class MarkAbsent extends GetSafeBaseFragment {
                         else {
                             for (int i = 0; i < absenceDateList.length(); i++) {
                                 if (absenceDateList.getJSONObject(i).getString("month").equals(absenceDate.getString("month")) & absenceDateList.getJSONObject(i).getString("year").equals(absenceDate.getString("year")) & absenceDateList.getJSONObject(i).getString("date").equals(absenceDate.getString("date"))) {
-                                    if(absenceDate.getString("session").equals("Both")&!absenceDateList.getJSONObject(i).getString("session").equals("Both")){
-                                        showToast(dialog,  absenceDateList.getJSONObject(i).getString("session") +" session is ", 0);
-                                        absenceDateList.remove(i);
+
+                                    absenceDateList.remove(i);
                                         absenceDateList.put(absenceDate);
 
-                                    }else if(absenceDate.getString("session").equals("Evening")||absenceDate.getString("session").equals("Morning")){
-
-                                        absenceDateList.getJSONObject(i).put("session","Both");
-                                    }
+//                                    if (absenceDate.getString("session").equals("Both") & !absenceDateList.getJSONObject(i).getString("session").equals("Both")) {
+//                                        showToast(dialog, absenceDateList.getJSONObject(i).getString("session") + " session changed to full day ", 0);
+//
+//
+//
+//
+//                                    } else if (absenceDate.getString("session").equals("Evening") & absenceDateList.getJSONObject(i).getString("session").equals("Morning")) {
+//
+//                                        showToast(dialog, absenceDateList.getJSONObject(i).getString("session") + " session changed to full day ", 0);
+//
+//                                        absenceDateList.getJSONObject(i).put("session", "Both");
+//                                    } else if (absenceDate.getString("session").equals("Morning") & absenceDateList.getJSONObject(i).getString("session").equals("Evening")) {
+//
+//                                        showToast(dialog, absenceDateList.getJSONObject(i).getString("session") + " session changed to full day ", 0);
+//
+//                                        absenceDateList.getJSONObject(i).put("session", "Both");
+//                                    }
 
 //if ( absenceDateList.getJSONObject(i).getString("session").equals(absenceDate.getString("session"))
 

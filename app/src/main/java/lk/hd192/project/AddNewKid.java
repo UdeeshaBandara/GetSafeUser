@@ -108,7 +108,7 @@ public class AddNewKid extends GetSafeBase {
                         currentPage = 3;
                         btnSave.setVisibility(View.VISIBLE);
                         btnNext.setVisibility(View.GONE);
-                        addKidFirstFragment.addKidDropDetails();
+//                        addKidFirstFragment.addKidDropDetails();
                     }
                 }
 

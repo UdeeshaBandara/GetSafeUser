@@ -67,7 +67,7 @@ public class AddKidSecondFragment extends GetSafeBaseFragment {
 
     View popupView;
     TinyDB tinyDB;
-//    LinearLayout lnrRemember;
+    //    LinearLayout lnrRemember;
     MapView mPickupLocation;
     GoogleMap googleMap;
     LocationManager locationManager;
@@ -76,14 +76,14 @@ public class AddKidSecondFragment extends GetSafeBaseFragment {
     AddNewKid addNewKid;
     String locationProvider = LocationManager.GPS_PROVIDER;
     CameraPosition cameraPosition;
-//    LottieAnimationView rememberAnimation;
+    //    LottieAnimationView rememberAnimation;
     EditText txtAddressOne, txtAddressTwo, txtCity;
-    TextView txtLocation;
+    TextView txtLocation, school_location;
 
-    Double latitude, longitude;
+    Double latitude, dropLatitude, longitude, dropLongitude;
     GetSafeServices getSafeServices;
     public static LatLng pinnedLocation;
-
+    boolean isPickUpLocation = true;
 
     public AddKidSecondFragment() {
         // Required empty public constructor
@@ -105,6 +105,7 @@ public class AddKidSecondFragment extends GetSafeBaseFragment {
         dialog = new Dialog(getActivity(), android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
         pinLocation = view.findViewById(R.id.pin_location);
         txtAddressOne = view.findViewById(R.id.txt_address_one);
+        school_location = view.findViewById(R.id.school_location);
         txtAddressTwo = view.findViewById(R.id.txt_address_two);
         txtCity = view.findViewById(R.id.txt_city);
         txtLocation = view.findViewById(R.id.txt_location);
@@ -116,10 +117,11 @@ public class AddKidSecondFragment extends GetSafeBaseFragment {
         addNewKid = new AddNewKid();
 
 
-
         pinLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                isPickUpLocation = true;
                 onCreateMapPopup(v, savedInstanceState);
                 View view = getActivity().getCurrentFocus();
 
@@ -127,6 +129,22 @@ public class AddKidSecondFragment extends GetSafeBaseFragment {
                     InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
+            }
+        });
+
+        school_location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isPickUpLocation = false;
+
+                View view = getActivity().getCurrentFocus();
+
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+
+                onCreateMapPopup(v, savedInstanceState);
             }
         });
 //        lnrRemember.setOnClickListener(new View.OnClickListener() {
@@ -208,7 +226,10 @@ public class AddKidSecondFragment extends GetSafeBaseFragment {
         mConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                txtLocation.setText(GetSafeBase.LOC_ADDRESS);
+                if (isPickUpLocation)
+                    txtLocation.setText(GetSafeBase.LOC_ADDRESS);
+                else
+                    school_location.setText(GetSafeBase.LOC_ADDRESS);
                 popupWindow.dismiss();
             }
         });
@@ -244,6 +265,13 @@ public class AddKidSecondFragment extends GetSafeBaseFragment {
                     .playOn(txtLocation);
             txtLocation.setError("Please select kid pickup location");
             AddNewKid.secondCompleted = false;
+        } else if (school_location.getText().toString().equals("School location on map")) {
+            YoYo.with(Techniques.Bounce)
+                    .duration(1000)
+                    .playOn(school_location);
+            school_location.setError("Select school location on map");
+            AddNewKid.secondCompleted = false;
+
         } else {
             AddNewKid.secondCompleted = true;
 
@@ -260,7 +288,7 @@ public class AddKidSecondFragment extends GetSafeBaseFragment {
         tempParam.put("longitude", longitude.toString());
         tempParam.put("add1", txtAddressOne.getText().toString());
         tempParam.put("add2", txtAddressTwo.getText().toString());
-        tinyDB.putString("temp_kid_add",txtAddressOne.getText().toString()+", "+txtAddressTwo.getText().toString()+", "+ txtCity.getText().toString());
+        tinyDB.putString("temp_kid_add", txtAddressOne.getText().toString() + ", " + txtAddressTwo.getText().toString() + ", " + txtCity.getText().toString());
 
 
         ((AddNewKid) Objects.requireNonNull(getActivity())).showLoading();
@@ -278,7 +306,7 @@ public class AddKidSecondFragment extends GetSafeBaseFragment {
 
                                 AddNewKid.kidLocId = result.getJSONObject("location").getString("locationable_id");
 
-
+                                addKidDropDetails();
 
 
                             } else
@@ -333,10 +361,17 @@ public class AddKidSecondFragment extends GetSafeBaseFragment {
                         @Override
                         public void onCameraChange(CameraPosition cameraPosition) {
 
-                            locationAddress(cameraPosition.target.latitude, cameraPosition.target.longitude);
-                            latitude = cameraPosition.target.latitude;
-                            longitude = cameraPosition.target.longitude;
-                            pinnedLocation = new LatLng(cameraPosition.target.latitude, cameraPosition.target.longitude);
+                            if (isPickUpLocation) {
+                                locationAddress(cameraPosition.target.latitude, cameraPosition.target.longitude);
+                                latitude = cameraPosition.target.latitude;
+                                longitude = cameraPosition.target.longitude;
+                                pinnedLocation = new LatLng(cameraPosition.target.latitude, cameraPosition.target.longitude);
+                            } else {
+
+                                locationAddress(cameraPosition.target.latitude, cameraPosition.target.longitude);
+                                dropLatitude = cameraPosition.target.latitude;
+                                dropLongitude = cameraPosition.target.longitude;
+                            }
 
 
                         }
@@ -390,5 +425,43 @@ public class AddKidSecondFragment extends GetSafeBaseFragment {
         }
     }
 
+    public void addKidDropDetails() {
+        HashMap<String, String> tempParam = new HashMap<>();
+        tempParam.put("id", AddNewKid.kidId);
+        tempParam.put("longitude", dropLongitude.toString());
+        tempParam.put("latitude", dropLatitude.toString());
+        tempParam.put("add1", "");
+        tempParam.put("add2", "");
+
+
+        ((AddNewKid) Objects.requireNonNull(getActivity())).showLoading();
+        getSafeServices.networkJsonRequest(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.ADD_CHILD_DROP_LOCATION), 2, tinyDB.getString("token"),
+                new VolleyJsonCallback() {
+
+                    @Override
+                    public void onSuccessResponse(JSONObject result) {
+                        ((AddNewKid) Objects.requireNonNull(getActivity())).hideLoading();
+                        try {
+                            Log.e("loc response", result + "");
+
+                            if (result.getBoolean("location_saved_status")) {
+
+
+                            } else
+                                showWarningToast(dialog, result.getString("validation_errors"), 0);
+
+
+                        } catch (Exception e) {
+                            ((AddNewKid) Objects.requireNonNull(getActivity())).hideLoading();
+                            Log.e("ex loc", e.getMessage());
+
+                            showWarningToast(dialog, "Something went wrong. Please try again", 0);
+
+                        }
+
+                    }
+                });
+
+    }
 
 }

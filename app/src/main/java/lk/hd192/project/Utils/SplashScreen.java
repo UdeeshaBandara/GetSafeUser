@@ -61,7 +61,9 @@ public class SplashScreen extends GetSafeBase {
 
                 try { //startActivity(new Intent(SplashScreen.this, Home.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
 
+                    Log.e("usersssss",result+"");
                     if (result.getBoolean("logged-in-status")) {
+
                         tinyDB.putBoolean("isLogged", true);
                         tinyDB.putString("user_id", result.getJSONObject("user").getString("id"));
                         tinyDB.putString("driver_id", result.getJSONObject("user").getString("driver_id"));
@@ -72,7 +74,7 @@ public class SplashScreen extends GetSafeBase {
                         startActivity(new Intent(SplashScreen.this, Home.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
                     } else {
                         OTP.optType = 0;
-                        startActivity(new Intent(SplashScreen.this, Login.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
+                        startActivity(new Intent(SplashScreen.this, Welcome.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
                     }
 
                     finish();

@@ -44,32 +44,10 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="15dp"
+                android:layout_marginEnd="14dp"
                 android:layout_marginRight="15dp"
                 android:src="@drawable/icon_notification" />
 
-            <RelativeLayout
-
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="5dp"
-
-                android:layout_marginRight="5dp"
-                android:background="@drawable/notification_count">
-
-                <TextView
-                    android:id="@+id/notification_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerInParent="true"
-                    android:layout_marginBottom="222dp"
-                    android:fontFamily="@font/nunito_bold"
-
-                    android:textColor="@color/white" />
-
-
-            </RelativeLayout>
 
 
         </RelativeLayout>
