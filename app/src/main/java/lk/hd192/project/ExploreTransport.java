@@ -651,7 +651,7 @@ public class ExploreTransport extends GetSafeBase {
             try {
                 holder.txt_driver_name.setText(" : " + driverList.getJSONObject(position).getString("name"));
                 holder.txt_start.setText(" : " + driverList.getJSONObject(position).getString("phone_no"));
-                holder.txt_end.setText(" : " + driverList.getJSONObject(position).getString("email"));
+                holder.txt_end.setText(" : " + driverList.getJSONObject(position).getString("per_km_charge")+" LKR");
                 getDriverImage(driverList.getJSONObject(position).getString("id"), holder.driver_image);
                 holder.oneDriver.setOnClickListener(new View.OnClickListener() {
                     @Override

@@ -170,7 +170,7 @@ public class Register extends GetSafeBase {
         findViewById(R.id.btn_register_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Selection.class));
+                startActivity(new Intent(getApplicationContext(), Welcome.class));
                 finish();
             }
         });

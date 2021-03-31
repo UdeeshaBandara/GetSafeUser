@@ -32,7 +32,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
 
@@ -155,6 +159,7 @@ public class Home extends GetSafeBase {
         btnNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getDeviceFcmToken();
                 startActivity(new Intent(getApplicationContext(), Notification.class));
             }
         });
@@ -201,7 +206,30 @@ public class Home extends GetSafeBase {
 //        getDeviceToken();
 
     }
+    public void getDeviceFcmToken() {
 
+
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            showToast(dialog, "Please try again", 0);
+
+
+                            return;
+
+
+                        } else {
+
+                          Log.e("fcm",task.getResult().getToken());
+
+
+                        }
+
+                    }
+                });
+    }
     private void setupStaffAccount() {
 
 //        getKidImage(tinyDB.getString("driver_id"), icon_user);

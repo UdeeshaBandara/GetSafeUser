@@ -155,6 +155,42 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+
+                    android:ellipsize="end"
+                    android:fontFamily="@font/nunito_bold"
+
+                    android:maxLines="2"
+                    android:text="Charge : "
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/txt_charge"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="7"
+
+                    android:ellipsize="end"
+
+                    android:fontFamily="@font/nunito_bold"
+                    android:maxLines="2"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
 
 
             <LinearLayout
@@ -369,8 +405,7 @@
                             android:layout_width="0dp"
                             android:layout_height="100dp"
                             android:layout_weight="2"
-                            android:scaleType="centerCrop"
-                            />
+                            android:scaleType="centerCrop" />
 
                         <ImageView
                             android:id="@+id/img_vehicle_two"
@@ -378,8 +413,7 @@
                             android:layout_height="100dp"
                             android:layout_marginLeft="5dp"
                             android:layout_weight="2"
-                            android:scaleType="centerCrop"
-                            />
+                            android:scaleType="centerCrop" />
 
                         <ImageView
                             android:id="@+id/img_vehicle_three"
@@ -387,8 +421,7 @@
                             android:layout_height="100dp"
                             android:layout_marginLeft="5dp"
                             android:layout_weight="2"
-                            android:scaleType="centerCrop"
-                          />
+                            android:scaleType="centerCrop" />
 
                         <ImageView
                             android:id="@+id/img_vehicle_four"
@@ -396,8 +429,7 @@
                             android:layout_height="100dp"
                             android:layout_marginLeft="5dp"
                             android:layout_weight="2"
-                            android:scaleType="centerCrop"
-                        />
+                            android:scaleType="centerCrop" />
 
 
                     </LinearLayout>
@@ -454,58 +486,58 @@
                     android:orientation="vertical">
 
 
-<!--                    <LinearLayout-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="match_parent"-->
+                    <!--                    <LinearLayout-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="match_parent"-->
 
-<!--                        android:orientation="horizontal">-->
-
-
-<!--                        <TextView-->
-<!--                            android:layout_width="0dp"-->
-<!--                            android:layout_height="match_parent"-->
-<!--                            android:layout_weight="4"-->
-<!--                            android:fontFamily="@font/nunito_bold"-->
-<!--                            android:text="Pick-up Schools  "-->
-<!--                            android:textColor="@color/white"-->
-<!--                            android:textSize="16sp" />-->
-
-<!--                        <TextView-->
-<!--                            android:layout_width="0dp"-->
-<!--                            android:layout_height="match_parent"-->
-<!--                            android:layout_weight="6"-->
-<!--                            android:fontFamily="@font/nunito_bold"-->
-<!--                            android:textColor="@color/white"-->
-<!--                            android:textSize="16sp" />-->
+                    <!--                        android:orientation="horizontal">-->
 
 
-<!--                    </LinearLayout>-->
+                    <!--                        <TextView-->
+                    <!--                            android:layout_width="0dp"-->
+                    <!--                            android:layout_height="match_parent"-->
+                    <!--                            android:layout_weight="4"-->
+                    <!--                            android:fontFamily="@font/nunito_bold"-->
+                    <!--                            android:text="Pick-up Schools  "-->
+                    <!--                            android:textColor="@color/white"-->
+                    <!--                            android:textSize="16sp" />-->
 
-<!--                    <LinearLayout-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="match_parent"-->
-<!--                        android:layout_marginTop="10dp"-->
-<!--                        android:orientation="horizontal">-->
-
-<!--                        <TextView-->
-<!--                            android:layout_width="0dp"-->
-<!--                            android:layout_height="match_parent"-->
-<!--                            android:layout_weight="4"-->
-<!--                            android:fontFamily="@font/nunito_bold"-->
-<!--                            android:text="Towns passed"-->
-<!--                            android:textColor="@color/white"-->
-<!--                            android:textSize="16sp" />-->
-
-<!--                        <TextView-->
-<!--                            android:layout_width="0dp"-->
-<!--                            android:layout_height="match_parent"-->
-<!--                            android:layout_weight="6"-->
-<!--                            android:fontFamily="@font/nunito_bold"-->
-<!--                            android:textColor="@color/white"-->
-<!--                            android:textSize="16sp" />-->
+                    <!--                        <TextView-->
+                    <!--                            android:layout_width="0dp"-->
+                    <!--                            android:layout_height="match_parent"-->
+                    <!--                            android:layout_weight="6"-->
+                    <!--                            android:fontFamily="@font/nunito_bold"-->
+                    <!--                            android:textColor="@color/white"-->
+                    <!--                            android:textSize="16sp" />-->
 
 
-<!--                    </LinearLayout>-->
+                    <!--                    </LinearLayout>-->
+
+                    <!--                    <LinearLayout-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="match_parent"-->
+                    <!--                        android:layout_marginTop="10dp"-->
+                    <!--                        android:orientation="horizontal">-->
+
+                    <!--                        <TextView-->
+                    <!--                            android:layout_width="0dp"-->
+                    <!--                            android:layout_height="match_parent"-->
+                    <!--                            android:layout_weight="4"-->
+                    <!--                            android:fontFamily="@font/nunito_bold"-->
+                    <!--                            android:text="Towns passed"-->
+                    <!--                            android:textColor="@color/white"-->
+                    <!--                            android:textSize="16sp" />-->
+
+                    <!--                        <TextView-->
+                    <!--                            android:layout_width="0dp"-->
+                    <!--                            android:layout_height="match_parent"-->
+                    <!--                            android:layout_weight="6"-->
+                    <!--                            android:fontFamily="@font/nunito_bold"-->
+                    <!--                            android:textColor="@color/white"-->
+                    <!--                            android:textSize="16sp" />-->
+
+
+                    <!--                    </LinearLayout>-->
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -514,17 +546,17 @@
                         android:orientation="horizontal">
 
 
-<!--                        <TextView-->
-<!--                            android:id="@+id/txt_seating"-->
-<!--                            android:layout_width="0dp"-->
-<!--                            android:layout_height="match_parent"-->
-<!--                            android:layout_weight="5"-->
-<!--                            android:drawableLeft="@drawable/icon_max_ppl"-->
-<!--                            android:drawablePadding="10dp"-->
-<!--                            android:fontFamily="@font/nunito_bold"-->
-<!--                            android:text="Max Capacity "-->
-<!--                            android:textColor="@color/white"-->
-<!--                            android:textSize="16sp" />-->
+                        <!--                        <TextView-->
+                        <!--                            android:id="@+id/txt_seating"-->
+                        <!--                            android:layout_width="0dp"-->
+                        <!--                            android:layout_height="match_parent"-->
+                        <!--                            android:layout_weight="5"-->
+                        <!--                            android:drawableLeft="@drawable/icon_max_ppl"-->
+                        <!--                            android:drawablePadding="10dp"-->
+                        <!--                            android:fontFamily="@font/nunito_bold"-->
+                        <!--                            android:text="Max Capacity "-->
+                        <!--                            android:textColor="@color/white"-->
+                        <!--                            android:textSize="16sp" />-->
 
                         <TextView
                             android:id="@+id/txt_seating"
@@ -639,7 +671,6 @@
                         android:layout_height="50dp"
                         android:layout_below="@id/lnr_heading_contact_driver"
                         android:layout_gravity="center"
-android:textSize="14sp"
                         android:layout_marginHorizontal="15dp"
                         android:layout_weight="6"
                         android:background="@drawable/bg_button_contact_driver"
@@ -650,7 +681,8 @@ android:textSize="14sp"
                         android:paddingRight="25dp"
                         android:text="Call Driver"
                         android:textAllCaps="false"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
 
                     <Button
                         android:id="@+id/btn_send_request"
@@ -658,22 +690,22 @@ android:textSize="14sp"
                         android:layout_height="50dp"
                         android:layout_below="@id/lnr_heading_contact_driver"
 
-                        android:textSize="14sp"
                         android:layout_gravity="center"
                         android:layout_marginRight="15dp"
                         android:layout_weight="6"
-                        android:ellipsize="end"
                         android:background="@drawable/bg_button_contact_driver"
                         android:drawableLeft="@drawable/icon_chat"
-                        android:drawablePadding="5dp"
                         android:drawableRight="@drawable/icon_forward"
+                        android:drawablePadding="5dp"
+                        android:ellipsize="end"
                         android:gravity="center"
+                        android:maxLines="2"
                         android:paddingLeft="15dp"
                         android:paddingRight="25dp"
-                        android:maxLines="2"
                         android:text="Request for a vacant seat"
                         android:textAllCaps="false"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
 
 
                 </LinearLayout>
@@ -692,15 +724,15 @@ android:textSize="14sp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#92292828"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
+
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/loading"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_centerInParent="true"
         android:layout_gravity="center"
         android:visibility="gone"
-        android:layout_centerInParent="true"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/loading" />

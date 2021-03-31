@@ -8,6 +8,7 @@
 
 
     <string name="BASE_URL">https://dev.viva.echonlabs.com/v1/getsafe/api</string>
+<!--    <string name="BASE_URL">https://192.168.43.78:8000/v1/getsafe/api</string>-->
     <string name="SAVE_USER">/register/saveuser</string>
     <string name="REGISTER_SEND_OTP">/register/sendotp</string>
     <string name="REGISTER_VALIDATE_OTP">/register/validateotp</string>
@@ -72,6 +73,7 @@
      <string name="PAYMENT">/payment/user/slip</string>
      <string name="MAKE_PAYMENT">/payment/user/make</string>
      <string name="MAKE_PAYMENT_CHILD">/payment/child/make</string>
+     <string name="COST">/search/cost</string>
 
 
 

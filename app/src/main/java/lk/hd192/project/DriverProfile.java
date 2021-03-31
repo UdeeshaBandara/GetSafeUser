@@ -40,7 +40,8 @@ public class DriverProfile extends GetSafeBase {
     LottieAnimationView loading;
     Button btn_send_request;
     ImageView driver_photo, img_vehicle_one, img_vehicle_two, img_vehicle_three, img_vehicle_four;
-    TextView txt_facilities, txt_driver_name, txt_vehicle_type, txt_vehicle_model, txt_vehicle_reg_no, txt_seating;
+    TextView txt_facilities, txt_driver_name, txt_vehicle_type, txt_vehicle_model, txt_vehicle_reg_no, txt_seating, txt_charge;
+    String uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,7 @@ public class DriverProfile extends GetSafeBase {
         img_vehicle_three = findViewById(R.id.img_vehicle_three);
         img_vehicle_four = findViewById(R.id.img_vehicle_four);
         txt_facilities = findViewById(R.id.txt_facilities);
+        txt_charge = findViewById(R.id.txt_charge);
         loading = findViewById(R.id.loading);
         view = findViewById(R.id.disable_layout);
         getSafeServices = new GetSafeServices();
@@ -114,6 +116,7 @@ public class DriverProfile extends GetSafeBase {
         });
 
         getDriverDetails();
+        getCost();
 
     }
 
@@ -197,7 +200,7 @@ public class DriverProfile extends GetSafeBase {
                         txt_driver_name.setText(driverDetails.getString("name"));
                         txt_vehicle_type.setText(driverDetails.getJSONArray("vehicle").getJSONObject(0).getString("type"));
                         phone = driverDetails.getString("phone_no");
-
+//                        txt_charge.setText();
                         txt_vehicle_model.setText(driverDetails.getJSONArray("vehicle").getJSONObject(0).getString("model"));
                         if (driverDetails.getJSONArray("vehicle").getJSONObject(0).getInt("AC") == 1)
                             txt_facilities.setText("A/C");
@@ -238,6 +241,42 @@ public class DriverProfile extends GetSafeBase {
 
                         }
 
+
+                    }
+
+
+                } catch (
+                        Exception e) {
+                    e.printStackTrace();
+                    Log.e("ex from loc", e.getMessage());
+
+                }
+                hideLoading();
+            }
+        });
+
+    }
+
+    private void getCost() {
+        HashMap<String, String> param = new HashMap<>();
+
+
+        if (tinyDB.getBoolean("isStaffAccount"))
+            uid = tinyDB.getString("user_id");
+        else
+            uid = tinyDB.getString("selectedChildId");
+
+        showLoading();
+        getSafeServices.networkJsonRequest(this, param, getString(R.string.BASE_URL) + getString(R.string.COST) + "?driver_id=" + driverId + "&user_child_id=" + uid, 1, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+
+                    Log.e("driver", result + "");
+                    if (result.getBoolean("status")) {
+
+                        txt_charge.setText( String.valueOf(Math.round( result.getDouble("model")* 100.0) / 100.0));
 
                     }
 
